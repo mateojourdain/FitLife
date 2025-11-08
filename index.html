@@ -16,9 +16,9 @@
         </div>
         <!-- page d'accueil -->
         <div id="home" class="page active">
+
             <!-- card récap -->
             <div class="section-title">Résumé Hebdomadaire</div>
-
             <div class="card" style="width: 100%;     background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);     border: 1px solid #222;
     border-radius: 12px;">
                 <div style="display: flex; flex-direction: column; gap: 10px;">
@@ -103,8 +103,8 @@
             <div class="hydration-card">
 
                 <div class="hydration-header">
-                    <div class="hydration-count"><span id="currentWater">1.6</span>L / <span
-                            id="targetWater">3.2</span>L</div>
+                    <div class="hydration-count"><span id="currentWater"></span>L / <span id="targetWater">3.2</span>L
+                    </div>
                 </div>
                 <div class="hydration-bar">
                     <div class="hydration-progress" id="hydrationProgress"></div>
@@ -115,6 +115,8 @@
                     <div class="hydration-amount">+/- 0.2L</div>
                     <button class="hydration-btn" onclick="adjustWater(0.2)">+</button>
                 </div>
+
+                <p class="indication-hydration">* Un verre d'eau de taille standard contient environ 0.2L</p>
             </div>
 
         </div>
@@ -124,21 +126,20 @@
         </div>
         <!-- page nutrition -->
         <div id="nutrition" class="page">
-
         </div>
 
         <!-- BOTTOM NAVIGATION -->
         <div class="bottom-nav">
             <button class="nav-item active" onclick="switchPage('home')">
-                <div class="nav-icon">🏠</div>
+                <div class="nav-icon"><img src="home.png"></div>
                 <div class="nav-label">Accueil</div>
             </button>
             <button class="nav-item" onclick="switchPage('workout')">
-                <div class="nav-icon">💪</div>
+                <div class="nav-icon"><img src="haltere.png"></div>
                 <div class="nav-label">Sport</div>
             </button>
             <button class="nav-item" onclick="switchPage('nutrition')">
-                <div class="nav-icon">🥗</div>
+                <div class="nav-icon"><img src="nourriture.png"></div>
                 <div class="nav-label">Nutrition</div>
             </button>
         </div>
@@ -175,7 +176,7 @@
 
         updateHydrationUI();
     });
-    
+
     // --- FONCTIONS POUR L'HYDRATATION ---
 
     const TARGET_WATER = 3.2; // Votre objectif en litres
@@ -252,6 +253,10 @@
         });
     });
     updateHydration();
+
+    // Calendrier mensuel de la page sport
+
+
 </script>
 
 </html>

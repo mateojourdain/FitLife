@@ -273,6 +273,22 @@ body {
     text-align: center;
 }
 
+.indication-hydration {
+    font-size: 11px;
+    color: #9AA4A8;
+    font-weight: 400;
+    margin-top: 25px;
+    text-align: left;
+}
+
+/* Page de sport */
+/* Calendrier mensuel  */
+
+
+
+
+
+
 
 
 
@@ -314,11 +330,16 @@ body {
 }
 
 .nav-item.active {
-    color: #00f5ff;
+    color: #00BFFF;
 }
 
 .nav-icon {
     font-size: 24px;
+}
+
+.nav-icon img {
+    width: 24px;
+    height: 24px;
 }
 
 .nav-label {
