@@ -1,0 +1,538 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #0a0a0a;
+    color: #ffffff;
+    min-height: 100vh;
+    padding-bottom: 80px;
+}
+
+.app-container {
+    max-width: 430px;
+    margin: 0 auto;
+    background: #0a0a0a;
+    min-height: 100vh;
+}
+
+.header {
+    padding: 40px 20px 20px;
+    background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
+}
+
+.header h1 {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -1px;
+    margin-bottom: 5px;
+    background: linear-gradient(135deg, #00f5ff 0%, #0080ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+
+.header .date {
+    font-size: 14px;
+    color: #666;
+    font-weight: 500;
+}
+
+.page {
+    display: none;
+    padding: 0 20px 20px;
+    animation: fadeIn 0.3s ease;
+}
+
+.page.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* HOME PAGE */
+/* card recap */
+.section-title {
+    font-size: 13px;
+    color: #9AA4A8;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 25px 0 25px;
+    font-weight: 600;
+}
+
+.card {
+    background: #141417;
+    border: 1px solid #202025;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 15px;
+}
+
+.background {
+    flex: 1;
+    background: #0a0a0a;
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid #1a1a1a;
+}
+
+
+.stat-line {
+    display: flex;
+    align-items: center;
+    justify-content: space-between
+}
+
+/* calendrier hebdomadaire */
+
+
+.days-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+}
+
+.day-name {
+    color: #9AA4A8;
+    margin-bottom: 6px;
+    font-weight: 600;
+    font-size: 11px;
+    text-align: center;
+}
+
+.day-circle {
+    background-color: #141417;
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 12px;
+    border: 2px solid #666;
+    display: grid;
+    place-items: center;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.day-circle.gym {
+    border-color: #FF00C8;
+    color: #FF00C8;
+}
+
+.day-circle.home {
+    border-color: #00BFFF;
+    color: #00BFFF;
+}
+
+.day-circle.today {
+    background-color: #141417;
+    color: #ffffff;
+    border: solid 2px #FF00C8;
+}
+
+.point-container {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+
+}
+
+#home-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 0;
+
+}
+
+#gym-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 0;
+
+}
+
+.point-container h3 {
+    font-size: 14px;
+    color: #666;
+    font-weight: 600;
+    margin-left: 10px;
+}
+
+#home-container .point {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #FF00C8;
+}
+
+#gym-container .point {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #00BFFF;
+}
+
+/* hydratation */
+
+.hydration-card {
+    background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
+    border: 1px solid #222;
+    border-radius: 20px;
+    padding: 25px;
+}
+
+.hydration-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.hydration-title {
+    font-size: 13px;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+}
+
+.hydration-count {
+    font-size: 16px;
+    font-weight: 700;
+    color: #00BFFF;
+}
+
+.hydration-controls {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.hydration-btn {
+    width: 40px;
+    height: 40px;
+    background: #1a1a1a;
+    border: 2px solid #333;
+    border-radius: 12px;
+    color: #00BFFF;
+    font-size: 20px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hydration-btn:hover {
+    background: #252525;
+    border-color: #00BFFF;
+}
+
+.hydration-btn:active {
+    transform: scale(0.95);
+}
+
+.hydration-amount {
+    font-size: 14px;
+    color: #999;
+}
+
+.hydration-bar {
+    height: 8px;
+    background: #1a1a1a;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 12px;
+}
+
+.hydration-progress {
+    height: 100%;
+    background-color: #00BFFF;
+    width: 50%;
+    transition: width 0.3s ease;
+}
+
+.hydration-target {
+    font-size: 12px;
+    color: #666;
+    text-align: center;
+}
+
+.indication-hydration {
+    font-size: 11px;
+    color: #9AA4A8;
+    font-weight: 400;
+    margin-top: 25px;
+    text-align: left;
+}
+
+
+/* ======================================= */
+/* PAGE SPORT - DESIGN HAUTE-FIDÉLITÉ      */
+/* ======================================= */
+
+/* * 1. L'en-tête du mois (Mois + Flèches)
+ * Design basé sur la "Hydration Card" : un module interactif.
+ * Il garde son fond en dégradé premium.
+*/
+.months-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-radius: 12px;
+    /* Standard de l'app */
+
+    /* Copié de .hydration-card et carte récap */
+    background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
+    border: 1px solid #222;
+    margin-bottom: 25px;
+    /* Géré par le .section-title maintenant */
+}
+
+/* * 2. Le titre du mois (ex: "Janvier 2024")
+ * Design basé sur le H1 "FitLife" et le KPI "4" : un chiffre/titre clé.
+*/
+#monthYear {
+    font-size: 24px;
+    font-weight: 900;
+    /* Impact fort */
+    flex-grow: 1;
+    text-align: center;
+
+    /* Copié du H1 "FitLife" et #totalSessions */
+    background: linear-gradient(135deg, #00f5ff 0%, #0080ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* * 3. Les boutons de navigation (< >)
+ * Design basé sur les .hydration-btn : des contrôles interactifs.
+*/
+.nav-button {
+    background: #1a1a1a;
+    border: 2px solid #333;
+    color: #00BFFF;
+    /* Accent bleu/cyan */
+    font-size: 20px;
+    font-weight: 700;
+    cursor: pointer;
+    border-radius: 12px;
+    /* Standard de l'app */
+    width: 40px;
+    /* Taille fixe */
+    height: 40px;
+    display: grid;
+    place-items: center;
+    transition: all 0.2s;
+}
+
+.nav-button:hover {
+    background: #252525;
+    border-color: #00BFFF;
+    /* Surlignage au survol */
+}
+
+.nav-button:active {
+    transform: scale(0.95);
+    /* Feedback au clic */
+}
+
+
+/* * 4. La carte du calendrier (contient la grille)
+ * Design basé sur la carte "Activité Hebdomadaire" : un conteneur statique.
+ * La classe .card (background: #141417) s'applique déjà.
+*/
+
+
+/* * 5. L'en-tête des jours (LUN, MAR...)
+ * Design basé sur .day-name de l'accueil.
+*/
+.calendar-days-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+    /* Correspondance avec la grille de l'accueil */
+    margin-bottom: 10px;
+}
+
+.calendar-days-header span {
+    color: #9AA4A8;
+    /* Copié de .day-name */
+    font-weight: 600;
+    /* Copié de .day-name */
+    font-size: 11px;
+    /* Copié de .day-name */
+    text-align: center;
+    text-transform: uppercase;
+}
+
+/* * 6. La grille des jours
+ * Design basé sur .days-grid de l'accueil.
+*/
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+    /* Correspondance avec la grille de l'accueil */
+}
+
+/* * 7. Cellule de jour (LA CLÉ DE L'HARMONIE)
+ * Design basé sur .day-circle de l'accueil.
+*/
+.day {
+    background-color: #141417;
+    /* Fond de la carte */
+    width: 100%;
+    aspect-ratio: 1;
+    /* Carré parfait (comme .day-circle) */
+    border-radius: 12px;
+    /* Coins arrondis (comme .day-circle) */
+
+    /* Bordure subtile (copiée de .card) */
+    border: 1px solid #202025;
+
+    display: grid;
+    place-items: center;
+    font-weight: 600;
+    font-size: 15px;
+    color: #ffffff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.day.empty {
+    background: none;
+    border: none;
+    cursor: default;
+}
+
+.day:hover:not(.empty) {
+    background-color: #252525;
+}
+
+/* * 8. Jour actuel (.today)
+ * Design basé sur .day-circle.today de l'accueil.
+*/
+.day.today {
+    border: 2px solid #ffffff;
+    /* Accent Magenta */
+    color: #ffffff;
+    background-color: #1a1a1a;
+    /* Léger relief */
+}
+
+
+/* * 10. Vue Détails (quand on clique sur un jour)
+ * Doit être propre et intégrée.
+*/
+.event-details {
+    padding-top: 10px;
+}
+
+
+/* Titre de la date dans le programme (ex: "Détails pour le 15...") */
+#selectedDateDisplay {
+    font-size: 24px;
+    font-weight: 600;
+    text-align: center;
+    padding-top: 15px;
+    padding-bottom: 30px;
+    background: linear-gradient(90deg, #00f5ff 0%, #0080ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+
+/* bouton ajouté une séance */
+
+.btn-primary {
+    background: linear-gradient(135deg, #00f5ff 0%, #0080ff 100%);
+    color: #000;
+    border: none;
+    padding: 16px;
+    border-radius: 15px;
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+    width: 100%;
+    margin-bottom: 15px;
+    transition: transform 0.2s;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/* BOTTOM NAV */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    background: #1a1a1a;
+    border-top: 1px solid #222;
+    display: flex;
+    justify-content: space-around;
+    padding: 5px 0 5px;
+    width: 100%;
+    max-width: 430px;
+    z-index: 1000;
+
+}
+
+.nav-item {
+    background: none;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    padding: 8px 20px;
+    transition: all 0.3s;
+}
+
+.nav-item.active {
+    color: #00BFFF;
+}
+
+.nav-icon {
+    font-size: 24px;
+}
+
+.nav-icon img {
+    width: 24px;
+    height: 24px;
+}
+
+.nav-label {
+    font-size: 11px;
+    font-weight: 600;
+}
