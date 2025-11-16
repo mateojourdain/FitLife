@@ -16,7 +16,6 @@ body {
     max-width: 430px;
     margin: 0 auto;
     background: #0a0a0a;
-    min-height: 100vh;
 }
 
 .header {
@@ -49,7 +48,14 @@ body {
 }
 
 .page.active {
+    /* Assure que la page prend l'espace nécessaire */
+    min-height: calc(100vh - 80px);
+    /* 100vh moins la hauteur de la barre de navigation du bas (env. 80px) */
+    overflow-y: visible;
+    /* Permet le défilement du contenu */
     display: block;
+    padding-bottom: 20px;
+    /* Ajoute un espace au bas de la page Sport pour voir tout le contenu */
 }
 
 @keyframes fadeIn {
@@ -127,12 +133,30 @@ body {
     font-size: 15px;
 }
 
-.day-circle.gym {
+.day-circle.missed {
+    background-color: #333333;
+    /* Fond gris sombre pour un jour manqué */
+    color: #666666;
+    /* Couleur de la croix (X) */
+    font-weight: 700;
+}
+
+.day-circle.today-circle {
+    /* Assure que le jour d'aujourd'hui garde le fond clair (ou blanc) pour le numéro */
+    background-color: #141417;
+    color: #ffffff;
+    border: solid 2px #ffffff;
+    font-weight: 700;
+}
+
+
+
+.day-circle.home {
     border-color: #FF00C8;
     color: #FF00C8;
 }
 
-.day-circle.home {
+.day-circle.gym {
     border-color: #00BFFF;
     color: #00BFFF;
 }
@@ -140,7 +164,7 @@ body {
 .day-circle.today {
     background-color: #141417;
     color: #ffffff;
-    border: solid 2px #FF00C8;
+    border: solid 2px #ffffff;
 }
 
 .point-container {
@@ -286,13 +310,9 @@ body {
 
 
 /* ======================================= */
-/* PAGE SPORT - DESIGN HAUTE-FIDÉLITÉ      */
+/* PAGE SPORT               */
 /* ======================================= */
 
-/* * 1. L'en-tête du mois (Mois + Flèches)
- * Design basé sur la "Hydration Card" : un module interactif.
- * Il garde son fond en dégradé premium.
-*/
 .months-header {
     display: flex;
     justify-content: space-between;
@@ -314,11 +334,8 @@ body {
 #monthYear {
     font-size: 24px;
     font-weight: 900;
-    /* Impact fort */
     flex-grow: 1;
     text-align: center;
-
-    /* Copié du H1 "FitLife" et #totalSessions */
     background: linear-gradient(135deg, #00f5ff 0%, #0080ff 100%);
     -webkit-background-clip: text;
     background-clip: text;
@@ -396,9 +413,7 @@ body {
     /* Correspondance avec la grille de l'accueil */
 }
 
-/* * 7. Cellule de jour (LA CLÉ DE L'HARMONIE)
- * Design basé sur .day-circle de l'accueil.
-*/
+/* * 7. Cellule de jour (LA CLÉ DE L'HARMONIE) */
 .day {
     background-color: #141417;
     /* Fond de la carte */
@@ -417,7 +432,8 @@ body {
     font-size: 15px;
     color: #ffffff;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.2s ease, border-color 0.2s, background-color 0.2s;
+    /* Ajout d'une transition plus complète */
 }
 
 .day.empty {
@@ -430,15 +446,32 @@ body {
     background-color: #252525;
 }
 
-/* * 8. Jour actuel (.today)
- * Design basé sur .day-circle.today de l'accueil.
-*/
+/* NOUVEAU: Jour sélectionné (LE CHOC VISUEL) */
+.day.selected {
+    background: #00BFFF;
+    /* Fond bleu éclatant */
+    color: #0a0a0a;
+    /* Texte noir */
+    border-color: #00BFFF;
+    /* Bordure assortie */
+    box-shadow: 0 0 15px rgba(0, 191, 255, 0.5);
+    /* Lueur */
+    font-weight: 900;
+    transform: scale(1.05);
+    /* Petite mise en avant */
+}
+
+.day.selected.today {
+    /* Le jour sélectionné prime sur le style 'today' */
+    border-color: #00BFFF;
+}
+
+/* * 8. Jour actuel (.today) */
 .day.today {
-    border: 2px solid #ffffff;
-    /* Accent Magenta */
+    border: 2px solid #FF00C8;
+    /* Accent Magenta (maintenu pour l'accueil) */
     color: #ffffff;
     background-color: #1a1a1a;
-    /* Léger relief */
 }
 
 
@@ -447,8 +480,38 @@ body {
 */
 .event-details {
     padding-top: 10px;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 }
 
+/* Amélioration du bouton de retour */
+.back-to-calendar {
+    background: none;
+    border: 1px solid;
+    cursor: pointer;
+    padding: 10px 0;
+    margin: 15px auto 5px auto;
+    /* Centrage et meilleur espacement */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    /* Utilise toute la largeur disponible */
+    border-radius: 8px;
+    /* Ajout d'arrondis */
+
+    /* Style de la police */
+    color: #00BFFF;
+    font-size: 15px;
+    font-weight: 600;
+    transition: color 0.2s;
+}
+
+.back-to-calendar:hover {
+    color: #0080ff;
+}
 
 /* Titre de la date dans le programme (ex: "Détails pour le 15...") */
 #selectedDateDisplay {
@@ -457,38 +520,493 @@ body {
     text-align: center;
     padding-top: 15px;
     padding-bottom: 30px;
-    background: linear-gradient(90deg, #00f5ff 0%, #0080ff 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: #ffffff;
 }
 
 
 /* bouton ajouté une séance */
-
 .btn-primary {
-    background: linear-gradient(135deg, #00f5ff 0%, #0080ff 100%);
+    background: linear-gradient(135deg, #FF00C8 0%, #FF0077 100%);
+    /* Changé en Magenta/Rose pour plus de contraste */
     color: #000;
     border: none;
     padding: 16px;
-    border-radius: 15px;
+    border-radius: 12px;
     font-weight: 700;
     font-size: 15px;
     cursor: pointer;
     width: 100%;
-    margin-bottom: 15px;
-    transition: transform 0.2s;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 15px rgba(255, 0, 200, 0.4);
+    transition: transform 0.2s, box-shadow 0.3s;
+}
+
+.btn-primary:hover {
+    box-shadow: 0 4px 20px rgba(255, 0, 200, 0.6);
+    transform: translateY(-2px);
 }
 
 
+/* --- CORRECTION CRITIQUE DU FILTRE OPAQUE --- */
+
+.hidden {
+    display: none !important;
+}
 
 
+/* Style pour les jours de calendrier avec une séance */
+.day.session-done {
+    position: relative;
+}
+
+.day.session-done::after {
+    content: '★';
+    position: absolute;
+    top: 5px;
+    /* Monté en haut à droite */
+    right: 5px;
+    width: auto;
+    height: auto;
+    font-size: 10px;
+    line-height: 1;
+    background: none;
+    color: #FF00C8;
+    /* Couleur étoile magenta (néon) */
+    border-radius: 0;
+}
+
+.day.selected.session-done::after {
+    display: none;
+}
 
 
+.add-session-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+    /* Fond plus opaque et plus sûr */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 20px;
+    box-sizing: border-box;
+    /* La transition de l'opacité est plus propre pour l'apparition/disparition */
+    transition: opacity 0.3s ease;
+}
+
+/* Assurer que la modal ne bloque pas les clics quand elle est cachée */
+.add-session-modal.hidden {
+    opacity: 0;
+    pointer-events: none;
+    display: block;
+    margin-bottom: 80px;
+}
+
+/* Style pour le contenu de la modal */
+.modal-content {
+    background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
+    color: #fff;
+    border: 1px solid #222;
+    border-radius: 12px;
+    padding: 25px;
+    width: 100%;
+    max-width: 450px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+    transform: translateY(0);
+    transition: transform 0.3s ease-out;
+}
 
 
+.modal-content h2 {
+    color: #00f5ff;
+    margin-top: 0;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #202025;
+    padding-bottom: 10px;
+    font-size: 1.5em;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 14px;
+    color: #9AA4A8;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.modal-content input[type="text"],
+.modal-content input[type="number"],
+.modal-content textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #333;
+    border-radius: 8px;
+    background-color: #2a2a2a;
+    color: #fff;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.modal-content textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.row-group {
+    display: flex;
+    gap: 15px;
+}
+
+.row-group .input-group {
+    flex: 1;
+}
+
+/* Styles par défaut pour .btn-secondary (utilisé dans le formulaire, par exemple) */
+.btn-secondary {
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #444;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.2s;
+    width: 100%;
+}
+
+.btn-secondary:hover {
+    background-color: #444;
+}
+
+/* Styles pour .btn-prim (non utilisé seul, mais redéfini pour la modal) */
+.btn-prim {
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #444;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.2s;
+    width: 100%;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.modal-actions .btn-prim,
+.modal-actions .btn-secondary {
+    flex: 1;
+}
+
+/* NOUVEAU: Styles spécifiques aux boutons d'action de la modal */
+.modal-actions .btn-prim {
+    background: linear-gradient(135deg, #00BFFF 0%, #0080ff 100%);
+    /* Bleu néon */
+    color: #0a0a0a;
+    border: none;
+    font-weight: 700;
+    box-shadow: 0 4px 10px rgba(0, 191, 255, 0.3);
+}
+
+.modal-actions .btn-secondary {
+    background-color: #333;
+    color: #9AA4A8;
+    border: 1px solid #555;
+    font-weight: 600;
+}
 
 
+/* --- BLOCAGE DE DÉFILEMENT DE LA MODALE --- */
+
+/* 1. Règle pour bloquer le défilement du corps de la page */
+body.modal-open {
+    overflow: hidden;
+    /* Empêche le défilement vertical */
+    position: fixed;
+    /* Empêche la page de sauter au moment du blocage */
+    width: 100%;
+    /* Maintient la largeur */
+}
+
+/* 2. Rendre le contenu interne de la modale scrollable */
+/* Le conteneur .modal-content doit être limité en hauteur et défiler */
+.add-session-modal .modal-content {
+    max-height: 90vh;
+    /* Limite la hauteur du contenu de la modale */
+    overflow-y: auto;
+    /* CLÉ : Permet le défilement interne si le contenu dépasse max-height */
+
+    /* Assurez-vous que le padding est suffisant pour voir le bas du contenu */
+    padding: 30px 20px 40px 20px;
+}
+
+/* --- TOGGLE BOUTON TYPE DE SÉANCE (GYM/MAISON) --- */
+
+.session-type-group {
+    margin-bottom: 25px;
+}
+
+.toggle-switch {
+    display: flex;
+    background-color: #2a2a2a;
+    border-radius: 8px;
+    padding: 4px;
+    border: 1px solid #333;
+}
+
+.toggle-switch button {
+    flex: 1;
+    border: none;
+    padding: 8px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    background-color: transparent;
+    color: #9AA4A8;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.toggle-switch button.active {
+    background: #00BFFF;
+    color: #1a1a1a;
+    box-shadow: 0 2px 5px rgba(0, 191, 255, 0.3);
+}
+
+
+/* --- CARTE DE RÉCAPITULATIF DE SÉANCE --- */
+
+.session-recap-container {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.session-card {
+    background: #1a1a1a;
+    border: 1px solid #222;
+    border-radius: 12px;
+    padding: 15px;
+    color: #fff;
+    position: relative;
+}
+
+/* En-tête de la séance (Nouveau) */
+.session-type-header {
+    display: flex;
+    align-items: center;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px dashed #222;
+}
+
+.session-type-header .type-label {
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.session-type-header .type-icon {
+    font-size: 1.2em;
+    margin-right: 8px;
+    /* Rendre les icônes néon */
+    text-shadow: 0 0 5px;
+}
+
+/* Définition des couleurs spécifiques pour l'en-tête */
+.session-type-header.gym {
+    color: #00BFFF;
+}
+
+.session-type-header.gym .type-icon {
+    text-shadow: 0 0 5px #00BFFF;
+}
+
+.session-type-header.home {
+    color: #FF00C8;
+}
+
+.session-type-header.home .type-icon {
+    text-shadow: 0 0 5px #FF00C8;
+}
+
+/* Titre de l'exercice */
+.exercise-name {
+    font-size: 1.3em;
+    font-weight: 900;
+    margin: 5px 0 10px 0;
+    color: #fff;
+}
+
+/* Notes */
+.notes {
+    font-style: italic;
+    font-size: 12px;
+    color: #9AA4A8;
+    /* Rendu plus lisible */
+    margin-top: 10px;
+    border-top: 1px solid #2a2a2a;
+    /* Ligne de séparation plus douce */
+    padding-top: 10px;
+}
+
+/* ==================================== */
+/* Styles pour la liste de Séries/Coches */
+/* ==================================== */
+
+.series-list {
+    list-style: none;
+    padding: 0 10px;
+    margin: 15px 0 15px 0;
+    border-top: 1px solid #1a1a1a;
+    border-bottom: 1px solid #1a1a1a;
+    background-color: #111111;
+    /* Léger fond pour distinguer */
+    border-radius: 8px;
+}
+
+.series-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #1a1a1a;
+}
+
+/* Retirer la ligne du bas pour le dernier élément */
+.series-item:last-child {
+    border-bottom: none;
+}
+
+.series-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.series-number {
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+}
+
+.series-reps {
+    font-size: 12px;
+    color: #9AA4A8;
+}
+
+.series-toggle-btn {
+    width: 30px;
+    height: 30px;
+    border: 2px solid #555;
+    border-radius: 6px;
+    background-color: #1a1a1a;
+    color: #000;
+    font-size: 18px;
+    font-weight: 900;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    line-height: 1;
+}
+
+/* Style lorsque la série est faite (cochée) */
+.series-item.done .series-info {
+    opacity: 0.6;
+    /* Assombrir la série faite */
+}
+
+.series-item.done .series-number,
+.series-item.done .series-reps {
+    color: #666;
+    text-decoration: line-through;
+}
+
+.series-item.done .series-toggle-btn {
+    background-color: #FF00C8;
+    /* Magenta Néon pour la coche */
+    border-color: #FF00C8;
+    color: #fff;
+    box-shadow: 0 0 5px rgba(255, 0, 200, 0.5);
+}
+
+.card-actions {
+    /* Assurez-vous que cette section est bien visible et alignée à droite comme sur l'image */
+    margin-top: 15px;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    border-top: 1px dashed #2a2a2a;
+    padding-top: 10px;
+}
+
+.btn-edit,
+.btn-delete {
+    background: none;
+    border: none;
+    font-size: 12px;
+    cursor: pointer;
+    font-weight: 500;
+    padding: 5px 10px;
+    border-radius: 4px;
+}
+
+/* Style pour le bouton Modifier */
+.session-card .btn-edit {
+    background: transparent;
+    border: 1px solid #00BFFF;
+    color: #00BFFF;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.session-card .btn-edit:hover {
+    background: rgba(0, 191, 255, 0.1);
+}
+
+/* Style pour le bouton Supprimer */
+.session-card .btn-delete {
+    position: static;
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 13px;
+    transition: background-color 0.2s, color 0.2s;
+    flex-grow: 0;
+
+    color: #ff4d4d;
+    border: 1px solid #ff4d4d;
+    background: transparent;
+}
+
+.session-card .btn-delete:hover {
+    background: rgba(255, 77, 77, 0.1);
+}
+
+.no-session-msg {
+    color: #9AA4A8;
+    font-style: italic;
+    text-align: center;
+    padding: 15px 0;
+}
 
 
 /* BOTTOM NAV */

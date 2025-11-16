@@ -5,28 +5,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>Page de recap</title>
+    <title>FitLife App</title>
 </head>
 
 <body>
-    <!-- Pour se connecter à la base de données -->
 
     <div class="app-container">
         <div class="header">
             <h1>FitLife </h1>
             <div class="date" id="currentDate"></div>
         </div>
-        <!-- page d'accueil -->
+
         <div id="home" class="page active">
 
-            <!-- card récap -->
             <div class="card" style="width: 100%;     background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);     border: 1px solid #222;
     border-radius: 12px;">
                 <div style="display: flex; flex-direction: column; gap: 10px;">
                     <div style="font-size: 14px; color: #9AA4A8; text-transform: uppercase; font-weight: 600;">
                         Séances Réalisées (Semaine)
                     </div>
-                    <div style="font-size: 44px; font-weight: 900; background: linear-gradient(135deg, #00f5ff 0%, #0080ff 100%); 
+                    <div style="font-size: 44px; font-weight: 900; background: linear-gradient(135deg, #00f5ff 0%, #0080ff 100%);
                         background-clip: text;
                         -webkit-text-fill-color: transparent; line-height: 1;">
                         <span id="totalSessions">4
@@ -54,52 +52,22 @@
                 </div>
             </div>
 
-            <!-- calendrier hebdomadaire -->
             <div class="section-title">Activité Hebdomadaire</div>
             <div class="card">
-                <div class="days-grid">
-                    <div class="day-item">
-                        <div class="day-name">LUN</div>
-                        <div class="day-circle gym">✓</div>
+                <div class="days-grid" id="weeklyCalendarGrid">
                     </div>
-                    <div class="day-item">
-                        <div class="day-name">MAR</div>
-                        <div class="day-circle home">✓</div>
-                    </div>
-                    <div class="day-item">
-                        <div class="day-name">MER</div>
-                        <div class="day-circle gym">✓</div>
-                    </div>
-                    <div class="day-item">
-                        <div class="day-name">JEU</div>
-                        <div class="day-circle home">✓</div>
-                    </div>
-                    <div class="day-item">
-                        <div class="day-name">VEN</div>
-                        <div class="day-circle today">28</div>
-                    </div>
-                    <div class="day-item">
-                        <div class="day-name">SAM</div>
-                        <div class="day-circle">29</div>
-                    </div>
-                    <div class="day-item">
-                        <div class="day-name">DIM</div>
-                        <div class="day-circle">30</div>
-                    </div>
-                </div>
                 <div class="point-container">
                     <div class="point-container" id="home-container">
-                        <div class="point"></div>
+                        <div class="point home"></div>
                         <h3>Maison</h3>
                     </div>
                     <div class="point-container" id="gym-container">
-                        <div class="point"></div>
+                        <div class="point gym"></div>
                         <h3>Salle</h3>
                     </div>
                 </div>
             </div>
 
-            <!-- hydratation -->
             <div class="section-title">hydratation</div>
             <div class="hydration-card">
 
@@ -121,61 +89,100 @@
             </div>
 
         </div>
-        <!-- page sport -->
-        <div id="workout" class="page">
-            <!-- calendrier mensuel-->
 
+        <div id="workout" class="page">
             <div class="months-header">
                 <button id="prevMonth" class="nav-button">‹</button>
                 <h2 id="monthYear"></h2>
                 <button id="nextMonth" class="nav-button">›</button>
             </div>
-            <div class="card">
-                <div class="calendar-container" id="calendarContainer">
-                    <div class="calendar-days-header">
-                        <span>Lun</span>
-                        <span>Mar</span>
-                        <span>Mer</span>
-                        <span>Jeu</span>
-                        <span>Ven</span>
-                        <span>Sam</span>
-                        <span>Dim</span>
-                    </div>
 
-                    <div class="calendar-grid" id="calendarGrid">
-                    </div>
+            <div class="calendar-container" id="calendarContainer">
+                <div class="calendar-days-header">
+                    <span>Lun</span>
+                    <span>Mar</span>
+                    <span>Mer</span>
+                    <span>Jeu</span>
+                    <span>Ven</span>
+                    <span>Sam</span>
+                    <span>Dim</span>
                 </div>
 
-                <div class="event-details hidden" id="eventDetails">
-                    <h3 id="selectedDateDisplay"></h3>
-
-                    <!-- bouton ajouter une seance  -->
-                    <button class="btn-primary">+ Nouvelle Séance</button>
+                <div class="calendar-grid" id="calendarGrid">
+                </div>
+                <div class="point-container">
+                    <div class="point-container" id="home-container">
+                        <div class="point home"></div>
+                        <h3>Maison</h3>
+                    </div>
+                    <div class="point-container" id="gym-container">
+                        <div class="point gym"></div>
+                        <h3>Salle</h3>
+                    </div>
                 </div>
             </div>
 
+            <div class="event-details hidden" id="eventDetails">
+                <button class="back-to-calendar" onclick="showCalendarView()">
+                    Voir le calendrier
+                </button>
+                <h3 id="selectedDateDisplay"></h3>
+
+                <button class="btn-primary" id="openFormButton">+ Nouvelle Séance</button>
+
+                <div id="sessionRecap" class="session-recap-container">
+                </div>
+            </div>
         </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        <!-- page nutrition -->
         <div id="nutrition" class="page">
         </div>
 
 
-        <!-- BOTTOM NAVIGATION -->
+        <div class="add-session-modal hidden" id="addSessionModal">
+            <div class="modal-content">
+                <h2 id="modalTitle">Ajouter une Séance</h2>
+                <div class="form-group session-type-group" id="sessionLocationGroup"> <label>Lieu de la séance</label>
+                    <div class="toggle-switch" id="sessionTypeToggle">
+                        <button data-type="gym" class="active">Salle de sport</button>
+                        <button data-type="home">Maison</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="exerciseName">Nom de l'exercice</label>
+                    <input type="text" id="exerciseName" placeholder="Ex: Développé couché">
+                </div>
+
+                <div class="form-group row-group">
+                    <div class="input-group">
+                        <label for="sets">Séries</label>
+                        <input type="number" id="sets" value="3" min="1">
+                    </div>
+                    <div class="input-group">
+                        <label for="reps">Répétitions</label>
+                        <input type="number" id="reps" value="10" min="1">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="notes">Notes (Optionnel)</label>
+                    <textarea id="notes" placeholder="Sensation, poids utilisé, etc."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <button class="btn-secondary" id="addPhotoButton">
+                        Ajouter une Photo (Optionnel)
+                    </button>
+                </div>
+
+                <div class="modal-actions">
+                    <button class="btn-secondary" onclick="closeAddSessionModal()">Annuler</button>
+                    <button class="btn-prim" id="saveSessionButton">Enregistrer</button>
+                </div>
+            </div>
+        </div>
+
         <div class="bottom-nav">
             <button class="nav-item active" onclick="switchPage('home')">
                 <div class="nav-icon"><img src="home.png"></div>
@@ -192,12 +199,46 @@
         </div>
     </div>
 </body>
-<!-- script page accueil -->
-<script>
-    // script pour faire fonctionner la date en haut de la page
-    document.addEventListener('DOMContentLoaded', () => {
-        const dateElement = document.getElementById('currentDate');
 
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        // --- 1. FONCTIONS UTILITAIRES GLOBALES ---
+
+        /**
+         * Bascule entre les différentes pages de l'application.
+         */
+        window.switchPage = (pageName) => {
+            const pages = document.querySelectorAll('.page');
+            const navItems = document.querySelectorAll('.nav-item');
+
+            pages.forEach(page => page.classList.remove('active'));
+            navItems.forEach(item => item.classList.remove('active'));
+
+            document.getElementById(pageName).classList.add('active');
+
+            // Trouver le bouton de navigation cliqué
+            const clickedItem = event.target.closest('.nav-item');
+            if (clickedItem) {
+                clickedItem.classList.add('active');
+            }
+
+            // Exécuter l'initialisation spécifique à la page Sport si nécessaire
+            if (pageName === 'workout') {
+                setupWorkoutPage();
+            } else {
+                // Si on quitte la page Sport, on s'assure que la modal est cachée
+                if (typeof closeAddSessionModal === 'function') {
+                    closeAddSessionModal();
+                }
+            }
+        }
+
+
+        // --- 2. LOGIQUE PAGE ACCUEIL (Date) ---
+
+        const dateElement = document.getElementById('currentDate');
         const date = new Date();
         const options = {
             weekday: 'long',
@@ -211,7 +252,6 @@
         dateString = dateString
             .split(' ')
             .map((word, i) => {
-                // On met la première lettre du premier mot et du mois en majuscule
                 if (i === 0 || (i > 1 && isNaN(word))) {
                     return word.charAt(0).toUpperCase() + word.slice(1);
                 }
@@ -221,130 +261,310 @@
 
         dateElement.textContent = dateString;
 
-        updateHydrationUI();
-    });
 
-    // --- FONCTIONS POUR L'HYDRATATION ---
+        // --- 3. LOGIQUE PAGE ACCUEIL (Hydratation) ---
 
-    const TARGET_WATER = 3.2; // Votre objectif en litres
-    const STORAGE_KEY = 'dailyWaterAmount'; // Clé de sauvegarde dans le navigateur
+        const TARGET_WATER = 3.2;
+        const STORAGE_KEY = 'dailyWaterAmount';
+        const targetWaterElement = document.getElementById('targetWater');
+        targetWaterElement.textContent = TARGET_WATER.toFixed(1);
 
-    function getInitialWaterAmount() {
-        // Récupère la valeur sauvegardée, ou utilise 1.6 comme valeur initiale
-        const storedAmount = localStorage.getItem(STORAGE_KEY);
-        // S'assurer de renvoyer un nombre (par défaut 1.6)
-        return parseFloat(storedAmount) || 1.6;
-    }
 
-    let currentWater = getInitialWaterAmount();
-
-    /**
-     * Met à jour l'affichage des litres et de la barre de progression.
-     */
-    function updateHydrationUI() {
-        const currentWaterElement = document.getElementById('currentWater');
-        const progressElement = document.getElementById('hydrationProgress');
-
-        // 1. Mise à jour des litres (avec 1 décimale)
-        currentWaterElement.textContent = currentWater.toFixed(1);
-
-        // 2. Calcul du pourcentage et mise à jour de la barre
-        let percentage = (currentWater / TARGET_WATER) * 100;
-
-        // Limiter la barre à 100%
-        if (percentage > 100) {
-            percentage = 100;
-        } else if (percentage < 0) {
-            percentage = 0;
+        function getInitialWaterAmount() {
+            const storedAmount = localStorage.getItem(STORAGE_KEY);
+            return parseFloat(storedAmount) || 1.6;
         }
 
-        progressElement.style.width = percentage + '%';
+        let currentWater = getInitialWaterAmount();
 
-        // 3. Sauvegarde dans le navigateur pour ne pas perdre la progression
-        localStorage.setItem(STORAGE_KEY, currentWater.toFixed(1));
-    }
+        /**
+         * Met à jour l'affichage des litres et de la barre de progression.
+         */
+        window.updateHydrationUI = () => {
+            const currentWaterElement = document.getElementById('currentWater');
+            const progressElement = document.getElementById('hydrationProgress');
 
+            currentWaterElement.textContent = currentWater.toFixed(1);
 
-    /**
-     * Modifie la quantité d'eau bue.
-     * Cette fonction est appelée par les boutons onclick="adjustWater(0.2)".
-     */
-    function adjustWater(amount) {
-        // Ajout/Retrait avec arrondi pour éviter les erreurs de virgule flottante JS
-        currentWater = parseFloat((currentWater + amount).toFixed(1));
+            let percentage = (currentWater / TARGET_WATER) * 100;
+            percentage = Math.min(100, Math.max(0, percentage));
 
-        // S'assurer que le montant n'est jamais négatif
-        if (currentWater < 0) {
-            currentWater = 0;
+            progressElement.style.width = percentage + '%';
+            localStorage.setItem(STORAGE_KEY, currentWater.toFixed(1));
         }
 
-        updateHydrationUI();
-    }
+        /**
+         * Modifie la quantité d'eau bue.
+         */
+        window.adjustWater = (amount) => {
+            currentWater = parseFloat((currentWater + amount).toFixed(1));
 
-    // changer de page
-    function switchPage(pageName) {
-        const pages = document.querySelectorAll('.page');
-        const navItems = document.querySelectorAll('.nav-item');
+            if (currentWater < 0) {
+                currentWater = 0;
+            }
 
-        pages.forEach(page => page.classList.remove('active'));
-        navItems.forEach(item => item.classList.remove('active'));
+            updateHydrationUI();
+        }
 
-        document.getElementById(pageName).classList.add('active');
-        event.target.closest('.nav-item').classList.add('active');
-    }
+        updateHydrationUI(); // Appel initial au chargement
 
-    const checkboxes = document.querySelectorAll('.checkbox');
-    checkboxes.forEach(box => {
-        box.addEventListener('click', function () {
-            this.classList.toggle('checked');
-        });
-    });
-    updateHydration();
 
-    // Calendrier mensuel de la page sport
 
-    document.addEventListener('DOMContentLoaded', () => {
+        // --- 4. LOGIQUE PAGE SPORT (Variables & Constantes) ---
+
+        const SESSION_STORAGE_KEY = 'workoutSessions';
+        const calendarContainer = document.getElementById('calendarContainer');
+        const eventDetails = document.getElementById('eventDetails');
+        const selectedDateDisplay = document.getElementById('selectedDateDisplay');
+        const openFormButton = document.getElementById('openFormButton');
+        const addSessionModal = document.getElementById('addSessionModal');
+        const saveSessionButton = document.getElementById('saveSessionButton');
+        const sessionTypeToggle = document.getElementById('sessionTypeToggle');
+        const sessionRecap = document.getElementById('sessionRecap');
+        const modalTitle = document.getElementById('modalTitle');
+        const sessionLocationGroup = document.getElementById('sessionLocationGroup');
+        const weeklyCalendarGrid = document.getElementById('weeklyCalendarGrid'); // NOUVEAU
+        const totalSessionsElement = document.getElementById('totalSessions');
+        const gymSessionsElement = document.getElementById('gymSessions');
+        const homeSessionsElement = document.getElementById('homeSessions');
+
+        const monthsHeader = document.querySelector('.months-header'); // NOUVEAU: Référence à l'en-tête du mois
         const monthYearDisplay = document.getElementById('monthYear');
         const calendarGrid = document.getElementById('calendarGrid');
         const prevButton = document.getElementById('prevMonth');
         const nextButton = document.getElementById('nextMonth');
+        const workoutPage = document.getElementById('workout');
 
-        let currentDate = new Date(); // Date actuelle pour suivre le mois affiché
+        let currentDate = new Date(); // Date pour suivre le mois affiché
+        let currentSelectedDate = new Date(); // Date exacte du jour cliqué
+        let sessionType = 'gym'; // Type de séance par défaut ('gym' ou 'home')
+        let editingExerciseIndex = null;
 
-        // Noms des mois en français
+        const daysOfWeek = ["DIM", "LUN", "MAR", "MER", "JEU", "VEN", "SAM"];
         const months = [
             "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
             "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
         ];
 
+
+        // --- 5. LOGIQUE GLOBALE (Stockage & Formatage) ---
+
+        function getSessions() {
+            try {
+                const storedSessions = localStorage.getItem(SESSION_STORAGE_KEY);
+                return storedSessions ? JSON.parse(storedSessions) : {};
+            } catch (e) {
+                console.error("Erreur de lecture du localStorage:", e);
+                return {};
+            }
+        }
+
+        function saveSessions(sessions) {
+            try {
+                localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(sessions));
+            } catch (e) {
+                console.error("Erreur d'écriture dans le localStorage:", e);
+            }
+        }
+
+        function formatDateKey(date) {
+            const y = date.getFullYear();
+            const m = String(date.getMonth() + 1).padStart(2, '0');
+            const d = String(date.getDate()).padStart(2, '0');
+            return `${y}-${m}-${d}`;
+        }
+
+        function formatDateDisplay(date) {
+            const options = {
+                weekday: 'long',
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            };
+            return date.toLocaleDateString('fr-FR', options);
+        }
+
+        function isToday(date) {
+            const today = new Date();
+            return date.getDate() === today.getDate() &&
+                date.getMonth() === today.getMonth() &&
+                date.getFullYear() === today.getFullYear();
+        }
+
+        // --- 6. LOGIQUE PAGE ACCUEIL (Calendrier Hebdomadaire & Recap) ---
+
         /**
-         * Rend le calendrier pour le mois et l'année donnés.
-         * @param {Date} date - La date à afficher (le mois et l'année sont utilisés).
+         * Met à jour les compteurs du récapitulatif de séances sur la page d'accueil.
+         */
+        function updateSessionRecap() {
+            const today = new Date();
+            const startOfWeek = new Date(today.setDate(today.getDate() - (today.getDay() === 0 ? 6 : today.getDay() - 1)));
+            const endOfWeek = new Date(startOfWeek);
+            endOfWeek.setDate(startOfWeek.getDate() + 6);
+
+            const allSessions = getSessions();
+            let totalSessions = 0;
+            let gymSessions = 0;
+            let homeSessions = 0;
+
+            for (const dateKey in allSessions) {
+                const sessionDate = new Date(dateKey);
+                // Vérifie si la séance est dans la semaine actuelle
+                if (sessionDate >= startOfWeek && sessionDate <= endOfWeek) {
+                    if (allSessions[dateKey].exercises.length > 0) {
+                        totalSessions++;
+                        if (allSessions[dateKey].type === 'gym') {
+                            gymSessions++;
+                        } else if (allSessions[dateKey].type === 'home') {
+                            homeSessions++;
+                        }
+                    }
+                }
+            }
+
+            totalSessionsElement.textContent = totalSessions;
+            gymSessionsElement.textContent = gymSessions;
+            homeSessionsElement.textContent = homeSessions;
+        }
+
+        /**
+         * Affiche le calendrier hebdomadaire sur la page d'accueil.
+         */
+        function renderWeeklyCalendar() {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0); // Début du jour pour comparaison
+
+            // Calculer le début de la semaine (Lundi)
+            let startOfWeekDay = today.getDay(); // 0 (Dimanche) à 6 (Samedi)
+            if (startOfWeekDay === 0) startOfWeekDay = 7; // Dimanche devient 7
+
+            const startOfWeek = new Date(today);
+            startOfWeek.setDate(today.getDate() - (startOfWeekDay - 1));
+            startOfWeek.setHours(0, 0, 0, 0);
+
+            let htmlContent = '';
+            const allSessions = getSessions();
+
+            for (let i = 0; i < 7; i++) {
+                const dayDate = new Date(startOfWeek);
+                dayDate.setDate(startOfWeek.getDate() + i);
+                dayDate.setHours(0, 0, 0, 0);
+
+                const dateKey = formatDateKey(dayDate);
+                const session = allSessions[dateKey];
+                const dayName = daysOfWeek[dayDate.getDay()];
+                const dayNumber = dayDate.getDate();
+
+                let circleClass = '';
+                let circleContent = dayNumber;
+
+                const isToday = dayDate.getTime() === today.getTime();
+                const isPast = dayDate.getTime() < today.getTime();
+                const hasSession = session && session.exercises.length > 0;
+
+                if (hasSession) {
+                    // Séance réalisée
+                    circleClass = session.type; // 'gym' ou 'home'
+                    circleContent = '✓';
+                } else if (isPast) {
+                    // Jour passé sans séance
+                    circleClass = 'missed'; // Nouvelle classe à ajouter dans style.css
+                    circleContent = '✕';
+                }
+
+                if (isToday) {
+                    // Le style 'today' est prioritaire sur le contenu (le numéro du jour)
+                    circleClass += ' today-circle';
+                    circleContent = dayNumber;
+                }
+
+                htmlContent += `
+                    <div class="day-item">
+                        <div class="day-name">${dayName}</div>
+                        <div class="day-circle ${circleClass.trim()}" data-day-key="${dateKey}">${circleContent}</div>
+                    </div>
+                `;
+            }
+            weeklyCalendarGrid.innerHTML = htmlContent;
+            updateSessionRecap(); // Met à jour le récapitulatif avec le nouveau calendrier
+        }
+
+        // --- 7. LOGIQUE PAGE SPORT (Fonctions d'Affichage et Modal) ---
+
+        /**
+         * Bascule la vue pour montrer le calendrier.
+         */
+        window.showCalendarView = () => {
+            monthsHeader.classList.remove('hidden'); // MODIFIÉ : Afficher l'en-tête du mois
+            calendarContainer.classList.remove('hidden');
+            eventDetails.classList.add('hidden');
+            openFormButton.classList.remove('hidden'); // S'assurer que le bouton d'ajout est visible au retour
+        }
+
+        /**
+         * Affiche les détails d'un jour et gère la visibilité du bouton d'ajout/modification.
+         */
+        function showEventDetails(day) {
+            const today = new Date();
+            const selectedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
+            currentSelectedDate = selectedDate;
+
+            // Masquer le calendrier et afficher les détails
+            calendarContainer.classList.add('hidden');
+            eventDetails.classList.remove('hidden');
+            monthsHeader.classList.add('hidden'); // MODIFIÉ : Masquer l'en-tête du mois
+
+            // Mise à jour de la date affichée
+            selectedDateDisplay.textContent = formatDateDisplay(currentSelectedDate);
+
+            // Charger les exercices pour la date sélectionnée
+            displaySessionRecap(currentSelectedDate);
+
+            // Gérer la visibilité du bouton d'ajout : Toujours visible
+            openFormButton.classList.remove('hidden');
+
+            // NOUVELLE LOGIQUE POUR LE TEXTE DU BOUTON
+            const dateKey = formatDateKey(currentSelectedDate);
+            const allSessions = getSessions();
+            const sessionExists = allSessions[dateKey] && allSessions[dateKey].exercises.length > 0;
+
+            if (sessionExists) {
+                openFormButton.textContent = '+ Ajouter Exercice';
+            } else {
+                openFormButton.textContent = '+ Nouvelle Séance';
+            }
+            // FIN NOUVELLE LOGIQUE
+
+            // Gérer la classe 'selected' sur le jour
+            calendarGrid.querySelectorAll('.day').forEach(d => d.classList.remove('selected'));
+            const clickedDayElement = calendarGrid.querySelector(`.day[data-day="${day}"]`);
+            if (clickedDayElement) {
+                clickedDayElement.classList.add('selected');
+            }
+        }
+
+
+        /**
+         * Rend la grille du calendrier mensuel.
          */
         function renderCalendar(date) {
             const currentYear = date.getFullYear();
             const currentMonth = date.getMonth();
             const today = new Date();
+            const allSessions = getSessions();
 
-            // 1. Mise à jour de l'en-tête (Mois Année)
             monthYearDisplay.textContent = `${months[currentMonth]} ${currentYear}`;
 
-            // 2. Calcul des dates du mois
-            // date(année, mois + 1, 0) donne le dernier jour du mois précédent, donc le jour '0' du mois actuel.
             const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
 
-            // date(année, mois, 1) donne le premier jour du mois actuel.
-            // getDay() renvoie 0 (Dimanche) à 6 (Samedi). On ajuste pour commencer à Lundi (1) jusqu'à Dimanche (7).
-            let firstDayOfWeek = new Date(currentYear, currentMonth, 1).getDay();
-            if (firstDayOfWeek === 0) firstDayOfWeek = 7; // Si Dimanche, le mettre à 7.
+            // Calculer le décalage pour que la semaine commence Lundi
+            let firstDayOfWeek = new Date(currentYear, currentMonth, 1).getDay(); // 0 = Dimanche
+            if (firstDayOfWeek === 0) firstDayOfWeek = 7; // Dimanche devient 7
+            const startDayOffset = firstDayOfWeek - 1; // 0 (Lun) à 6 (Dim)
 
-            // Le décalage pour le premier jour est (firstDayOfWeek - 1) car Lun=1, Mar=2, ...
-            const startDayOffset = firstDayOfWeek - 1;
+            calendarGrid.innerHTML = '';
 
-            // 3. Remplissage de la grille
-            calendarGrid.innerHTML = ''; // Vide la grille existante
-
-            // Jours vides (décalage) pour le début du mois
+            // Jours vides de début de mois
             for (let i = 0; i < startDayOffset; i++) {
                 const dayElement = document.createElement('div');
                 dayElement.classList.add('day', 'empty');
@@ -356,153 +576,22 @@
                 const dayElement = document.createElement('div');
                 dayElement.classList.add('day', 'current-month');
                 dayElement.textContent = day;
+                dayElement.dataset.day = day;
 
-                // Marquer le jour actuel (Aujourd'hui)
-                if (currentYear === today.getFullYear() &&
-                    currentMonth === today.getMonth() &&
-                    day === today.getDate()) {
+                const sessionDate = new Date(currentYear, currentMonth, day);
+                const dateKey = formatDateKey(sessionDate);
+                const session = allSessions[dateKey]; // Récupère l'objet session
+                const hasSession = session && session.exercises.length > 0;
+
+                if (currentYear === today.getFullYear() && currentMonth === today.getMonth() && day === today.getDate()) {
                     dayElement.classList.add('today');
                 }
 
-                calendarGrid.appendChild(dayElement);
-            }
-        }
-
-        // --- Gestion des événements de navigation ---
-
-        prevButton.addEventListener('click', () => {
-            // Recule d'un mois
-            currentDate.setMonth(currentDate.getMonth() - 1);
-            renderCalendar(currentDate);
-        });
-
-        nextButton.addEventListener('click', () => {
-            // Avance d'un mois
-            currentDate.setMonth(currentDate.getMonth() + 1);
-            renderCalendar(currentDate);
-        });
-
-        // Afficher le calendrier initial
-        renderCalendar(currentDate);
-    });
-
-
-</script>
-<!-- script page sport -->
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        // --- Déclarations des éléments et variables ---
-        const calendarContainer = document.getElementById('calendarContainer');
-        const eventDetails = document.getElementById('eventDetails');
-        const selectedDateDisplay = document.getElementById('selectedDateDisplay');
-        // Sélection du bouton 'Ajouter une séance'
-        const addButton = document.querySelector('#eventDetails .btn-primary');
-
-        const monthYearDisplay = document.getElementById('monthYear');
-        const calendarGrid = document.getElementById('calendarGrid');
-        const prevButton = document.getElementById('prevMonth');
-        const nextButton = document.getElementById('nextMonth');
-
-        let currentDate = new Date(); // Date pour suivre le mois affiché
-
-        // Noms des mois en français
-        const months = [
-            "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
-            "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
-        ];
-
-        // --- FONCTIONS DE GESTION DE L'AFFICHAGE ET DE LA LOGIQUE ---
-
-        /**
-         * Affiche les détails d'un jour, met à jour le titre et gère le bouton.
-         * @param {number} day - Le numéro du jour cliqué.
-         */
-        function showEventDetails(day) {
-            const today = new Date();
-            // Créer une date exacte pour le jour cliqué/sélectionné (heure à minuit)
-            const selectedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
-
-            // Pour la comparaison, on met l'heure d'aujourd'hui à minuit (pour ignorer l'heure actuelle)
-            const todayMidnight = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-
-            // --- 1. Gestion du Titre ---
-
-            // Le jour sélectionné est-il aujourd'hui ? (en ignorant l'heure)
-            const isToday = (selectedDate.getTime() === todayMidnight.getTime());
-
-            if (isToday) {
-                // Condition 1 : Afficher "Séance du Jour"
-                selectedDateDisplay.textContent = `Séance d'aujourd'hui`;
-            } else {
-                // Afficher la date complète
-                const month = months[currentDate.getMonth()];
-                const year = currentDate.getFullYear();
-                selectedDateDisplay.textContent = `Séance du ${day} ${month} ${year}`;
-            }
-
-            // --- 2. Gestion de la visibilité du Bouton ---
-
-            // Condition 2 : La date sélectionnée est-elle strictement antérieure à aujourd'hui (minuit) ?
-            const isPast = (selectedDate.getTime() < todayMidnight.getTime());
-
-            if (isPast) {
-                // Cacher le bouton pour les jours passés
-                addButton.style.display = 'none';
-            } else {
-                // Afficher le bouton pour Aujourd'hui et les jours futurs
-                addButton.style.display = 'block';
-            }
-
-            // --- 3. Affichage de la vue de détail ---
-            calendarContainer.classList.add('hidden');
-            eventDetails.classList.remove('hidden');
-        }
-
-        /**
-         * Revient à la vue Calendrier. (Utile pour la navigation entre pages)
-         */
-        function showCalendar() {
-            calendarContainer.classList.remove('hidden');
-            eventDetails.classList.add('hidden');
-        }
-
-
-        /**
-         * Rend le calendrier pour le mois et l'année donnés.
-         */
-        function renderCalendar(date) {
-            const currentYear = date.getFullYear();
-            const currentMonth = date.getMonth();
-            const today = new Date();
-
-            monthYearDisplay.textContent = `${months[currentMonth]} ${currentYear}`;
-
-            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-            let firstDayOfWeek = new Date(currentYear, currentMonth, 1).getDay();
-            if (firstDayOfWeek === 0) firstDayOfWeek = 7;
-            const startDayOffset = firstDayOfWeek - 1;
-
-            calendarGrid.innerHTML = '';
-
-            for (let i = 0; i < startDayOffset; i++) {
-                const dayElement = document.createElement('div');
-                dayElement.classList.add('day', 'empty');
-                calendarGrid.appendChild(dayElement);
-            }
-
-            for (let day = 1; day <= daysInMonth; day++) {
-                const dayElement = document.createElement('div');
-                dayElement.classList.add('day', 'current-month');
-                dayElement.textContent = day;
-
-                // Marquer le jour actuel (Aujourd'hui)
-                if (currentYear === today.getFullYear() &&
-                    currentMonth === today.getMonth() &&
-                    day === today.getDate()) {
-                    dayElement.classList.add('today');
+                if (hasSession) {
+                    // Modification pour prendre en compte le type de séance
+                    dayElement.classList.add(`${session.type}-session`);
                 }
 
-                // Écouteur d'événement au clic sur un jour
                 dayElement.addEventListener('click', () => {
                     showEventDetails(day);
                 });
@@ -511,51 +600,377 @@
             }
         }
 
-        // --- Gestion des événements de navigation (Changement de mois) ---
+        // --- 8. LOGIQUE MODALE DE SÉANCE ---
 
+        /**
+         * Ouvre la modal en mode Ajout d'Exercice.
+         */
+        function openAddExerciseModal() {
+            // Réinitialisation des champs
+            document.getElementById('exerciseName').value = '';
+            document.getElementById('sets').value = '3';
+            document.getElementById('reps').value = '10';
+            document.getElementById('notes').value = '';
+
+            const dateKey = formatDateKey(currentSelectedDate);
+            const allSessions = getSessions();
+            const sessionExists = allSessions[dateKey] && allSessions[dateKey].exercises.length > 0;
+            editingExerciseIndex = null;
+
+            if (sessionExists) {
+                modalTitle.textContent = 'Ajouter un Exercice';
+                sessionLocationGroup.style.display = 'none';
+                sessionType = allSessions[dateKey].type; // Réutilise le type existant
+            } else {
+                modalTitle.textContent = 'Nouvelle Séance';
+                sessionLocationGroup.style.display = 'block';
+                // Assurer que le toggle est bien initialisé (par défaut à 'gym')
+                sessionType = 'gym';
+                document.querySelector('#sessionTypeToggle button[data-type="gym"]').classList.add('active');
+                document.querySelector('#sessionTypeToggle button[data-type="home"]').classList.remove('active');
+            }
+
+            saveSessionButton.textContent = 'Enregistrer';
+            openFormButton.classList.add('hidden'); // Masquer le bouton principal
+            addSessionModal.classList.remove('hidden');
+            document.body.classList.add('modal-open'); // Bloquer le défilement du body
+        }
+
+        /**
+         * Ouvre la modal en mode Modification d'Exercice.
+         */
+        function openEditExerciseModal(index, exerciseData) {
+            editingExerciseIndex = index;
+            modalTitle.textContent = 'Modifier l\'Exercice';
+            sessionLocationGroup.style.display = 'none'; // Le type de séance ne change pas lors de la modif d'un exercice
+            saveSessionButton.textContent = 'Mettre à jour';
+
+            // Remplir les champs
+            document.getElementById('exerciseName').value = exerciseData.name;
+            document.getElementById('sets').value = exerciseData.sets;
+            document.getElementById('reps').value = exerciseData.reps;
+            document.getElementById('notes').value = exerciseData.notes;
+
+            openFormButton.classList.add('hidden');
+            addSessionModal.classList.remove('hidden');
+            document.body.classList.add('modal-open');
+        }
+
+        /**
+         * Ferme la modal et réinitialise l'état.
+         */
+        window.closeAddSessionModal = () => {
+            addSessionModal.classList.add('hidden');
+            openFormButton.classList.remove('hidden'); // Afficher à nouveau le bouton principal
+            document.body.classList.remove('modal-open');
+            editingExerciseIndex = null;
+        }
+
+        /**
+         * Change le type de séance dans la modal.
+         */
+        function handleSessionTypeToggle(event) {
+            const target = event.target.closest('button');
+            if (target) {
+                sessionType = target.dataset.type;
+                sessionTypeToggle.querySelectorAll('button').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                target.classList.add('active');
+            }
+        }
+
+        /**
+         * Enregistre ou met à jour l'exercice dans le localStorage.
+         * MODIFIÉ : Logique de gestion de 'seriesList' pour être plus robuste
+         */
+        function saveSession() {
+            const name = document.getElementById('exerciseName').value.trim();
+            const sets = parseInt(document.getElementById('sets').value, 10);
+            const reps = parseInt(document.getElementById('reps').value, 10);
+            const notes = document.getElementById('notes').value.trim();
+
+            if (!name || isNaN(sets) || sets < 1 || isNaN(reps) || reps < 1) {
+                alert('Veuillez remplir le nom de l\'exercice, le nombre de séries et de répétitions.');
+                return;
+            }
+
+            const dateKey = formatDateKey(currentSelectedDate);
+            const allSessions = getSessions();
+
+            if (!allSessions[dateKey]) {
+                allSessions[dateKey] = {
+                    type: sessionType,
+                    exercises: []
+                };
+            }
+            
+            // Récupère l'exercice existant pour le mode modification
+            const existingExercise = editingExerciseIndex !== null ? allSessions[dateKey].exercises[editingExerciseIndex] : null;
+
+            let seriesList;
+
+            // Logique de création/mise à jour de la liste des séries :
+            // 1. Si c'est un nouvel exercice (editingExerciseIndex === null)
+            // 2. Ou si le nombre de séries a changé (existingExercise.sets !== sets)
+            // 3. Ou si la propriété 'series' est manquante (e.g., données sauvegardées avant cette fonctionnalité)
+            if (editingExerciseIndex === null || existingExercise.sets !== sets || !existingExercise.series) {
+                
+                // On crée une nouvelle liste de séries (toutes non faites)
+                seriesList = [];
+                for (let i = 0; i < sets; i++) {
+                    seriesList.push({
+                        reps: reps, // Répétitions par série
+                        isDone: false // État de la coche
+                    });
+                }
+            } else { 
+                // Mode modification et le nombre de séries est le même.
+                // On réutilise l'ancienne liste pour conserver l'état des coches (isDone)
+                seriesList = existingExercise.series;
+                // On s'assure que le nombre de répétitions par série est à jour
+                seriesList.forEach(series => series.reps = reps);
+            }
+            
+            // Création de l'objet exercice (ou mise à jour)
+            const newExerciseData = {
+                name: name,
+                sets: sets,
+                reps: reps,
+                notes: notes,
+                photo: '',
+                series: seriesList 
+            };
+
+
+            if (editingExerciseIndex !== null) {
+                // Mode Modification
+                allSessions[dateKey].exercises[editingExerciseIndex] = newExerciseData;
+            } else {
+                // Mode Ajout
+                allSessions[dateKey].exercises.push(newExerciseData);
+            }
+
+            // Mettre à jour le type de séance si la modal l'a permis (mode ajout)
+            if (document.getElementById('sessionLocationGroup').style.display !== 'none') {
+                allSessions[dateKey].type = sessionType;
+            }
+
+            // --- C'est ici que l'exécution reprend ! ---
+            saveSessions(allSessions);
+            closeAddSessionModal();
+            displaySessionRecap(currentSelectedDate);
+            renderCalendar(currentDate); // Mettre à jour l'icône sur le calendrier
+            renderWeeklyCalendar(); // Mettre à jour le calendrier de l'accueil
+            showEventDetails(currentSelectedDate.getDate()); // MODIFIÉ: Met à jour le bouton principal
+        }
+
+        /**
+         * Gère la modification d'un exercice.
+         */
+        function handleEditExercise(event) {
+            const index = parseInt(event.currentTarget.dataset.index, 10);
+            const dateKey = formatDateKey(currentSelectedDate);
+            const allSessions = getSessions();
+            const exerciseData = allSessions[dateKey].exercises[index];
+            openEditExerciseModal(index, exerciseData);
+        }
+
+        /**
+         * Gère la suppression d'un exercice.
+         */
+        function deleteExercise(event) {
+            if (!confirm("Êtes-vous sûr de vouloir supprimer cet exercice ?")) {
+                return;
+            }
+
+            const indexToDelete = parseInt(event.currentTarget.dataset.index, 10);
+            const dateKey = formatDateKey(currentSelectedDate);
+            const allSessions = getSessions();
+            const session = allSessions[dateKey];
+
+            if (session && session.exercises.length > indexToDelete) {
+                session.exercises.splice(indexToDelete, 1);
+
+                // Supprimer la séance entière si elle est vide
+                if (session.exercises.length === 0) {
+                    delete allSessions[dateKey];
+                }
+
+                saveSessions(allSessions);
+                displaySessionRecap(currentSelectedDate);
+                renderCalendar(currentDate);
+                renderWeeklyCalendar(); // SYNCHRONISATION
+                showEventDetails(currentSelectedDate.getDate());
+            }
+        }
+
+        /**
+         * Gère le clic sur la coche pour marquer une série comme faite/non faite.
+         * NOUVELLE FONCTION
+         */
+        function toggleSeriesDone(exerciseIndex, seriesIndex) {
+            const dateKey = formatDateKey(currentSelectedDate);
+            const allSessions = getSessions();
+            const session = allSessions[dateKey];
+
+            if (session && session.exercises[exerciseIndex] && session.exercises[exerciseIndex].series[seriesIndex]) {
+                const currentStatus = session.exercises[exerciseIndex].series[seriesIndex].isDone;
+                session.exercises[exerciseIndex].series[seriesIndex].isDone = !currentStatus;
+
+                saveSessions(allSessions);
+                displaySessionRecap(currentSelectedDate); // Réaffiche la carte
+            }
+        }
+
+        /**
+         * Génère et affiche le récapitulatif des séances pour une date donnée.
+         * MODIFIÉ : Ajout de la structure de liste pour les séries et du bouton de coche
+         */
+        function displaySessionRecap(date) {
+            const dateKey = formatDateKey(date);
+            const allSessions = getSessions();
+            const session = allSessions[dateKey];
+            const exercises = session ? session.exercises : [];
+            sessionRecap.innerHTML = '';
+
+            if (exercises.length === 0) {
+                sessionRecap.innerHTML = `<p class="no-session-msg">Aucune séance enregistrée pour cette journée.</p>`;
+            } else {
+                const sessionTypeLabel = session.type === 'gym' ? 'Salle de Sport' : 'À la Maison';
+                const sessionTypeIcon = session.type === 'gym' ? '💪' : '🏠';
+
+                // En-tête de la séance
+                sessionRecap.innerHTML = `
+                    <div class="session-type-header ${session.type}">
+                        <span class="type-icon">${sessionTypeIcon}</span>
+                        <span class="type-label">${sessionTypeLabel}</span>
+                    </div>
+                `;
+
+                exercises.forEach((exercise, exerciseIndex) => {
+                    const exerciseCard = document.createElement('div');
+                    exerciseCard.classList.add('session-card');
+                    exerciseCard.classList.add(session.type);
+
+                    // --- Construction de la liste des séries ---
+                    let seriesHtml = '<ul class="series-list">';
+
+                    if (exercise.series) {
+                        exercise.series.forEach((series, seriesIndex) => {
+                            const isDone = series.isDone;
+                            const checkIcon = isDone ? '✓' : '';
+                            const doneClass = isDone ? 'done' : '';
+
+                            seriesHtml += `
+                                <li class="series-item ${doneClass}">
+                                    <div class="series-info">
+                                        <span class="series-number">Série ${seriesIndex + 1}</span>
+                                        <span class="series-reps">${series.reps} Répétitions</span>
+                                    </div>
+                                    <button class="series-toggle-btn" data-exercise-index="${exerciseIndex}" data-series-index="${seriesIndex}">
+                                        ${checkIcon}
+                                    </button>
+                                </li>
+                            `;
+                        });
+                    }
+                    seriesHtml += '</ul>';
+                    // ------------------------------------------
+
+                    exerciseCard.innerHTML += `
+                        <h4 class="exercise-name">${exercise.name}</h4>
+
+                        ${seriesHtml}
+
+                        ${exercise.notes ? `<p class="notes">Notes: ${exercise.notes}</p>` : ''}
+
+                        <div class="card-actions">
+                            <button class="btn-edit" data-index="${exerciseIndex}">Modifier</button>
+                            <button class="btn-delete" data-index="${exerciseIndex}">Supprimer</button>
+                        </div>
+                    `;
+                    sessionRecap.appendChild(exerciseCard);
+                });
+
+                // Attacher les écouteurs d'événements pour les boutons de coche
+                sessionRecap.querySelectorAll('.series-toggle-btn').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const exIndex = parseInt(e.currentTarget.dataset.exerciseIndex, 10);
+                        const sIndex = parseInt(e.currentTarget.dataset.seriesIndex, 10);
+                        toggleSeriesDone(exIndex, sIndex);
+                    });
+                });
+                // Attacher les écouteurs d'événements pour les boutons d'action
+                sessionRecap.querySelectorAll('.btn-edit').forEach(button => {
+                    button.addEventListener('click', handleEditExercise);
+                });
+                sessionRecap.querySelectorAll('.btn-delete').forEach(button => {
+                    button.addEventListener('click', deleteExercise);
+                });
+            }
+        }
+
+
+        // --- 9. INITIALISATION ET ÉCOUTEURS D'ÉVÉNEMENTS ---
+
+        // Écouteurs pour la navigation du calendrier
         prevButton.addEventListener('click', () => {
             currentDate.setMonth(currentDate.getMonth() - 1);
             renderCalendar(currentDate);
-            showCalendar(); // On revient au calendrier après le changement de mois
+            showCalendarView();
         });
 
         nextButton.addEventListener('click', () => {
             currentDate.setMonth(currentDate.getMonth() + 1);
             renderCalendar(currentDate);
-            showCalendar(); // On revient au calendrier après le changement de mois
+            showCalendarView();
         });
 
-        // --- Logique d'affichage initial (Afficher la séance du jour au chargement/switch) ---
+        // Écouteurs pour la modal
+        openFormButton.addEventListener('click', openAddExerciseModal);
+        saveSessionButton.addEventListener('click', saveSession);
+        sessionTypeToggle.addEventListener('click', handleSessionTypeToggle);
 
-        // 1. Initialiser l'affichage du calendrier au mois actuel
-        renderCalendar(currentDate);
+        /**
+         * Fonction d'initialisation de la page Sport.
+         */
+        const setupWorkoutPage = () => {
+            renderCalendar(currentDate);
+            showCalendarView();
 
-        const workoutPage = document.getElementById('workout');
-
-        const initialSetup = () => {
-            // Afficher la vue de détail pour AUJOURD'HUI
-            showEventDetails(new Date().getDate());
+            const todayElement = calendarGrid.querySelector('.today');
+            if (todayElement) {
+                setTimeout(() => {
+                    todayElement.click();
+                }, 10);
+            }
         };
 
-        // Si la page 'workout' est la page active au chargement, on lance l'initialisation
+        // Initialisation du calendrier du mois et de la semaine au chargement
+        renderCalendar(currentDate);
+        renderWeeklyCalendar();
+
+        // Initialisation de la page Sport si active au chargement
         if (workoutPage.classList.contains('active')) {
-            initialSetup();
+            setupWorkoutPage();
         }
 
         // Écouteur sur les boutons de navigation du bas (pour l'initialisation)
         const navItems = document.querySelectorAll('.nav-item');
         navItems.forEach(item => {
             item.addEventListener('click', (e) => {
-                const pageName = e.currentTarget.querySelector('.nav-label').textContent;
-                if (pageName === 'Sport') {
-                    // Petite attente pour s'assurer que le switchPage a eu lieu avant initialSetup
-                    setTimeout(initialSetup, 100);
-                } else {
-                    // Si on quitte la page Sport, on revient à la vue calendrier par défaut
-                    showCalendar();
+                const pageLabel = e.currentTarget.querySelector('.nav-label').textContent;
+                if (pageLabel === 'Sport') {
+                    if (!workoutPage.classList.contains('active')) {
+                        switchPage('workout');
+                    }
+                } else if (pageLabel === 'Accueil') {
+                    renderWeeklyCalendar(); // Met à jour le calendrier hebdomadaire à chaque retour à l'accueil
                 }
             });
         });
+
     });
 </script>
 
