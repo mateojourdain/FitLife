@@ -3,184 +3,218 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>FitLife App</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
 
     <div class="app-container">
         <div class="header">
-            <h1>FitLife </h1>
+            <h1>FitLife</h1>
             <div class="date" id="currentDate"></div>
         </div>
 
         <div id="home" class="page active">
-
-            <div class="card" style="width: 100%;     background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);     border: 1px solid #222;
-    border-radius: 12px;">
+            <div class="card gradient-border">
                 <div style="display: flex; flex-direction: column; gap: 10px;">
-                    <div style="font-size: 14px; color: #9AA4A8; text-transform: uppercase; font-weight: 600;">
-                        Séances Réalisées (Semaine)
+                    <div class="card-label">Séances Réalisées (Semaine)</div>
+                    <div class="big-stat">
+                        <span id="totalSessions">0</span>
+                        <span class="stat-goal">/ 5 Objectif</span>
                     </div>
-                    <div style="font-size: 44px; font-weight: 900; background: linear-gradient(135deg, #00f5ff 0%, #0080ff 100%);
-                        background-clip: text;
-                        -webkit-text-fill-color: transparent; line-height: 1;">
-                        <span id="totalSessions">4
-
-                        </span>
-                        <span style="font-size: 18px; font-weight: 500; margin-left: 5px;">/
-                            5 Objectif</span>
-                    </div>
-
-                    <div style="margin-top: 10px; border-top: 1px solid #202025; padding-top: 10px;">
-                        <div class="background">
+                    <div class="stats-separator">
+                        <div class="background-stat">
                             <div class="stat-line" style="margin-bottom: 8px;">
-                                <div style="font-size: 14px;     color: #666; font-weight: 600;">En salle de sport</div>
-                                <div style="font-size: 20px; font-weight: 700; color: #00BFFF;" id="gymSessions">3
-                                </div>
+                                <div class="stat-label">En salle de sport</div>
+                                <div style="font-size: 20px; font-weight: 700; color: #00BFFF;" id="gymSessions">0</div>
                             </div>
                             <div class="stat-line">
-                                <div style="font-size: 14px;     color: #666; font-weight: 600;">A la maison</div>
-                                <div style="font-size: 20px; font-weight: 700; color: #00BFFF;" id="homeSessions">1
+                                <div class="stat-label">A la maison</div>
+                                <div style="font-size: 20px; font-weight: 700; color: #FF00C8;" id="homeSessions">0
                                 </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
 
-            <div class="section-title">Activité Hebdomadaire</div>
-            <div class="card">
-                <div class="days-grid" id="weeklyCalendarGrid">
+            <div class="section-title">Mon Corps</div>
+            <div class="card ripple" onclick="openWeightModal()">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                    <div>
+                        <div class="card-label">Poids Actuel</div>
+                        <div style="font-size: 28px; font-weight: 900; color: #fff;"><span id="displayWeight">--</span>
+                            <span style="font-size:16px; color:#666;">kg</span>
+                        </div>
                     </div>
-                <div class="point-container">
-                    <div class="point-container" id="home-container">
-                        <div class="point home"></div>
-                        <h3>Maison</h3>
-                    </div>
-                    <div class="point-container" id="gym-container">
-                        <div class="point gym"></div>
-                        <h3>Salle</h3>
+                    <div style="text-align:right;">
+                        <div class="card-label">IMC</div>
+                        <div style="font-size: 28px; font-weight: 900; color: #00BFFF;" id="displayBMI">--</div>
                     </div>
                 </div>
+                <div style="height: 150px; width: 100%;"><canvas id="weightChart"></canvas></div>
+                <div
+                    style="text-align:center; cursor: pointer; font-size:11px; color:#666; margin-top:10px; text-transform:uppercase; letter-spacing:1px;">
+                    Toucher pour mettre à jour</div>
             </div>
 
-            <div class="section-title">hydratation</div>
+            <div class="section-title">Outils</div>
+            <div class="card ripple" onclick="openRmModal()"
+                style="display:flex; justify-content:space-between; align-items:center; padding:20px;">
+                <div style="display:flex; align-items:center; gap:15px;">
+                    <div class="icon-box">⚡</div>
+                    <div>
+                        <div style="font-weight:700; color:#fff; font-size:16px;">Calculateur 1RM</div>
+                        <div style="font-size:12px; color:#666;">Estime ta force max</div>
+                    </div>
+                </div>
+                <div style="color:#00BFFF; font-size:20px;">›</div>
+            </div>
+
+            <div class="section-title">Hydratation</div>
             <div class="hydration-card">
-
                 <div class="hydration-header">
-                    <div class="hydration-count"><span id="currentWater"></span>L / <span id="targetWater">3.2</span>L
-                    </div>
+                    <div class="hydration-count"><span id="currentWater"></span>L <span
+                            style="color:#9AA4A8; font-size:14px;">/ <span id="targetWater">3.2</span>L</span></div>
                 </div>
                 <div class="hydration-bar">
                     <div class="hydration-progress" id="hydrationProgress"></div>
                 </div>
-                <div class="hydration-target">Objectif quotidien</div>
                 <div class="hydration-controls">
                     <button class="hydration-btn" onclick="adjustWater(-0.2)">−</button>
                     <div class="hydration-amount">+/- 0.2L</div>
                     <button class="hydration-btn" onclick="adjustWater(0.2)">+</button>
                 </div>
-
                 <p class="indication-hydration">* Un verre d'eau de taille standard contient environ 0.2L</p>
-            </div>
 
+            </div>
         </div>
 
         <div id="workout" class="page">
-            <div class="months-header">
-                <button id="prevMonth" class="nav-button">‹</button>
-                <h2 id="monthYear"></h2>
-                <button id="nextMonth" class="nav-button">›</button>
+            <div class="day-slider-container">
+                <button id="prevWeek" class="week-nav-btn">‹</button>
+                <div class="day-slider" id="daySlider"></div>
+                <button id="nextWeek" class="week-nav-btn">›</button>
             </div>
 
-            <div class="calendar-container" id="calendarContainer">
-                <div class="calendar-days-header">
-                    <span>Lun</span>
-                    <span>Mar</span>
-                    <span>Mer</span>
-                    <span>Jeu</span>
-                    <span>Ven</span>
-                    <span>Sam</span>
-                    <span>Dim</span>
-                </div>
-
-                <div class="calendar-grid" id="calendarGrid">
-                </div>
-                <div class="point-container">
-                    <div class="point-container" id="home-container">
-                        <div class="point home"></div>
-                        <h3>Maison</h3>
-                    </div>
-                    <div class="point-container" id="gym-container">
-                        <div class="point gym"></div>
-                        <h3>Salle</h3>
-                    </div>
-                </div>
+            <div id="actionButtonsContainer" style="display: flex; gap: 10px; margin-top: 20px;">
+                <button class="btn-secondary" id="btnProgram" onclick="openTemplateModal()" style="flex:1;">
+                    Programmes</button>
+                <button class="btn-primary" id="openFormButton" style="flex:1; margin-bottom:0; display:none; color: #fff;     background: linear-gradient(135deg, #00f5ff 0%, #0080ff 100%);
+">
+                    Nouvelle Séance</button>
             </div>
 
-            <div class="event-details hidden" id="eventDetails">
-                <button class="back-to-calendar" onclick="showCalendarView()">
-                    Voir le calendrier
-                </button>
-                <h3 id="selectedDateDisplay"></h3>
-
-                <button class="btn-primary" id="openFormButton">+ Nouvelle Séance</button>
-
-                <div id="sessionRecap" class="session-recap-container">
-                </div>
+            <div class="section-title" id="recapSectionTitle"
+                style="display:none; margin-bottom:15px; margin-top:35px;">
+                Récapitulatif (<span id="recapDateDisplay" style="color:#fff;"></span>)
             </div>
+            <div id="sessionRecap" class="session-recap-container"></div>
         </div>
 
         <div id="nutrition" class="page">
+            <div style="text-align:center; padding:60px 20px; color:#666;">
+                <div style="font-size:40px; margin-bottom:10px;">🍎</div>Module Nutrition à venir
+            </div>
         </div>
 
-
-        <div class="add-session-modal hidden" id="addSessionModal">
+        <div class="modal-overlay hidden" id="addSessionModal">
             <div class="modal-content">
-                <h2 id="modalTitle">Ajouter une Séance</h2>
-                <div class="form-group session-type-group" id="sessionLocationGroup"> <label>Lieu de la séance</label>
+                <div class="modal-header-row">
+                    <h2 id="modalTitle">Séance</h2><button class="btn-close-text"
+                        onclick="closeAddSessionModal()">Fermer</button>
+                </div>
+                <div class="form-group" id="sessionLocationGroup">
                     <div class="toggle-switch" id="sessionTypeToggle">
-                        <button data-type="gym" class="active">Salle de sport</button>
-                        <button data-type="home">Maison</button>
+                        <button data-type="gym" class="active">Salle de sport</button><button
+                            data-type="home">Maison</button>
                     </div>
                 </div>
-
-                <div class="form-group">
-                    <label for="exerciseName">Nom de l'exercice</label>
-                    <input type="text" id="exerciseName" placeholder="Ex: Développé couché">
-                </div>
-
+                <div class="form-group"><label>Nom de l'exercice</label><input type="text" id="exerciseName"
+                        placeholder="Ex: Développé couché"></div>
                 <div class="form-group row-group">
-                    <div class="input-group">
-                        <label for="sets">Séries</label>
-                        <input type="number" id="sets" value="3" min="1">
-                    </div>
-                    <div class="input-group">
-                        <label for="reps">Répétitions</label>
-                        <input type="number" id="reps" value="10" min="1">
-                    </div>
+                    <div class="input-group"><label>Séries</label><input type="number" id="sets" value="3"></div>
+                    <div class="input-group"><label>Répétitions</label><input type="number" id="reps" value="10"></div>
                 </div>
-
-                <div class="form-group">
-                    <label for="notes">Notes (Optionnel)</label>
-                    <textarea id="notes" placeholder="Sensation, poids utilisé, etc."></textarea>
-                </div>
-
-                <div class="form-group">
-                    <button class="btn-secondary" id="addPhotoButton">
-                        Ajouter une Photo (Optionnel)
-                    </button>
-                </div>
-
-                <div class="modal-actions">
-                    <button class="btn-secondary" onclick="closeAddSessionModal()">Annuler</button>
-                    <button class="btn-prim" id="saveSessionButton">Enregistrer</button>
+                <div class="form-group"><label>Notes</label><textarea id="notes"
+                        placeholder="Sensation, poids..."></textarea></div>
+                <div class="modal-actions"><button class="btn-primary full" id="saveSessionButton">Enregistrer</button>
                 </div>
             </div>
+        </div>
+
+        <div class="modal-overlay hidden" id="weightModal">
+            <div class="modal-content">
+                <div class="modal-header-row">
+                    <h2>Poids & IMC</h2><button class="btn-close-text" onclick="closeWeightModal()">Fermer</button>
+                </div>
+                <div class="form-group row-group">
+                    <div class="input-group"><label>Poids (kg)</label><input type="number" id="inputWeight"
+                            placeholder="0"></div>
+                    <div class="input-group"><label>Taille (cm)</label><input type="number" id="inputHeight"
+                            placeholder="175"></div>
+                </div>
+                <div class="form-group"><label>Âge (ans)</label><input type="number" id="inputAge" placeholder="25">
+                </div>
+                <div class="card" style="margin: 20px 0; text-align:center; border:1px solid #333; background:#0a0a0a;">
+                    <div
+                        style="font-size:12px; color:#666; text-transform:uppercase; letter-spacing:1px; margin-bottom:5px;">
+                        IMC Estimé</div>
+                    <div id="bmiResult" style="font-size:40px; font-weight:900; color:#00BFFF; line-height:1;">--</div>
+                    <div id="bmiText" style="font-size:14px; font-weight:600; color:#fff; margin-top:5px;">--</div>
+                </div>
+                <div class="modal-actions"><button class="btn-primary full"
+                        onclick="saveWeightData()">Sauvegarder</button></div>
+            </div>
+        </div>
+
+        <div class="modal-overlay hidden" id="rmModal">
+            <div class="modal-content">
+                <div class="modal-header-row">
+                    <h2>Calculateur 1RM</h2><button class="btn-close-text"
+                        onclick="document.getElementById('rmModal').classList.add('hidden')">Fermer</button>
+                </div>
+                <div class="form-group row-group">
+                    <div class="input-group"><label>Poids (kg)</label><input type="number" id="rmWeight"
+                            placeholder="80"></div>
+                    <div class="input-group"><label>Répétitions</label><input type="number" id="rmReps" placeholder="8">
+                    </div>
+                </div>
+                <div class="card" style="margin: 20px 0; text-align:center; border:1px solid #333; background:#0a0a0a;">
+                    <div style="font-size:12px; color:#666; text-transform:uppercase; letter-spacing:1px;">Max Théorique
+                    </div>
+                    <div id="rmResult" style="font-size:40px; font-weight:900; color:#00BFFF;">--</div>
+                    <div style="font-size:12px; color:#666;">kg</div>
+                </div>
+                <button class="btn-primary full" onclick="calculateRM()">Calculer</button>
+            </div>
+        </div>
+
+        <div class="modal-overlay hidden" id="templateModal">
+            <div class="modal-content">
+                <div class="modal-header-row">
+                    <h2>Programmes</h2><button class="btn-close-text"
+                        onclick="document.getElementById('templateModal').classList.add('hidden')">Fermer</button>
+                </div>
+                <div id="templateList" style="display:flex; flex-direction:column; gap:10px;"></div>
+            </div>
+        </div>
+
+        <div id="smartTimer" class="timer-float hidden">
+            <div style="display:flex; flex-direction:column;">
+                <span style="font-size:10px; color:#888; font-weight:700;">REPOS</span>
+                <span id="timerDisplay"
+                    style="font-size:20px; font-weight:700; color:#fff; font-family:monospace;">01:30</span>
+            </div>
+            <div style="display:flex; gap:8px;">
+                <button class="timer-btn" onclick="adjustTimer(-10)">-10</button>
+                <button class="timer-btn" onclick="adjustTimer(+10)">+10</button>
+                <button class="timer-btn stop" onclick="stopTimer()">✕</button>
+            </div>
+            <div class="timer-bar" id="timerBar"></div>
         </div>
 
         <div class="bottom-nav">
@@ -198,780 +232,300 @@
             </button>
         </div>
     </div>
-</body>
 
-
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-
-        // --- 1. FONCTIONS UTILITAIRES GLOBALES ---
-
-        /**
-         * Bascule entre les différentes pages de l'application.
-         */
-        window.switchPage = (pageName) => {
-            const pages = document.querySelectorAll('.page');
-            const navItems = document.querySelectorAll('.nav-item');
-
-            pages.forEach(page => page.classList.remove('active'));
-            navItems.forEach(item => item.classList.remove('active'));
-
-            document.getElementById(pageName).classList.add('active');
-
-            // Trouver le bouton de navigation cliqué
-            const clickedItem = event.target.closest('.nav-item');
-            if (clickedItem) {
-                clickedItem.classList.add('active');
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            window.switchPage = (pageName) => {
+                document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                event.target.closest('.nav-item')?.classList.add('active');
+                document.getElementById(pageName).classList.add('active');
+                if (pageName === 'workout') setupWorkoutPage();
+                else if (typeof closeAddSessionModal === 'function') closeAddSessionModal();
             }
 
-            // Exécuter l'initialisation spécifique à la page Sport si nécessaire
-            if (pageName === 'workout') {
-                setupWorkoutPage();
-            } else {
-                // Si on quitte la page Sport, on s'assure que la modal est cachée
-                if (typeof closeAddSessionModal === 'function') {
-                    closeAddSessionModal();
-                }
+            const dateElement = document.getElementById('currentDate');
+            const date = new Date();
+            let dateString = date.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
+            dateElement.textContent = dateString.charAt(0).toUpperCase() + dateString.slice(1);
+
+            const TARGET_WATER = 3.2;
+            const STORAGE_KEY = 'dailyWaterAmount';
+            let currentWater = parseFloat(localStorage.getItem(STORAGE_KEY)) || 1.6;
+            window.updateHydrationUI = () => {
+                document.getElementById('currentWater').textContent = currentWater.toFixed(1);
+                document.getElementById('hydrationProgress').style.width = Math.min(100, (currentWater / TARGET_WATER) * 100) + '%';
+                localStorage.setItem(STORAGE_KEY, currentWater.toFixed(1));
             }
-        }
-
-
-        // --- 2. LOGIQUE PAGE ACCUEIL (Date) ---
-
-        const dateElement = document.getElementById('currentDate');
-        const date = new Date();
-        const options = {
-            weekday: 'long',
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric'
-        };
-        let dateString = date.toLocaleDateString('fr-FR', options);
-
-        // Met la première lettre de la date ET du mois en majuscule
-        dateString = dateString
-            .split(' ')
-            .map((word, i) => {
-                if (i === 0 || (i > 1 && isNaN(word))) {
-                    return word.charAt(0).toUpperCase() + word.slice(1);
-                }
-                return word;
-            })
-            .join(' ');
-
-        dateElement.textContent = dateString;
-
-
-        // --- 3. LOGIQUE PAGE ACCUEIL (Hydratation) ---
-
-        const TARGET_WATER = 3.2;
-        const STORAGE_KEY = 'dailyWaterAmount';
-        const targetWaterElement = document.getElementById('targetWater');
-        targetWaterElement.textContent = TARGET_WATER.toFixed(1);
-
-
-        function getInitialWaterAmount() {
-            const storedAmount = localStorage.getItem(STORAGE_KEY);
-            return parseFloat(storedAmount) || 1.6;
-        }
-
-        let currentWater = getInitialWaterAmount();
-
-        /**
-         * Met à jour l'affichage des litres et de la barre de progression.
-         */
-        window.updateHydrationUI = () => {
-            const currentWaterElement = document.getElementById('currentWater');
-            const progressElement = document.getElementById('hydrationProgress');
-
-            currentWaterElement.textContent = currentWater.toFixed(1);
-
-            let percentage = (currentWater / TARGET_WATER) * 100;
-            percentage = Math.min(100, Math.max(0, percentage));
-
-            progressElement.style.width = percentage + '%';
-            localStorage.setItem(STORAGE_KEY, currentWater.toFixed(1));
-        }
-
-        /**
-         * Modifie la quantité d'eau bue.
-         */
-        window.adjustWater = (amount) => {
-            currentWater = parseFloat((currentWater + amount).toFixed(1));
-
-            if (currentWater < 0) {
-                currentWater = 0;
-            }
-
+            window.adjustWater = (amount) => { currentWater = Math.max(0, parseFloat((currentWater + amount).toFixed(1))); updateHydrationUI(); }
             updateHydrationUI();
-        }
 
-        updateHydrationUI(); // Appel initial au chargement
+            const SESSION_STORAGE_KEY = 'workoutSessions';
+            let currentDate = new Date();
+            let currentSelectedDate = new Date();
+            let selectedDayElement = null;
+            let sessionType = 'gym';
+            let editingExerciseIndex = null;
+            function getWeekStart(date) { const d = new Date(date); let day = d.getDay() || 7; d.setDate(d.getDate() - (day - 1)); d.setHours(0, 0, 0, 0); return d; }
+            let currentWeekStart = getWeekStart(currentDate);
 
+            function getSessions() { return JSON.parse(localStorage.getItem(SESSION_STORAGE_KEY)) || {}; }
+            function saveSessions(sessions) { localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(sessions)); }
+            function formatDateKey(d) { return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; }
+            function formatDateDisplay(d) { return d.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' }); }
 
-
-        // --- 4. LOGIQUE PAGE SPORT (Variables & Constantes) ---
-
-        const SESSION_STORAGE_KEY = 'workoutSessions';
-        const calendarContainer = document.getElementById('calendarContainer');
-        const eventDetails = document.getElementById('eventDetails');
-        const selectedDateDisplay = document.getElementById('selectedDateDisplay');
-        const openFormButton = document.getElementById('openFormButton');
-        const addSessionModal = document.getElementById('addSessionModal');
-        const saveSessionButton = document.getElementById('saveSessionButton');
-        const sessionTypeToggle = document.getElementById('sessionTypeToggle');
-        const sessionRecap = document.getElementById('sessionRecap');
-        const modalTitle = document.getElementById('modalTitle');
-        const sessionLocationGroup = document.getElementById('sessionLocationGroup');
-        const weeklyCalendarGrid = document.getElementById('weeklyCalendarGrid'); // NOUVEAU
-        const totalSessionsElement = document.getElementById('totalSessions');
-        const gymSessionsElement = document.getElementById('gymSessions');
-        const homeSessionsElement = document.getElementById('homeSessions');
-
-        const monthsHeader = document.querySelector('.months-header'); // NOUVEAU: Référence à l'en-tête du mois
-        const monthYearDisplay = document.getElementById('monthYear');
-        const calendarGrid = document.getElementById('calendarGrid');
-        const prevButton = document.getElementById('prevMonth');
-        const nextButton = document.getElementById('nextMonth');
-        const workoutPage = document.getElementById('workout');
-
-        let currentDate = new Date(); // Date pour suivre le mois affiché
-        let currentSelectedDate = new Date(); // Date exacte du jour cliqué
-        let sessionType = 'gym'; // Type de séance par défaut ('gym' ou 'home')
-        let editingExerciseIndex = null;
-
-        const daysOfWeek = ["DIM", "LUN", "MAR", "MER", "JEU", "VEN", "SAM"];
-        const months = [
-            "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
-            "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
-        ];
-
-
-        // --- 5. LOGIQUE GLOBALE (Stockage & Formatage) ---
-
-        function getSessions() {
-            try {
-                const storedSessions = localStorage.getItem(SESSION_STORAGE_KEY);
-                return storedSessions ? JSON.parse(storedSessions) : {};
-            } catch (e) {
-                console.error("Erreur de lecture du localStorage:", e);
-                return {};
+            // FONCTION CRUCIALE : Vérifie si la date est STRICTEMENT passée (hier ou avant)
+            function isPastDate(d) {
+                const today = new Date(); today.setHours(0, 0, 0, 0);
+                const check = new Date(d); check.setHours(0, 0, 0, 0);
+                return check.getTime() < today.getTime();
             }
-        }
 
-        function saveSessions(sessions) {
-            try {
-                localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(sessions));
-            } catch (e) {
-                console.error("Erreur d'écriture dans le localStorage:", e);
-            }
-        }
-
-        function formatDateKey(date) {
-            const y = date.getFullYear();
-            const m = String(date.getMonth() + 1).padStart(2, '0');
-            const d = String(date.getDate()).padStart(2, '0');
-            return `${y}-${m}-${d}`;
-        }
-
-        function formatDateDisplay(date) {
-            const options = {
-                weekday: 'long',
-                day: 'numeric',
-                month: 'long',
-                year: 'numeric'
-            };
-            return date.toLocaleDateString('fr-FR', options);
-        }
-
-        function isToday(date) {
-            const today = new Date();
-            return date.getDate() === today.getDate() &&
-                date.getMonth() === today.getMonth() &&
-                date.getFullYear() === today.getFullYear();
-        }
-
-        // --- 6. LOGIQUE PAGE ACCUEIL (Calendrier Hebdomadaire & Recap) ---
-
-        /**
-         * Met à jour les compteurs du récapitulatif de séances sur la page d'accueil.
-         */
-        function updateSessionRecap() {
-            const today = new Date();
-            const startOfWeek = new Date(today.setDate(today.getDate() - (today.getDay() === 0 ? 6 : today.getDay() - 1)));
-            const endOfWeek = new Date(startOfWeek);
-            endOfWeek.setDate(startOfWeek.getDate() + 6);
-
-            const allSessions = getSessions();
-            let totalSessions = 0;
-            let gymSessions = 0;
-            let homeSessions = 0;
-
-            for (const dateKey in allSessions) {
-                const sessionDate = new Date(dateKey);
-                // Vérifie si la séance est dans la semaine actuelle
-                if (sessionDate >= startOfWeek && sessionDate <= endOfWeek) {
-                    if (allSessions[dateKey].exercises.length > 0) {
+            function updateDashboardSessions() {
+                const allSessions = getSessions();
+                let totalSessions = 0, gymSessions = 0, homeSessions = 0;
+                const today = new Date(); today.setHours(0, 0, 0, 0);
+                let startOfWeekDay = today.getDay() || 7;
+                const startOfWeek = new Date(today); startOfWeek.setDate(today.getDate() - (startOfWeekDay - 1));
+                for (let i = 0; i < 7; i++) {
+                    const dayDate = new Date(startOfWeek); dayDate.setDate(startOfWeek.getDate() + i);
+                    const session = allSessions[formatDateKey(dayDate)];
+                    if (session && session.exercises.length > 0) {
                         totalSessions++;
-                        if (allSessions[dateKey].type === 'gym') {
-                            gymSessions++;
-                        } else if (allSessions[dateKey].type === 'home') {
-                            homeSessions++;
-                        }
+                        if (session.type === 'gym') gymSessions++; else homeSessions++;
                     }
                 }
+                document.getElementById('totalSessions').textContent = totalSessions;
+                document.getElementById('gymSessions').textContent = gymSessions;
+                document.getElementById('homeSessions').textContent = homeSessions;
             }
 
-            totalSessionsElement.textContent = totalSessions;
-            gymSessionsElement.textContent = gymSessions;
-            homeSessionsElement.textContent = homeSessions;
-        }
-
-        /**
-         * Affiche le calendrier hebdomadaire sur la page d'accueil.
-         */
-        function renderWeeklyCalendar() {
-            const today = new Date();
-            today.setHours(0, 0, 0, 0); // Début du jour pour comparaison
-
-            // Calculer le début de la semaine (Lundi)
-            let startOfWeekDay = today.getDay(); // 0 (Dimanche) à 6 (Samedi)
-            if (startOfWeekDay === 0) startOfWeekDay = 7; // Dimanche devient 7
-
-            const startOfWeek = new Date(today);
-            startOfWeek.setDate(today.getDate() - (startOfWeekDay - 1));
-            startOfWeek.setHours(0, 0, 0, 0);
-
-            let htmlContent = '';
-            const allSessions = getSessions();
-
-            for (let i = 0; i < 7; i++) {
-                const dayDate = new Date(startOfWeek);
-                dayDate.setDate(startOfWeek.getDate() + i);
-                dayDate.setHours(0, 0, 0, 0);
-
-                const dateKey = formatDateKey(dayDate);
-                const session = allSessions[dateKey];
-                const dayName = daysOfWeek[dayDate.getDay()];
-                const dayNumber = dayDate.getDate();
-
-                let circleClass = '';
-                let circleContent = dayNumber;
-
-                const isToday = dayDate.getTime() === today.getTime();
-                const isPast = dayDate.getTime() < today.getTime();
-                const hasSession = session && session.exercises.length > 0;
-
-                if (hasSession) {
-                    // Séance réalisée
-                    circleClass = session.type; // 'gym' ou 'home'
-                    circleContent = '✓';
-                } else if (isPast) {
-                    // Jour passé sans séance
-                    circleClass = 'missed'; // Nouvelle classe à ajouter dans style.css
-                    circleContent = '✕';
-                }
-
-                if (isToday) {
-                    // Le style 'today' est prioritaire sur le contenu (le numéro du jour)
-                    circleClass += ' today-circle';
-                    circleContent = dayNumber;
-                }
-
-                htmlContent += `
-                    <div class="day-item">
-                        <div class="day-name">${dayName}</div>
-                        <div class="day-circle ${circleClass.trim()}" data-day-key="${dateKey}">${circleContent}</div>
-                    </div>
-                `;
-            }
-            weeklyCalendarGrid.innerHTML = htmlContent;
-            updateSessionRecap(); // Met à jour le récapitulatif avec le nouveau calendrier
-        }
-
-        // --- 7. LOGIQUE PAGE SPORT (Fonctions d'Affichage et Modal) ---
-
-        /**
-         * Bascule la vue pour montrer le calendrier.
-         */
-        window.showCalendarView = () => {
-            monthsHeader.classList.remove('hidden'); // MODIFIÉ : Afficher l'en-tête du mois
-            calendarContainer.classList.remove('hidden');
-            eventDetails.classList.add('hidden');
-            openFormButton.classList.remove('hidden'); // S'assurer que le bouton d'ajout est visible au retour
-        }
-
-        /**
-         * Affiche les détails d'un jour et gère la visibilité du bouton d'ajout/modification.
-         */
-        function showEventDetails(day) {
-            const today = new Date();
-            const selectedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
-            currentSelectedDate = selectedDate;
-
-            // Masquer le calendrier et afficher les détails
-            calendarContainer.classList.add('hidden');
-            eventDetails.classList.remove('hidden');
-            monthsHeader.classList.add('hidden'); // MODIFIÉ : Masquer l'en-tête du mois
-
-            // Mise à jour de la date affichée
-            selectedDateDisplay.textContent = formatDateDisplay(currentSelectedDate);
-
-            // Charger les exercices pour la date sélectionnée
-            displaySessionRecap(currentSelectedDate);
-
-            // Gérer la visibilité du bouton d'ajout : Toujours visible
-            openFormButton.classList.remove('hidden');
-
-            // NOUVELLE LOGIQUE POUR LE TEXTE DU BOUTON
-            const dateKey = formatDateKey(currentSelectedDate);
-            const allSessions = getSessions();
-            const sessionExists = allSessions[dateKey] && allSessions[dateKey].exercises.length > 0;
-
-            if (sessionExists) {
-                openFormButton.textContent = '+ Ajouter Exercice';
-            } else {
-                openFormButton.textContent = '+ Nouvelle Séance';
-            }
-            // FIN NOUVELLE LOGIQUE
-
-            // Gérer la classe 'selected' sur le jour
-            calendarGrid.querySelectorAll('.day').forEach(d => d.classList.remove('selected'));
-            const clickedDayElement = calendarGrid.querySelector(`.day[data-day="${day}"]`);
-            if (clickedDayElement) {
-                clickedDayElement.classList.add('selected');
-            }
-        }
-
-
-        /**
-         * Rend la grille du calendrier mensuel.
-         */
-        function renderCalendar(date) {
-            const currentYear = date.getFullYear();
-            const currentMonth = date.getMonth();
-            const today = new Date();
-            const allSessions = getSessions();
-
-            monthYearDisplay.textContent = `${months[currentMonth]} ${currentYear}`;
-
-            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-
-            // Calculer le décalage pour que la semaine commence Lundi
-            let firstDayOfWeek = new Date(currentYear, currentMonth, 1).getDay(); // 0 = Dimanche
-            if (firstDayOfWeek === 0) firstDayOfWeek = 7; // Dimanche devient 7
-            const startDayOffset = firstDayOfWeek - 1; // 0 (Lun) à 6 (Dim)
-
-            calendarGrid.innerHTML = '';
-
-            // Jours vides de début de mois
-            for (let i = 0; i < startDayOffset; i++) {
-                const dayElement = document.createElement('div');
-                dayElement.classList.add('day', 'empty');
-                calendarGrid.appendChild(dayElement);
-            }
-
-            // Jours du mois
-            for (let day = 1; day <= daysInMonth; day++) {
-                const dayElement = document.createElement('div');
-                dayElement.classList.add('day', 'current-month');
-                dayElement.textContent = day;
-                dayElement.dataset.day = day;
-
-                const sessionDate = new Date(currentYear, currentMonth, day);
-                const dateKey = formatDateKey(sessionDate);
-                const session = allSessions[dateKey]; // Récupère l'objet session
-                const hasSession = session && session.exercises.length > 0;
-
-                if (currentYear === today.getFullYear() && currentMonth === today.getMonth() && day === today.getDate()) {
-                    dayElement.classList.add('today');
-                }
-
-                if (hasSession) {
-                    // Modification pour prendre en compte le type de séance
-                    dayElement.classList.add(`${session.type}-session`);
-                }
-
-                dayElement.addEventListener('click', () => {
-                    showEventDetails(day);
-                });
-
-                calendarGrid.appendChild(dayElement);
-            }
-        }
-
-        // --- 8. LOGIQUE MODALE DE SÉANCE ---
-
-        /**
-         * Ouvre la modal en mode Ajout d'Exercice.
-         */
-        function openAddExerciseModal() {
-            // Réinitialisation des champs
-            document.getElementById('exerciseName').value = '';
-            document.getElementById('sets').value = '3';
-            document.getElementById('reps').value = '10';
-            document.getElementById('notes').value = '';
-
-            const dateKey = formatDateKey(currentSelectedDate);
-            const allSessions = getSessions();
-            const sessionExists = allSessions[dateKey] && allSessions[dateKey].exercises.length > 0;
-            editingExerciseIndex = null;
-
-            if (sessionExists) {
-                modalTitle.textContent = 'Ajouter un Exercice';
-                sessionLocationGroup.style.display = 'none';
-                sessionType = allSessions[dateKey].type; // Réutilise le type existant
-            } else {
-                modalTitle.textContent = 'Nouvelle Séance';
-                sessionLocationGroup.style.display = 'block';
-                // Assurer que le toggle est bien initialisé (par défaut à 'gym')
-                sessionType = 'gym';
-                document.querySelector('#sessionTypeToggle button[data-type="gym"]').classList.add('active');
-                document.querySelector('#sessionTypeToggle button[data-type="home"]').classList.remove('active');
-            }
-
-            saveSessionButton.textContent = 'Enregistrer';
-            openFormButton.classList.add('hidden'); // Masquer le bouton principal
-            addSessionModal.classList.remove('hidden');
-            document.body.classList.add('modal-open'); // Bloquer le défilement du body
-        }
-
-        /**
-         * Ouvre la modal en mode Modification d'Exercice.
-         */
-        function openEditExerciseModal(index, exerciseData) {
-            editingExerciseIndex = index;
-            modalTitle.textContent = 'Modifier l\'Exercice';
-            sessionLocationGroup.style.display = 'none'; // Le type de séance ne change pas lors de la modif d'un exercice
-            saveSessionButton.textContent = 'Mettre à jour';
-
-            // Remplir les champs
-            document.getElementById('exerciseName').value = exerciseData.name;
-            document.getElementById('sets').value = exerciseData.sets;
-            document.getElementById('reps').value = exerciseData.reps;
-            document.getElementById('notes').value = exerciseData.notes;
-
-            openFormButton.classList.add('hidden');
-            addSessionModal.classList.remove('hidden');
-            document.body.classList.add('modal-open');
-        }
-
-        /**
-         * Ferme la modal et réinitialise l'état.
-         */
-        window.closeAddSessionModal = () => {
-            addSessionModal.classList.add('hidden');
-            openFormButton.classList.remove('hidden'); // Afficher à nouveau le bouton principal
-            document.body.classList.remove('modal-open');
-            editingExerciseIndex = null;
-        }
-
-        /**
-         * Change le type de séance dans la modal.
-         */
-        function handleSessionTypeToggle(event) {
-            const target = event.target.closest('button');
-            if (target) {
-                sessionType = target.dataset.type;
-                sessionTypeToggle.querySelectorAll('button').forEach(btn => {
-                    btn.classList.remove('active');
-                });
-                target.classList.add('active');
-            }
-        }
-
-        /**
-         * Enregistre ou met à jour l'exercice dans le localStorage.
-         * MODIFIÉ : Logique de gestion de 'seriesList' pour être plus robuste
-         */
-        function saveSession() {
-            const name = document.getElementById('exerciseName').value.trim();
-            const sets = parseInt(document.getElementById('sets').value, 10);
-            const reps = parseInt(document.getElementById('reps').value, 10);
-            const notes = document.getElementById('notes').value.trim();
-
-            if (!name || isNaN(sets) || sets < 1 || isNaN(reps) || reps < 1) {
-                alert('Veuillez remplir le nom de l\'exercice, le nombre de séries et de répétitions.');
-                return;
-            }
-
-            const dateKey = formatDateKey(currentSelectedDate);
-            const allSessions = getSessions();
-
-            if (!allSessions[dateKey]) {
-                allSessions[dateKey] = {
-                    type: sessionType,
-                    exercises: []
-                };
-            }
-            
-            // Récupère l'exercice existant pour le mode modification
-            const existingExercise = editingExerciseIndex !== null ? allSessions[dateKey].exercises[editingExerciseIndex] : null;
-
-            let seriesList;
-
-            // Logique de création/mise à jour de la liste des séries :
-            // 1. Si c'est un nouvel exercice (editingExerciseIndex === null)
-            // 2. Ou si le nombre de séries a changé (existingExercise.sets !== sets)
-            // 3. Ou si la propriété 'series' est manquante (e.g., données sauvegardées avant cette fonctionnalité)
-            if (editingExerciseIndex === null || existingExercise.sets !== sets || !existingExercise.series) {
-                
-                // On crée une nouvelle liste de séries (toutes non faites)
-                seriesList = [];
-                for (let i = 0; i < sets; i++) {
-                    seriesList.push({
-                        reps: reps, // Répétitions par série
-                        isDone: false // État de la coche
-                    });
-                }
-            } else { 
-                // Mode modification et le nombre de séries est le même.
-                // On réutilise l'ancienne liste pour conserver l'état des coches (isDone)
-                seriesList = existingExercise.series;
-                // On s'assure que le nombre de répétitions par série est à jour
-                seriesList.forEach(series => series.reps = reps);
-            }
-            
-            // Création de l'objet exercice (ou mise à jour)
-            const newExerciseData = {
-                name: name,
-                sets: sets,
-                reps: reps,
-                notes: notes,
-                photo: '',
-                series: seriesList 
-            };
-
-
-            if (editingExerciseIndex !== null) {
-                // Mode Modification
-                allSessions[dateKey].exercises[editingExerciseIndex] = newExerciseData;
-            } else {
-                // Mode Ajout
-                allSessions[dateKey].exercises.push(newExerciseData);
-            }
-
-            // Mettre à jour le type de séance si la modal l'a permis (mode ajout)
-            if (document.getElementById('sessionLocationGroup').style.display !== 'none') {
-                allSessions[dateKey].type = sessionType;
-            }
-
-            // --- C'est ici que l'exécution reprend ! ---
-            saveSessions(allSessions);
-            closeAddSessionModal();
-            displaySessionRecap(currentSelectedDate);
-            renderCalendar(currentDate); // Mettre à jour l'icône sur le calendrier
-            renderWeeklyCalendar(); // Mettre à jour le calendrier de l'accueil
-            showEventDetails(currentSelectedDate.getDate()); // MODIFIÉ: Met à jour le bouton principal
-        }
-
-        /**
-         * Gère la modification d'un exercice.
-         */
-        function handleEditExercise(event) {
-            const index = parseInt(event.currentTarget.dataset.index, 10);
-            const dateKey = formatDateKey(currentSelectedDate);
-            const allSessions = getSessions();
-            const exerciseData = allSessions[dateKey].exercises[index];
-            openEditExerciseModal(index, exerciseData);
-        }
-
-        /**
-         * Gère la suppression d'un exercice.
-         */
-        function deleteExercise(event) {
-            if (!confirm("Êtes-vous sûr de vouloir supprimer cet exercice ?")) {
-                return;
-            }
-
-            const indexToDelete = parseInt(event.currentTarget.dataset.index, 10);
-            const dateKey = formatDateKey(currentSelectedDate);
-            const allSessions = getSessions();
-            const session = allSessions[dateKey];
-
-            if (session && session.exercises.length > indexToDelete) {
-                session.exercises.splice(indexToDelete, 1);
-
-                // Supprimer la séance entière si elle est vide
-                if (session.exercises.length === 0) {
-                    delete allSessions[dateKey];
-                }
-
-                saveSessions(allSessions);
-                displaySessionRecap(currentSelectedDate);
-                renderCalendar(currentDate);
-                renderWeeklyCalendar(); // SYNCHRONISATION
-                showEventDetails(currentSelectedDate.getDate());
-            }
-        }
-
-        /**
-         * Gère le clic sur la coche pour marquer une série comme faite/non faite.
-         * NOUVELLE FONCTION
-         */
-        function toggleSeriesDone(exerciseIndex, seriesIndex) {
-            const dateKey = formatDateKey(currentSelectedDate);
-            const allSessions = getSessions();
-            const session = allSessions[dateKey];
-
-            if (session && session.exercises[exerciseIndex] && session.exercises[exerciseIndex].series[seriesIndex]) {
-                const currentStatus = session.exercises[exerciseIndex].series[seriesIndex].isDone;
-                session.exercises[exerciseIndex].series[seriesIndex].isDone = !currentStatus;
-
-                saveSessions(allSessions);
-                displaySessionRecap(currentSelectedDate); // Réaffiche la carte
-            }
-        }
-
-        /**
-         * Génère et affiche le récapitulatif des séances pour une date donnée.
-         * MODIFIÉ : Ajout de la structure de liste pour les séries et du bouton de coche
-         */
-        function displaySessionRecap(date) {
-            const dateKey = formatDateKey(date);
-            const allSessions = getSessions();
-            const session = allSessions[dateKey];
-            const exercises = session ? session.exercises : [];
-            sessionRecap.innerHTML = '';
-
-            if (exercises.length === 0) {
-                sessionRecap.innerHTML = `<p class="no-session-msg">Aucune séance enregistrée pour cette journée.</p>`;
-            } else {
-                const sessionTypeLabel = session.type === 'gym' ? 'Salle de Sport' : 'À la Maison';
-                const sessionTypeIcon = session.type === 'gym' ? '💪' : '🏠';
-
-                // En-tête de la séance
-                sessionRecap.innerHTML = `
-                    <div class="session-type-header ${session.type}">
-                        <span class="type-icon">${sessionTypeIcon}</span>
-                        <span class="type-label">${sessionTypeLabel}</span>
-                    </div>
-                `;
-
-                exercises.forEach((exercise, exerciseIndex) => {
-                    const exerciseCard = document.createElement('div');
-                    exerciseCard.classList.add('session-card');
-                    exerciseCard.classList.add(session.type);
-
-                    // --- Construction de la liste des séries ---
-                    let seriesHtml = '<ul class="series-list">';
-
-                    if (exercise.series) {
-                        exercise.series.forEach((series, seriesIndex) => {
-                            const isDone = series.isDone;
-                            const checkIcon = isDone ? '✓' : '';
-                            const doneClass = isDone ? 'done' : '';
-
-                            seriesHtml += `
-                                <li class="series-item ${doneClass}">
-                                    <div class="series-info">
-                                        <span class="series-number">Série ${seriesIndex + 1}</span>
-                                        <span class="series-reps">${series.reps} Répétitions</span>
-                                    </div>
-                                    <button class="series-toggle-btn" data-exercise-index="${exerciseIndex}" data-series-index="${seriesIndex}">
-                                        ${checkIcon}
-                                    </button>
-                                </li>
-                            `;
-                        });
+            function renderDaySlider(startOfWeek) {
+                const slider = document.getElementById('daySlider'); slider.innerHTML = '';
+                const allSessions = getSessions();
+                let selectedDayFound = false;
+
+                const today = new Date();
+                today.setHours(0, 0, 0, 0); // Jour actuel sans l'heure
+
+                for (let i = 0; i < 7; i++) {
+                    const dayDate = new Date(startOfWeek); dayDate.setDate(startOfWeek.getDate() + i);
+                    const key = formatDateKey(dayDate);
+                    const dayName = dayDate.toLocaleDateString('fr-FR', { weekday: 'short' }).substring(0, 3).toUpperCase();
+                    const el = document.createElement('div');
+                    el.classList.add('slider-day');
+
+                    // MARQUEUR DE SÉANCE (le point)
+                    if (allSessions[key] && allSessions[key].exercises.length > 0) el.classList.add(allSessions[key].type);
+
+                    // MISE EN ÉVIDENCE DU JOUR ACTUEL
+                    const checkDate = new Date(dayDate); checkDate.setHours(0, 0, 0, 0);
+                    if (checkDate.getTime() === today.getTime()) {
+                        el.classList.add('today');
                     }
-                    seriesHtml += '</ul>';
-                    // ------------------------------------------
 
-                    exerciseCard.innerHTML += `
-                        <h4 class="exercise-name">${exercise.name}</h4>
-
-                        ${seriesHtml}
-
-                        ${exercise.notes ? `<p class="notes">Notes: ${exercise.notes}</p>` : ''}
-
-                        <div class="card-actions">
-                            <button class="btn-edit" data-index="${exerciseIndex}">Modifier</button>
-                            <button class="btn-delete" data-index="${exerciseIndex}">Supprimer</button>
-                        </div>
-                    `;
-                    sessionRecap.appendChild(exerciseCard);
-                });
-
-                // Attacher les écouteurs d'événements pour les boutons de coche
-                sessionRecap.querySelectorAll('.series-toggle-btn').forEach(button => {
-                    button.addEventListener('click', (e) => {
-                        const exIndex = parseInt(e.currentTarget.dataset.exerciseIndex, 10);
-                        const sIndex = parseInt(e.currentTarget.dataset.seriesIndex, 10);
-                        toggleSeriesDone(exIndex, sIndex);
-                    });
-                });
-                // Attacher les écouteurs d'événements pour les boutons d'action
-                sessionRecap.querySelectorAll('.btn-edit').forEach(button => {
-                    button.addEventListener('click', handleEditExercise);
-                });
-                sessionRecap.querySelectorAll('.btn-delete').forEach(button => {
-                    button.addEventListener('click', deleteExercise);
-                });
-            }
-        }
-
-
-        // --- 9. INITIALISATION ET ÉCOUTEURS D'ÉVÉNEMENTS ---
-
-        // Écouteurs pour la navigation du calendrier
-        prevButton.addEventListener('click', () => {
-            currentDate.setMonth(currentDate.getMonth() - 1);
-            renderCalendar(currentDate);
-            showCalendarView();
-        });
-
-        nextButton.addEventListener('click', () => {
-            currentDate.setMonth(currentDate.getMonth() + 1);
-            renderCalendar(currentDate);
-            showCalendarView();
-        });
-
-        // Écouteurs pour la modal
-        openFormButton.addEventListener('click', openAddExerciseModal);
-        saveSessionButton.addEventListener('click', saveSession);
-        sessionTypeToggle.addEventListener('click', handleSessionTypeToggle);
-
-        /**
-         * Fonction d'initialisation de la page Sport.
-         */
-        const setupWorkoutPage = () => {
-            renderCalendar(currentDate);
-            showCalendarView();
-
-            const todayElement = calendarGrid.querySelector('.today');
-            if (todayElement) {
-                setTimeout(() => {
-                    todayElement.click();
-                }, 10);
-            }
-        };
-
-        // Initialisation du calendrier du mois et de la semaine au chargement
-        renderCalendar(currentDate);
-        renderWeeklyCalendar();
-
-        // Initialisation de la page Sport si active au chargement
-        if (workoutPage.classList.contains('active')) {
-            setupWorkoutPage();
-        }
-
-        // Écouteur sur les boutons de navigation du bas (pour l'initialisation)
-        const navItems = document.querySelectorAll('.nav-item');
-        navItems.forEach(item => {
-            item.addEventListener('click', (e) => {
-                const pageLabel = e.currentTarget.querySelector('.nav-label').textContent;
-                if (pageLabel === 'Sport') {
-                    if (!workoutPage.classList.contains('active')) {
-                        switchPage('workout');
+                    // SÉLECTION ACTUELLE
+                    if (formatDateKey(dayDate) === formatDateKey(currentSelectedDate)) {
+                        el.classList.add('selected');
+                        selectedDayFound = true;
+                        selectedDayElement = el;
                     }
-                } else if (pageLabel === 'Accueil') {
-                    renderWeeklyCalendar(); // Met à jour le calendrier hebdomadaire à chaque retour à l'accueil
+
+                    el.innerHTML = `<div class="day-name">${dayName}</div><div class="day-num">${dayDate.getDate()}</div>`;
+                    el.onclick = () => selectDay(dayDate);
+                    slider.appendChild(el);
                 }
+                if (!selectedDayFound) selectDay(startOfWeek);
+                setTimeout(() => { if (document.querySelector('.slider-day.selected')) document.querySelector('.slider-day.selected').scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' }); }, 0);
+            }
+
+            function selectDay(date) {
+                currentSelectedDate = new Date(date);
+                const dateKey = formatDateKey(currentSelectedDate);
+                document.getElementById('recapDateDisplay').textContent = formatDateDisplay(currentSelectedDate);
+                if (selectedDayElement) selectedDayElement.classList.remove('selected');
+                document.querySelectorAll('.slider-day').forEach(el => {
+                    const dayDate = new Date(currentWeekStart);
+                    dayDate.setDate(currentWeekStart.getDate() + Array.from(el.parentNode.children).indexOf(el));
+                    if (formatDateKey(dayDate) === formatDateKey(currentSelectedDate)) { selectedDayElement = el; el.classList.add('selected'); } else { el.classList.remove('selected'); }
+                });
+                displaySessionRecap(currentSelectedDate, true);
+
+                // LOGIQUE DE VERROUILLAGE DES JOURS PASSÉS
+                const allSessions = getSessions();
+                const btnAdd = document.getElementById('openFormButton');
+                const actionContainer = document.getElementById('actionButtonsContainer');
+                const isPast = isPastDate(currentSelectedDate);
+
+                if (isPast) {
+                    actionContainer.style.display = 'none'; // Cache les boutons si date passée
+                } else {
+                    actionContainer.style.display = 'flex';
+                    btnAdd.style.display = 'flex';
+                    btnAdd.textContent = (allSessions[dateKey] && allSessions[dateKey].exercises.length > 0) ? ' Ajouter un exercice' : ' Ajouté une séance';
+                }
+            }
+
+            document.getElementById('prevWeek').addEventListener('click', () => { currentWeekStart.setDate(currentWeekStart.getDate() - 7); currentSelectedDate.setDate(currentSelectedDate.getDate() - 7); renderDaySlider(currentWeekStart); });
+            document.getElementById('nextWeek').addEventListener('click', () => { currentWeekStart.setDate(currentWeekStart.getDate() + 7); currentSelectedDate.setDate(currentSelectedDate.getDate() + 7); renderDaySlider(currentWeekStart); });
+
+            function openAddExerciseModal() {
+                if (isPastDate(currentSelectedDate)) return; // Sécurité supplémentaire
+                document.getElementById('exerciseName').value = ''; document.getElementById('sets').value = '3'; document.getElementById('reps').value = '10'; document.getElementById('notes').value = '';
+                const key = formatDateKey(currentSelectedDate); const all = getSessions();
+                if (all[key] && all[key].exercises.length > 0) {
+                    document.getElementById('modalTitle').textContent = 'Ajouter un Exercice';
+                    document.getElementById('sessionLocationGroup').style.display = 'none';
+                    sessionType = all[key].type;
+                } else {
+                    document.getElementById('modalTitle').textContent = 'Nouvelle Séance';
+                    document.getElementById('sessionLocationGroup').style.display = 'block';
+                    sessionType = 'gym';
+                    document.querySelector('[data-type="gym"]').classList.add('active'); document.querySelector('[data-type="home"]').classList.remove('active');
+                }
+                document.getElementById('addSessionModal').classList.remove('hidden');
+                document.body.classList.add('modal-open');
+            }
+            window.closeAddSessionModal = () => { document.getElementById('addSessionModal').classList.add('hidden'); document.body.classList.remove('modal-open'); editingExerciseIndex = null; if (currentSelectedDate) selectDay(currentSelectedDate); renderDaySlider(currentWeekStart); }
+
+            document.getElementById('sessionTypeToggle').addEventListener('click', (e) => {
+                const btn = e.target.closest('button');
+                if (btn) { sessionType = btn.dataset.type; document.querySelectorAll('.toggle-switch button').forEach(b => b.classList.remove('active')); btn.classList.add('active'); }
             });
-        });
+            document.getElementById('saveSessionButton').addEventListener('click', () => {
+                const name = document.getElementById('exerciseName').value;
+                const sets = parseInt(document.getElementById('sets').value);
+                const reps = parseInt(document.getElementById('reps').value);
+                if (!name) return alert('Nom manquant');
+                const key = formatDateKey(currentSelectedDate); const all = getSessions();
+                if (!all[key]) all[key] = { type: sessionType, exercises: [] };
+                const newEx = { name, sets, reps, notes: document.getElementById('notes').value, series: [] };
+                for (let i = 0; i < sets; i++) newEx.series.push({ reps, isDone: false });
+                if (editingExerciseIndex !== null) all[key].exercises[editingExerciseIndex] = newEx;
+                else { all[key].exercises.push(newEx); if (document.getElementById('sessionLocationGroup').style.display !== 'none') all[key].type = sessionType; }
+                saveSessions(all); closeAddSessionModal(); selectDay(currentSelectedDate); updateDashboardSessions();
+            });
 
-    });
-</script>
+            function displaySessionRecap(date, showTitle = false) {
+                const container = document.getElementById('sessionRecap'); container.innerHTML = '';
+                const key = formatDateKey(date); const all = getSessions(); const s = all[key];
+                const recapTitle = document.getElementById('recapSectionTitle');
+                if (!s || s.exercises.length === 0) { container.innerHTML = '<div class="no-session-msg">Aucune séance.</div>'; recapTitle.style.display = showTitle ? 'block' : 'none'; return; }
+                recapTitle.style.display = 'block';
+                const isPast = isPastDate(date);
+                container.innerHTML = `<div class="session-type-header ${s.type}"><span class="type-label">${s.type === 'gym' ? 'Salle de Sport' : 'Maison'}</span></div>`;
+                s.exercises.forEach((ex, idx) => {
+                    let seriesHtml = '<ul class="series-list">';
+                    ex.series.forEach((ser, sIdx) => {
+                        const btnClass = ser.isDone ? 'done' : '';
+                        const check = ser.isDone ? '✓' : '';
+                        // MODIFICATION ICI : Affichage clair en LISTE avec distinction "Série" / "Reps"
+                        seriesHtml += `
+                    <li class="series-item ${btnClass}">
+                        <div class="series-info-row">
+                            <span class="series-num">Série ${sIdx + 1}</span>
+                            <span class="series-val">${ser.reps} Reps</span>
+                        </div>
+                        <button class="series-toggle-btn ${isPast ? 'disabled' : ''}" onclick="toggleSeries(${idx}, ${sIdx})">${check}</button>
+                    </li>`;
+                    });
+                    seriesHtml += '</ul>';
+                    const actions = isPast ? '' : `<div class="card-actions"><button class="btn-edit" onclick="editEx(${idx})">Modifier</button><button class="btn-delete" onclick="delEx(${idx})">Supprimer</button></div>`;
+                    container.innerHTML += `<div class="session-card ${s.type}"><div class="ex-header-row"><h4>${ex.name}</h4></div>${seriesHtml}${actions}</div>`;
+                });
+            }
+
+            window.toggleSeries = (exIdx, sIdx) => {
+                if (isPastDate(currentSelectedDate)) return; // Sécurité
+                const key = formatDateKey(currentSelectedDate); const all = getSessions();
+                const val = !all[key].exercises[exIdx].series[sIdx].isDone;
+                all[key].exercises[exIdx].series[sIdx].isDone = val;
+                saveSessions(all); selectDay(currentSelectedDate);
+                if (val === true) startTimer(90);
+            }
+
+            window.editEx = (idx) => {
+                const all = getSessions(); const dateKey = formatDateKey(currentSelectedDate); const ex = all[dateKey].exercises[idx];
+                document.getElementById('exerciseName').value = ex.name; document.getElementById('sets').value = ex.sets;
+                document.getElementById('reps').value = ex.reps; document.getElementById('notes').value = ex.notes;
+                editingExerciseIndex = idx; document.getElementById('modalTitle').textContent = 'Modifier';
+                document.getElementById('addSessionModal').classList.remove('hidden');
+            }
+            window.delEx = (idx) => {
+                if (confirm('Supprimer ?')) {
+                    const all = getSessions(); const dateKey = formatDateKey(currentSelectedDate);
+                    all[dateKey].exercises.splice(idx, 1); if (all[dateKey].exercises.length === 0) delete all[dateKey];
+                    saveSessions(all); selectDay(currentSelectedDate); updateDashboardSessions(); renderDaySlider(currentWeekStart);
+                }
+            }
+
+            let weightHistory = JSON.parse(localStorage.getItem('weightHistory')) || [];
+            function calcInstantBMI() {
+                const w = parseFloat(document.getElementById('inputWeight').value); const h = parseFloat(document.getElementById('inputHeight').value);
+                if (w > 0 && h > 0) { const bmi = (w / ((h / 100) * (h / 100))).toFixed(1); document.getElementById('bmiResult').innerText = bmi; document.getElementById('bmiText').innerText = (bmi < 18.5 ? "Maigreur" : (bmi < 25 ? "Normal" : "Surpoids")); }
+                else { document.getElementById('bmiResult').innerText = "--"; document.getElementById('bmiText').innerText = "--"; }
+            }
+            ['inputWeight', 'inputHeight', 'inputAge'].forEach(id => document.getElementById(id).addEventListener('input', calcInstantBMI));
+
+            window.openWeightModal = () => { document.getElementById('weightModal').classList.remove('hidden'); document.body.classList.add('modal-open'); const last = weightHistory[weightHistory.length - 1]; if (last) { document.getElementById('inputWeight').value = last.weight; document.getElementById('inputHeight').value = last.height || ''; document.getElementById('inputAge').value = last.age || ''; calcInstantBMI(); } }
+            window.closeWeightModal = () => { document.getElementById('weightModal').classList.add('hidden'); document.body.classList.remove('modal-open'); }
+            window.saveWeightData = () => {
+                const w = parseFloat(document.getElementById('inputWeight').value); const h = parseFloat(document.getElementById('inputHeight').value); const a = parseFloat(document.getElementById('inputAge').value);
+                if (w && h) {
+                    const todayKey = new Date().toISOString().substring(0, 10);
+                    weightHistory = weightHistory.filter(e => new Date(e.date).toISOString().substring(0, 10) !== todayKey);
+                    weightHistory.push({ date: new Date().toISOString(), weight: w, height: h, age: a });
+                    weightHistory.sort((a, b) => new Date(a.date) - new Date(b.date)); localStorage.setItem('weightHistory', JSON.stringify(weightHistory));
+                    updateWeightUI(); closeWeightModal();
+                }
+            }
+
+            let chartInstance = null;
+            function updateWeightUI() {
+                const last = weightHistory[weightHistory.length - 1];
+                if (last && last.height) { document.getElementById('displayWeight').innerText = last.weight; const bmi = (last.weight / ((last.height / 100) ** 2)).toFixed(1); document.getElementById('displayBMI').innerText = bmi; }
+                const ctx = document.getElementById('weightChart').getContext('2d'); if (chartInstance) chartInstance.destroy();
+                const labels = weightHistory.map(entry => new Date(entry.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })); const data = weightHistory.map(entry => entry.weight);
+                chartInstance = new Chart(ctx, { type: 'line', data: { labels: labels, datasets: [{ label: 'Poids', data: data, borderColor: '#00BFFF', backgroundColor: 'rgba(0, 245, 255, 0.1)', borderWidth: 2, tension: 0.4, pointRadius: 3, fill: true }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { grid: { color: '#222' }, ticks: { color: '#666' } } } } });
+            }
+
+            window.openRmModal = () => { document.getElementById('rmModal').classList.remove('hidden'); }
+            window.calculateRM = () => { const w = parseFloat(document.getElementById('rmWeight').value); const r = parseFloat(document.getElementById('rmReps').value); if (w && r) document.getElementById('rmResult').innerText = Math.round(w * (1 + r / 30)); }
+
+            const templates = { "Full Body": [{ name: "Squat", s: 3, r: 10 }, { name: "Développé Couché", s: 3, r: 10 }, { name: "Tractions", s: 3, r: 10 }], "Push": [{ name: "Pompes", s: 4, r: 12 }, { name: "Développé Militaire", s: 3, r: 10 }], "Pull": [{ name: "Tractions", s: 4, r: 8 }, { name: "Rowing", s: 3, r: 10 }] };
+            window.openTemplateModal = () => {
+                if (isPastDate(currentSelectedDate)) return; // Sécurité
+                const list = document.getElementById('templateList'); list.innerHTML = '';
+                Object.keys(templates).forEach(key => {
+                    const btn = document.createElement('button'); btn.className = 'btn-secondary'; btn.style.width = '100%'; btn.style.marginBottom = '10px'; btn.style.textAlign = 'left';
+                    btn.innerHTML = `<b>${key}</b> <span style="float:right; color:#666">${templates[key].length} exos</span>`;
+                    btn.onclick = () => loadTemplate(key); list.appendChild(btn);
+                });
+                document.getElementById('templateModal').classList.remove('hidden');
+            }
+            function loadTemplate(key) {
+                const tpl = templates[key]; const dateKey = formatDateKey(currentSelectedDate); const all = getSessions();
+                if (!all[dateKey]) all[dateKey] = { type: 'gym', exercises: [] };
+                tpl.forEach(item => { const newEx = { name: item.name, sets: item.s, reps: item.r, notes: "Importé", series: [] }; for (let i = 0; i < item.s; i++) newEx.series.push({ reps: item.r, isDone: false }); all[dateKey].exercises.push(newEx); });
+                saveSessions(all); document.getElementById('templateModal').classList.add('hidden'); selectDay(currentSelectedDate); updateDashboardSessions();
+            }
+
+            let timerInterval = null; let timerTime = 0; let timerTotal = 0;
+            window.startTimer = (sec) => { timerTime = sec; timerTotal = sec; document.getElementById('smartTimer').classList.remove('hidden'); clearInterval(timerInterval); updateTimerUI(); timerInterval = setInterval(() => { timerTime--; updateTimerUI(); if (timerTime <= 0) stopTimer(); }, 1000); }
+            window.stopTimer = () => { clearInterval(timerInterval); document.getElementById('smartTimer').classList.add('hidden'); }
+            window.adjustTimer = (val) => { timerTime += val; if (timerTime < 0) timerTime = 0; updateTimerUI(); }
+            function updateTimerUI() {
+                const m = Math.floor(timerTime / 60).toString().padStart(2, '0'); const s = (timerTime % 60).toString().padStart(2, '0');
+                document.getElementById('timerDisplay').innerText = `${m}:${s}`;
+                document.getElementById('timerBar').style.width = (timerTime / timerTotal) * 100 + "%";
+            }
+
+            document.getElementById('openFormButton').addEventListener('click', openAddExerciseModal);
+            const workoutPage = document.getElementById('workout');
+            const setupWorkoutPage = () => { currentWeekStart = getWeekStart(new Date()); renderDaySlider(currentWeekStart); selectDay(new Date()); };
+            setupWorkoutPage(); updateDashboardSessions(); updateWeightUI();
+        });
+    </script>
+</body>
 
 </html>
