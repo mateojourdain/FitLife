@@ -10,9 +10,8 @@
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: #0a0a0a;
-    /* Ton noir original */
-    color: #ffffff;
+    background: #D9DADD;
+    color: #2F3438;
     min-height: 100vh;
     padding-bottom: 90px;
     -webkit-font-smoothing: antialiased;
@@ -21,7 +20,8 @@ body {
 .app-container {
     max-width: 450px;
     margin: 0 auto;
-    background: #0a0a0a;
+    background: #D9DADD;
+    ;
     min-height: 100vh;
     position: relative;
 }
@@ -33,10 +33,10 @@ body {
     padding: 15px 20px 15px;
     position: relative;
     z-index: 50;
-    background: rgba(10, 10, 10, 0.85);
+    background: #A5A8AD;
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
-    border-bottom: 1px solid #202025;
+    border-bottom: 1px solid #9B9EA3;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -50,7 +50,7 @@ body {
 }
 
 .settings {
-margin-left: 20px;
+    margin-left: 20px;
 }
 
 .header h1 {
@@ -58,7 +58,7 @@ margin-left: 20px;
     font-weight: 800;
     letter-spacing: -1px;
     margin: 0;
-    background: linear-gradient(135deg, #00f5ff 0%, #0080ff 100%);
+    background: linear-gradient(135deg, #2F3438 0%, #C4C6CA 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -66,7 +66,7 @@ margin-left: 20px;
 
 .header .date {
     font-size: 13px;
-    color: #666;
+    color: #ffffff;
     font-weight: 600;
     text-transform: uppercase;
 }
@@ -79,17 +79,17 @@ margin-left: 20px;
 .settings img:hover {
     cursor: pointer;
 }
- /* navbar */
+
+/* navbar */
 .bottom-nav {
     position: fixed;
     bottom: 0;
     width: 100%;
     max-width: 450px;
-    /* Le flou Apple */
-    background: rgba(10, 10, 10, 0.85);
+    background: #A5A8AD;
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
-    border-top: 1px solid #202025;
+    border-top: 1px solid #9AA1A8;
     display: flex;
     justify-content: space-around;
     padding: 10px 0 30px;
@@ -99,7 +99,7 @@ margin-left: 20px;
 .nav-item {
     background: none;
     border: none;
-    color: #666;
+    color: grey;
     cursor: pointer;
     display: flex;
     flex-direction: column;
@@ -119,7 +119,7 @@ margin-left: 20px;
 }
 
 .nav-item.active {
-    color: #00BFFF;
+    color: #ffffff;
 }
 
 .nav-icon {
@@ -167,30 +167,27 @@ margin-left: 20px;
 }
 
 .card {
-    background: #141417;
-    /* Ta couleur originale */
-    border: 1px solid #202025;
+    background: #E4E7EB;
+    border: 1px solid #BFC5CC;
+    color: #2F3438;
     border-radius: 14px;
-    /* Un peu plus doux */
     padding: 20px;
-    margin-bottom: 15px;
-    position: relative;
-    transition: ease 0.1s;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
 }
 
 .card.gradient-border {
-    border: 1px solid #202025;
-    background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
+    background: #E4E7EB;
+    border: 1px solid #BFC5CC;
 }
 
 .card.ripple:active {
     transform: scale(0.98);
-    background: #1a1a1d;
+    background: #E4E7EB;
 }
 
 .card-label {
     font-size: 16px;
-    color: #9AA4A8;
+    color: #5B6065;
     font-weight: 600;
     text-transform: uppercase;
     margin-bottom: 5px;
@@ -202,28 +199,27 @@ margin-left: 20px;
     font-weight: 900;
     line-height: 1;
     margin-bottom: 10px;
-    color: #00BFFF;
+    color: #9AA4A8;
 }
 
 .stat-goal {
     font-size: 18px;
     font-weight: 500;
-    color: #fff;
+    color: #BFC5CC;
     margin-left: 5px;
-    -webkit-text-fill-color: #fff;
 }
 
 .stats-separator {
-    border-top: 1px solid #202025;
+    border-top: 1px solid #9B9EA3;
     padding-top: 10px;
     margin-top: 5px;
 }
 
 .background-stat {
-    background: #0a0a0a;
+    background: #9AA4A8;
     padding: 12px;
     border-radius: 14px;
-    border: 1px solid #202025;
+    border: 1px solid #9B9EA3;
 }
 
 .stat-line {
@@ -234,7 +230,7 @@ margin-left: 20px;
 
 .stat-label {
     font-size: 14px;
-    color: #666;
+    color: #BFC5CC;
     font-weight: 600;
 }
 
@@ -242,7 +238,8 @@ margin-left: 20px;
 .icon-box {
     width: 40px;
     height: 40px;
-    background: #222;
+    background: #B5B7BC;
+    color: #2F3438;
     border-radius: 14px;
     display: flex;
     align-items: center;
@@ -252,11 +249,10 @@ margin-left: 20px;
 
 /* Hydratation */
 .hydration-card {
-    background: #141417;
-    /* Ta couleur originale */
-    border: 1px solid #202025;
+    background: #E4E7EB;
+    border: 1px solid #BFC5CC;
+    color: #9AA4A8;
     border-radius: 14px;
-    /* Un peu plus doux */
     padding: 20px;
     margin-bottom: 15px;
     position: relative;
@@ -272,12 +268,12 @@ margin-left: 20px;
 .hydration-count {
     font-size: 20px;
     font-weight: 700;
-    color: #00BFFF;
+    color: #2F3438;
 }
 
 .hydration-bar {
     height: 8px;
-    background: #0a0a0a;
+    background: #D9DADD;
     border-radius: 4px;
     overflow: hidden;
     margin-bottom: 15px;
@@ -285,7 +281,7 @@ margin-left: 20px;
 
 .hydration-progress {
     height: 100%;
-    background: #00BFFF;
+    background: #5B6065;
     width: 50%;
     transition: width 0.5s ease;
 }
@@ -299,17 +295,17 @@ margin-left: 20px;
 
 .hydration-amount {
     font-size: 14px;
-    color: #666;
+    color: #2F3438;
     font-weight: 600;
 }
 
 .hydration-btn {
     width: 40px;
     height: 40px;
-    background: #1a1a1a;
-    border: 2px solid #202025;
+    color: #2F3438;
+    background: #D9DADD;
+    border: 2px solid #BFC5CC;
     border-radius: 14px;
-    color: #00BFFF;
     font-size: 20px;
     font-weight: 700;
     cursor: pointer;
@@ -321,7 +317,7 @@ margin-left: 20px;
 
 .indication-hydration {
     font-size: 11px;
-    color: #666;
+    color: #2F3438;
     font-weight: 400;
     margin-top: 15px;
     text-align: left;
@@ -662,8 +658,8 @@ input[type="text"],
 input[type="number"],
 textarea {
     width: 100%;
-    background: #0a0a0a;
-    border: 1px solid #202025;
+    background: #C4C6CA;
+    border: 1px solid #9B9EA3;
     color: #fff;
     padding: 12px;
     border-radius: 10px;
