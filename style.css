@@ -30,18 +30,27 @@ body {
 /* HEADER & NAVIGATION (AVEC GLASSMORPHISM) */
 /* ================================================= */
 .header {
-    padding: 50px 20px 15px;
-    position: sticky;
-    top: 0;
+    padding: 15px 20px 15px;
+    position: relative;
     z-index: 50;
-    /* Le flou Apple */
     background: rgba(10, 10, 10, 0.85);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
     border-bottom: 1px solid #202025;
     display: flex;
+    flex-direction: row;
     justify-content: space-between;
-    align-items: baseline;
+    align-items: center;
+}
+
+.header-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.settings {
+margin-left: 20px;
 }
 
 .header h1 {
@@ -62,6 +71,15 @@ body {
     text-transform: uppercase;
 }
 
+.settings img {
+    height: 24px;
+    width: 24px;
+}
+
+.settings img:hover {
+    cursor: pointer;
+}
+ /* navbar */
 .bottom-nav {
     position: fixed;
     bottom: 0;
@@ -171,7 +189,7 @@ body {
 }
 
 .card-label {
-    font-size: 13px;
+    font-size: 16px;
     color: #9AA4A8;
     font-weight: 600;
     text-transform: uppercase;

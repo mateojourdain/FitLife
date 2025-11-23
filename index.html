@@ -12,10 +12,16 @@
 <body>
 
     <div class="app-container">
-        <div class="header">
-            <h1>FitLife</h1>
-            <div class="date" id="currentDate"></div>
-        </div>
+
+        <header class="header">
+            <div class="header-info">
+                <h1>FitLife</h1>
+                <div class="date" id="currentDate"></div>
+            </div>
+            <div class="settings">
+                <div class="settings" onclick="switchPage('settings')"><img src="reglage.png"></div>
+            </div>
+        </header>
 
         <div id="home" class="page active">
             <div class="card gradient-border">
@@ -71,7 +77,7 @@
                         <div style="font-size:12px; color:#666;">Estime ta force max</div>
                     </div>
                 </div>
-                <div style="color:#00BFFF; font-size:20px;">›</div>
+                <div style="color:#00BFFF; font-size:20px; cursor: pointer;">›</div>
             </div>
 
             <div class="section-title">Hydratation</div>
@@ -119,6 +125,10 @@
             <div style="text-align:center; padding:60px 20px; color:#666;">
                 <div style="font-size:40px; margin-bottom:10px;">🍎</div>Module Nutrition à venir
             </div>
+        </div>
+
+        <div id="settings class=" page">
+
         </div>
 
         <div class="modal-overlay hidden" id="addSessionModal">
@@ -185,6 +195,7 @@
                 </div>
                 <div class="card" style="margin: 20px 0; text-align:center; border:1px solid #333; background:#0a0a0a;">
                     <div style="font-size:12px; color:#666; text-transform:uppercase; letter-spacing:1px;">Max Théorique
+                        sur une rep
                     </div>
                     <div id="rmResult" style="font-size:40px; font-weight:900; color:#00BFFF;">--</div>
                     <div style="font-size:12px; color:#666;">kg</div>
