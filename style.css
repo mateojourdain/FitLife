@@ -1,5 +1,52 @@
 /* ================================================= */
-/* BASE & COULEURS ORIGINALES */
+/* PALETTE DU JUSTE MILIEU (THÈME PAR DÉFAUT / CLAIR) */
+/* ================================================= */
+
+:root {
+    /* Couleurs du Juste Milieu (Clair) */
+    --bg-primary: #E5E7EB;
+    --bg-secondary: #FFFFFF;
+    --bg-tertiary: #F3F4F6;
+    --border-color: #CFD2D9;
+    --text-primary: #2C3E50;
+    --text-secondary: #7F8C9A;
+    --accent-gym: #00BFFF;
+    --accent-home: #FF00C8;
+    --text-inactive: #95A5A6;
+    --icon-filter: invert(20%) sepia(50%) saturate(100%) hue-rotate(180deg); /* Légèrement bleuté pour le clair */
+    --header-bg-rgb: 255, 255, 255; /* Blanc pour le header transparent */
+    --gradient-text-start: #2F3438;
+    --gradient-text-end: #C4C6CA;
+    --input-bg: #E5E7EB;
+    --input-text: #2F3438;
+}
+
+/* ================================================= */
+/* PALETTE DU MODE FONCÉ (THÈME SOMBRE) */
+/* ================================================= */
+
+.dark-mode {
+    /* Couleurs du Pro/Dark (Sombre) */
+    --bg-primary: #1C1C1E;
+    --bg-secondary: #2C2C2E;
+    --bg-tertiary: #3A3A3C;
+    --border-color: #48484A;
+    --text-primary: #F2F2F7;
+    --text-secondary: #A8A8B4;
+    --accent-gym: #00BFFF;
+    --accent-home: #FF00C8;
+    --text-inactive: #6D6D75;
+    --icon-filter: invert(100%); /* Inverse les couleurs des icônes pour le mode sombre */
+    --header-bg-rgb: 44, 44, 46; /* Gris foncé pour le header transparent */
+    --gradient-text-start: #00f5ff;
+    --gradient-text-end: #0080ff;
+    --input-bg: #3A3A3C;
+    --input-text: #F2F2F7;
+}
+
+
+/* ================================================= */
+/* BASE & STYLES GLOBAUX (UTILISATION DES VARIABLES) */
 /* ================================================= */
 * {
     margin: 0;
@@ -10,18 +57,18 @@
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: #D9DADD;
-    color: #2F3438;
+    background: var(--bg-primary);
+    color: var(--text-primary);
     min-height: 100vh;
     padding-bottom: 90px;
     -webkit-font-smoothing: antialiased;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 .app-container {
     max-width: 450px;
     margin: 0 auto;
-    background: #D9DADD;
-    ;
+    background: var(--bg-primary);
     min-height: 100vh;
     position: relative;
 }
@@ -33,10 +80,11 @@ body {
     padding: 15px 20px 15px;
     position: relative;
     z-index: 50;
-    background: #A5A8AD;
+    /* Utilisation de la variable RGB pour le fond semi-transparent */
+    background: rgba(var(--header-bg-rgb), 0.9);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
-    border-bottom: 1px solid #9B9EA3;
+    border-bottom: 1px solid var(--border-color);
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -58,7 +106,8 @@ body {
     font-weight: 800;
     letter-spacing: -1px;
     margin: 0;
-    background: linear-gradient(135deg, #2F3438 0%, #C4C6CA 100%);
+    /* Utilisation des variables pour le dégradé de texte */
+    background: linear-gradient(135deg, var(--gradient-text-start) 0%, var(--gradient-text-end) 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -66,7 +115,7 @@ body {
 
 .header .date {
     font-size: 13px;
-    color: #ffffff;
+    color: var(--text-secondary);
     font-weight: 600;
     text-transform: uppercase;
 }
@@ -74,6 +123,7 @@ body {
 .settings img {
     height: 24px;
     width: 24px;
+    filter: var(--icon-filter); /* Application du filtre d'icône */
 }
 
 .settings img:hover {
@@ -86,10 +136,11 @@ body {
     bottom: 0;
     width: 100%;
     max-width: 450px;
-    background: #A5A8AD;
+    /* Utilisation de la variable RGB pour le fond semi-transparent */
+    background: rgba(var(--header-bg-rgb), 0.95);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
-    border-top: 1px solid #9AA1A8;
+    border-top: 1px solid var(--border-color);
     display: flex;
     justify-content: space-around;
     padding: 10px 0 30px;
@@ -99,7 +150,7 @@ body {
 .nav-item {
     background: none;
     border: none;
-    color: grey;
+    color: var(--text-inactive);
     cursor: pointer;
     display: flex;
     flex-direction: column;
@@ -112,6 +163,11 @@ body {
 .nav-icon img {
     width: 24px;
     height: 24px;
+    filter: var(--icon-filter);
+    opacity: 0.6;
+}
+.nav-item.active .nav-icon img {
+    opacity: 1;
 }
 
 .nav-item:active {
@@ -119,7 +175,7 @@ body {
 }
 
 .nav-item.active {
-    color: #ffffff;
+    color: var(--text-primary);
 }
 
 .nav-icon {
@@ -154,11 +210,11 @@ body {
 }
 
 /* ================================================= */
-/* CARTES (TON STYLE ORIGINAL + ARRONDIS PRO) */
+/* CARTES */
 /* ================================================= */
 .section-title {
     font-size: 13px;
-    color: #9AA4A8;
+    color: var(--text-secondary);
     text-transform: uppercase;
     letter-spacing: 1px;
     margin: 25px 0 10px;
@@ -167,27 +223,32 @@ body {
 }
 
 .card {
-    background: #E4E7EB;
-    border: 1px solid #BFC5CC;
-    color: #2F3438;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
     border-radius: 14px;
     padding: 20px;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+    transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+
+.dark-mode .card {
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3); /* Ombre plus marquée en dark mode */
 }
 
 .card.gradient-border {
-    background: #E4E7EB;
-    border: 1px solid #BFC5CC;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
 }
 
 .card.ripple:active {
     transform: scale(0.98);
-    background: #E4E7EB;
+    background: var(--bg-tertiary);
 }
 
 .card-label {
     font-size: 16px;
-    color: #5B6065;
+    color: var(--text-secondary);
     font-weight: 600;
     text-transform: uppercase;
     margin-bottom: 5px;
@@ -199,27 +260,27 @@ body {
     font-weight: 900;
     line-height: 1;
     margin-bottom: 10px;
-    color: #9AA4A8;
+    color: var(--text-primary);
 }
 
 .stat-goal {
     font-size: 18px;
     font-weight: 500;
-    color: #BFC5CC;
+    color: var(--text-secondary);
     margin-left: 5px;
 }
 
 .stats-separator {
-    border-top: 1px solid #9B9EA3;
+    border-top: 1px solid var(--border-color);
     padding-top: 10px;
     margin-top: 5px;
 }
 
 .background-stat {
-    background: #9AA4A8;
+    background: var(--bg-tertiary);
     padding: 12px;
     border-radius: 14px;
-    border: 1px solid #9B9EA3;
+    border: 1px solid var(--border-color);
 }
 
 .stat-line {
@@ -230,7 +291,7 @@ body {
 
 .stat-label {
     font-size: 14px;
-    color: #BFC5CC;
+    color: var(--text-secondary);
     font-weight: 600;
 }
 
@@ -238,20 +299,21 @@ body {
 .icon-box {
     width: 40px;
     height: 40px;
-    background: #B5B7BC;
-    color: #2F3438;
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
     border-radius: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 20px;
+    border: 1px solid var(--border-color);
 }
 
 /* Hydratation */
 .hydration-card {
-    background: #E4E7EB;
-    border: 1px solid #BFC5CC;
-    color: #9AA4A8;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
     border-radius: 14px;
     padding: 20px;
     margin-bottom: 15px;
@@ -268,12 +330,12 @@ body {
 .hydration-count {
     font-size: 20px;
     font-weight: 700;
-    color: #2F3438;
+    color: var(--text-primary);
 }
 
 .hydration-bar {
     height: 8px;
-    background: #D9DADD;
+    background: var(--bg-tertiary);
     border-radius: 4px;
     overflow: hidden;
     margin-bottom: 15px;
@@ -281,7 +343,7 @@ body {
 
 .hydration-progress {
     height: 100%;
-    background: #5B6065;
+    background: var(--accent-gym);
     width: 50%;
     transition: width 0.5s ease;
 }
@@ -295,16 +357,16 @@ body {
 
 .hydration-amount {
     font-size: 14px;
-    color: #2F3438;
+    color: var(--text-primary);
     font-weight: 600;
 }
 
 .hydration-btn {
     width: 40px;
     height: 40px;
-    color: #2F3438;
-    background: #D9DADD;
-    border: 2px solid #BFC5CC;
+    color: var(--text-primary);
+    background: var(--bg-tertiary);
+    border: 2px solid var(--border-color);
     border-radius: 14px;
     font-size: 20px;
     font-weight: 700;
@@ -317,7 +379,7 @@ body {
 
 .indication-hydration {
     font-size: 11px;
-    color: #2F3438;
+    color: var(--text-secondary);
     font-weight: 400;
     margin-top: 15px;
     text-align: left;
@@ -334,8 +396,8 @@ body {
     display: flex;
     align-items: center;
     margin: 10px 0 20px;
-    background: #141417;
-    border: 1px solid #202025;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
     border-radius: 16px;
     padding: 10px 5px;
 }
@@ -343,7 +405,7 @@ body {
 .week-nav-btn {
     background: none;
     border: none;
-    color: #00BFFF;
+    color: var(--accent-gym);
     font-size: 24px;
     padding: 0 10px;
     cursor: pointer;
@@ -368,8 +430,8 @@ body {
     text-align: center;
     padding: 10px 0;
     border-radius: 10px;
-    background: #0a0a0a;
-    border: 1px solid #202025;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
     cursor: pointer;
     transition: 0.2s;
     position: relative;
@@ -377,7 +439,7 @@ body {
 
 .slider-day .day-name {
     font-size: 10px;
-    color: #666;
+    color: var(--text-secondary);
     font-weight: 700;
     margin-bottom: 4px;
 }
@@ -385,21 +447,22 @@ body {
 .slider-day .day-num {
     font-size: 18px;
     font-weight: 700;
-    color: #666;
+    color: var(--text-secondary);
 }
 
 /* MISE EN ÉVIDENCE DU JOUR ACTUEL */
 .slider-day.today {
-    border: 2px solid #ffffff;
+    border: 2px solid var(--text-primary);
+}
 
+.slider-day.selected {
+    background: var(--border-color);
 }
 
 .slider-day.selected .day-name,
 .slider-day.selected .day-num {
-    color: #ffffff;
+    color: var(--text-primary);
 }
-
-
 
 /* MARQUEURS SÉANCE (POINT SOUS LE CHIFFRE) */
 .slider-day.gym::after,
@@ -416,18 +479,51 @@ body {
 }
 
 .slider-day.gym::after {
-    background-color: #00BFFF;
+    background-color: var(--accent-gym);
 }
 
 .slider-day.home::after {
-    background-color: #FF00C8;
+    background-color: var(--accent-home);
 }
 
-
-
 /* ================================================= */
-/* SESSION RECAP (RETOUR A LA LISTE CLAIRE) */
+/* SESSION RECAP */
 /* ================================================= */
+
+/* Hiding the planning interface when active */
+#workoutPlanning.hidden {
+    display: none;
+}
+
+/* Active Session Interface Styles */
+.active-session-interface {
+    display: none; /* Controlled by JS/class .hidden */
+}
+.active-session-interface.hidden {
+    display: none;
+}
+
+.active-session-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.active-session-header h2 {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--text-primary);
+}
+
+.current-exercise-card {
+    padding: 25px;
+    text-align: center;
+    border: 2px solid var(--accent-gym); /* Highlight the main card */
+}
+
 .session-recap-container {
     display: flex;
     flex-direction: column;
@@ -435,11 +531,17 @@ body {
 }
 
 .session-card {
-    background: #141417;
-    border: 1px solid #202025;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
     border-radius: 16px;
     margin-top: 10px;
     padding: 15px;
+    transition: all 0.2s;
+}
+
+.session-card.done-session-card {
+    opacity: 0.7;
+    border: 1px solid var(--text-inactive);
 }
 
 /* séparation entre la date et la seance programé */
@@ -448,7 +550,7 @@ body {
     justify-content: center;
     margin-bottom: 10px;
     padding-bottom: 10px;
-    border-bottom: 1px dashed #202025;
+    border-bottom: 1px dashed var(--border-color);
 }
 
 .type-label {
@@ -459,35 +561,35 @@ body {
 }
 
 .gym .type-label {
-    color: #00BFFF;
+    color: var(--accent-gym);
 }
 
 .home .type-label {
-    color: #FF00C8;
+    color: var(--accent-home);
 }
 
 .exercise-name {
     font-size: 16px;
     font-weight: 700;
     margin-bottom: 10px;
-    color: #fff;
+    color: var(--text-primary);
 }
 
 .series-list {
     list-style: none;
-    background: #0a0a0a;
+    background: var(--bg-tertiary);
     border-radius: 14px;
     margin-top: 10px;
     padding: 5px 10px;
-    border: 1px solid #202025;
+    border: 1px solid var(--border-color);
 }
 
 .series-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 12px 0;
-    border-bottom: 1px solid #202025;
+    padding: 8px 0; /* Adjusted padding */
+    border-bottom: 1px solid var(--border-color);
 }
 
 .series-item:last-child {
@@ -503,34 +605,20 @@ body {
 
 .series-num {
     font-size: 14px;
-    color: #fff;
+    color: var(--text-primary);
     font-weight: 600;
 }
 
 .series-val {
     font-size: 14px;
-    color: #9AA4A8;
+    color: var(--text-secondary);
 }
 
+/* Since the toggle button is removed from planning, these styles are mostly unused here but kept for context if needed */
 .series-toggle-btn {
-    width: 28px;
-    height: 28px;
-    border-radius: 8px;
-    border: 2px solid #444;
-    background: none;
-    color: #000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: 0.2s;
+    display: none; 
 }
 
-.series-item.done .series-toggle-btn {
-    background: #00f5ff;
-    border-color: #00f5ff;
-    font-weight: bold;
-}
 
 .series-item.done .series-num,
 .series-item.done .series-val {
@@ -543,7 +631,7 @@ body {
     justify-content: flex-end;
     gap: 10px;
     margin-top: 15px;
-    border-top: 1px solid #202025;
+    border-top: 1px solid var(--border-color);
     padding-top: 10px;
 }
 
@@ -558,7 +646,7 @@ body {
 }
 
 .btn-edit {
-    color: #00BFFF;
+    color: var(--accent-gym);
 }
 
 .btn-delete {
@@ -567,13 +655,13 @@ body {
 
 .no-session-msg {
     text-align: center;
-    color: #666;
+    color: var(--text-secondary);
     font-style: italic;
     padding: 20px;
 }
 
 /* ================================================= */
-/* MODALES (CENTRAGE & STYLE) */
+/* MODALES */
 /* ================================================= */
 .modal-overlay {
     position: fixed;
@@ -581,7 +669,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.85);
+    background: rgba(0, 0, 0, 0.75);
     z-index: 2000;
     display: flex;
     align-items: center;
@@ -595,15 +683,19 @@ body {
 }
 
 .modal-content {
-    background: #141417;
+    background: var(--bg-secondary);
     width: 90%;
     max-width: 400px;
     border-radius: 16px;
     padding: 25px;
-    border: 1px solid #202025;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
     max-height: 90vh;
     overflow-y: auto;
+    transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+.dark-mode .modal-content {
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
 }
 
 .modal-header-row {
@@ -611,12 +703,12 @@ body {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
-    border-bottom: 1px solid #202025;
+    border-bottom: 1px solid var(--border-color);
     padding-bottom: 10px;
 }
 
 .modal-header-row h2 {
-    background: linear-gradient(135deg, #00f5ff 0%, #0080ff 100%);
+    background: linear-gradient(135deg, var(--accent-gym) 0%, #0080ff 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -628,7 +720,7 @@ body {
 .btn-close-text {
     background: none;
     border: none;
-    color: #666;
+    color: var(--text-secondary);
     font-size: 14px;
     cursor: pointer;
 }
@@ -640,7 +732,7 @@ body {
 .form-group label {
     display: block;
     font-size: 14px;
-    color: #9AA4A8;
+    color: var(--text-secondary);
     margin-bottom: 5px;
     font-weight: 600;
 }
@@ -658,14 +750,22 @@ input[type="text"],
 input[type="number"],
 textarea {
     width: 100%;
-    background: #C4C6CA;
-    border: 1px solid #9B9EA3;
-    color: #fff;
+    background: var(--input-bg);
+    border: 1px solid var(--border-color);
+    color: var(--input-text);
     padding: 12px;
     border-radius: 10px;
     font-size: 16px;
     box-sizing: border-box;
     outline: none;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+/* Override pour les inputs du mode Sombre dans le cas où le thème par défaut était mal configuré */
+.dark-mode input[type="text"],
+.dark-mode input[type="number"],
+.dark-mode textarea {
+    color: var(--text-primary);
 }
 
 
@@ -677,17 +777,17 @@ textarea {
 /* Toggle Switch */
 .toggle-switch {
     display: flex;
-    background: #0a0a0a;
+    background: var(--bg-tertiary);
     padding: 4px;
     border-radius: 8px;
-    border: 1px solid #202025;
+    border: 1px solid var(--border-color);
 }
 
 .toggle-switch button {
     flex: 1;
     background: none;
     border: none;
-    color: #9AA4A8;
+    color: var(--text-secondary);
     padding: 8px;
     font-weight: 600;
     font-size: 14px;
@@ -696,14 +796,14 @@ textarea {
 }
 
 .toggle-switch button[data-type="gym"].active {
-    background: #00BFFF;
-    color: #1a1a1a;
+    background: var(--accent-gym);
+    color: var(--bg-secondary);
     box-shadow: 0 2px 5px rgba(0, 191, 255, 0.3);
 }
 
 .toggle-switch button[data-type="home"].active {
-    background: #FF00C8;
-    color: #1a1a1a;
+    background: var(--accent-home);
+    color: var(--bg-secondary);
     box-shadow: 0 2px 5px rgba(255, 0, 200, 0.35);
 
 }
@@ -713,8 +813,8 @@ textarea {
 /* Boutons Principaux */
 .btn-primary {
     width: 100%;
-    background: linear-gradient(135deg, #00f5ff 0%, #0080ff 100%);
-    color: #000;
+    background: linear-gradient(135deg, var(--accent-gym) 0%, #0080ff 100%);
+    color: var(--bg-secondary);
     border: none;
     padding: 16px;
     border-radius: 12px;
@@ -724,6 +824,9 @@ textarea {
     box-shadow: 0 4px 20px rgba(0, 150, 255, 0.35);
     transition: transform 0.1s;
 }
+.dark-mode .btn-primary {
+    color: #1a1a1a;
+}
 
 .btn-primary:active {
     transform: scale(0.98);
@@ -731,13 +834,14 @@ textarea {
 
 .btn-secondary {
     width: 100%;
-    background: #222;
-    color: #fff;
-    border: 1px solid #202025;
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
     padding: 12px;
     border-radius: 12px;
     font-weight: 600;
     cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 /* Timer Flottant */
@@ -748,9 +852,9 @@ textarea {
     transform: translateX(-50%);
     width: 90%;
     max-width: 400px;
-    background: rgba(20, 20, 23, 0.95);
+    background: rgba(var(--header-bg-rgb), 0.95);
     backdrop-filter: blur(10px);
-    border: 1px solid #666;
+    border: 1px solid var(--border-color);
     border-bottom: none;
     border-radius: 16px;
     border-bottom-left-radius: 0;
@@ -761,10 +865,17 @@ textarea {
     align-items: center;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     z-index: 1500;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+.dark-mode .timer-float {
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5);
 }
 
 .timer-float.hidden {
     display: none;
+}
+.timer-float span {
+    color: var(--text-primary);
 }
 
 .timer-bar {
@@ -772,14 +883,14 @@ textarea {
     bottom: 0;
     left: 0;
     height: 3px;
-    background: #00BFFF;
+    background: var(--accent-gym);
     width: 100%;
     transition: width 1s linear;
 }
 
 .timer-btn {
-    background: #333;
-    color: #fff;
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
     border: none;
     padding: 5px 8px;
     border-radius: 6px;
@@ -793,4 +904,75 @@ textarea {
     background: none;
     font-size: 16px;
     padding: 0 5px;
+}
+
+
+/* ================================================= */
+/* AJOUTS POUR LE MODE REGLAGES */
+/* ================================================= */
+
+.theme-selector {
+    display: flex;
+    gap: 15px;
+    justify-content: space-between;
+    padding: 15px 0;
+}
+
+.theme-option {
+    flex: 1;
+    text-align: center;
+    background: var(--bg-tertiary);
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    padding: 15px 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.theme-option:hover {
+    opacity: 0.9;
+}
+
+.theme-option.active-theme {
+    border-color: var(--accent-gym);
+    box-shadow: 0 0 0 3px rgba(0, 191, 255, 0.2);
+}
+
+.theme-preview {
+    width: 60px;
+    height: 40px;
+    border-radius: 6px;
+    margin: 0 auto 10px;
+    border: 1px solid var(--border-color);
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Couleurs spécifiques aux previews (fixes pour illustrer) */
+.preview-light {
+    background: #E5E7EB;
+}
+.preview-light .dot {
+    background: #2C3E50;
+}
+
+.preview-dark {
+    background: #1C1C1E;
+}
+.preview-dark .dot {
+    background: #F2F2F7;
+}
+
+.theme-preview .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.theme-option label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
 }

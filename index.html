@@ -35,11 +35,11 @@
                         <div class="background-stat">
                             <div class="stat-line" style="margin-bottom: 8px;">
                                 <div class="stat-label">En salle de sport</div>
-                                <div style="font-size: 20px; font-weight: 700; color: #00BFFF;" id="gymSessions">0</div>
+                                <div style="font-size: 20px; font-weight: 700; color: var(--accent-gym);" id="gymSessions">0</div>
                             </div>
                             <div class="stat-line">
                                 <div class="stat-label">A la maison</div>
-                                <div style="font-size: 20px; font-weight: 700; color: #FF00C8;" id="homeSessions">0
+                                <div style="font-size: 20px; font-weight: 700; color: var(--accent-home);" id="homeSessions">0
                                 </div>
                             </div>
                         </div>
@@ -52,53 +52,47 @@
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
                     <div>
                         <div class="card-label">Poids Actuel</div>
-                        <div style="font-size: 28px; font-weight: 900; color: #2F3438;"><span
+                        <div style="font-size: 28px; font-weight: 900; color: var(--text-primary);"><span
                                 id="displayWeight">--</span>
-                            <span style="font-size:16px; color: #5B6065;">kg</span>
+                            <span style="font-size:16px; color: var(--text-secondary);">kg</span>
                         </div>
                     </div>
                     <div style="text-align:right;">
                         <div class="card-label">IMC</div>
-                        <div style="font-size: 28px; font-weight: 900; color: #00BFFF;" id="displayBMI">--</div>
+                        <div style="font-size: 28px; font-weight: 900; color: var(--accent-gym);" id="displayBMI">--</div>
                     </div>
                 </div>
                 <div style="height: 150px; width: 100%;"><canvas id="weightChart"></canvas></div>
                 <div
-                    style="text-align:center; cursor: pointer; font-size:11px; color:#666; margin-top:10px; text-transform:uppercase; letter-spacing:1px;">
+                    style="text-align:center; cursor: pointer; font-size:11px; color:var(--text-secondary); margin-top:10px; text-transform:uppercase; letter-spacing:1px;">
                     Toucher pour mettre à jour</div>
             </div>
 
             <div class="section-title">Outils</div>
             <div class="card ripple" onclick="openRmModal()"
-                style="display:flex; justify-content:space-between; align-items:center; padding:20px;">
+                style="display:flex; justify-content:space-between; align-items:center; padding:20px; margin-bottom: 15px;">
                 <div style="display:flex; align-items:center; gap:15px;">
                     <div class="icon-box">⚡</div>
                     <div>
-                        <div style="font-weight:700; color:#fff; font-size:16px;">Calculateur 1RM</div>
-                        <div style="font-size:12px; color:#666;">Estime ta force max</div>
+                        <div style="font-weight:700; color:var(--text-primary); font-size:16px;">Calculateur 1RM</div>
+                        <div style="font-size:12px; color:var(--text-secondary);">Estime ta force max</div>
                     </div>
                 </div>
-                <div style="color:#00BFFF; font-size:20px; cursor: pointer;">›</div>
+                <div style="color:var(--accent-gym); font-size:20px; cursor: pointer;">›</div>
             </div>
 
-            <div class="section-title">Hydratation</div>
-            <div class="hydration-card">
-                <div class="hydration-header">
-                    <div class="hydration-count"><span id="currentWater"></span>L <span
-                            style="color:#9AA4A8; font-size:14px;">/ <span id="targetWater">3.2</span>L</span></div>
+            <div class="card ripple" onclick="openPercentageModal()"
+                style="display:flex; justify-content:space-between; align-items:center; padding:20px;">
+                <div style="display:flex; align-items:center; gap:15px;">
+                    <div class="icon-box">📊</div>
+                    <div>
+                        <div style="font-weight:700; color:var(--text-primary); font-size:16px;">Zones de travail</div>
+                        <div style="font-size:12px; color:var(--text-secondary);">Calcule ton poids par %</div>
+                    </div>
                 </div>
-                <div class="hydration-bar">
-                    <div class="hydration-progress" id="hydrationProgress"></div>
-                </div>
-                <div class="hydration-controls">
-                    <button class="hydration-btn" onclick="adjustWater(-0.2)">−</button>
-                    <div class="hydration-amount">+/- 0.2L</div>
-                    <button class="hydration-btn" onclick="adjustWater(0.2)">+</button>
-                </div>
-                <p class="indication-hydration">* Un verre d'eau de taille standard contient environ 0.2L</p>
-
+                <div style="color:var(--accent-gym); font-size:20px; cursor: pointer;">›</div>
             </div>
-        </div>
+            </div>
 
         <div id="workout" class="page">
             <div class="day-slider-container">
@@ -110,28 +104,39 @@
             <div id="actionButtonsContainer" style="display: flex; gap: 10px; margin-top: 20px;">
                 <button class="btn-secondary" id="btnProgram" onclick="openTemplateModal()" style="flex:1;">
                     Programmes</button>
-                <button class="btn-primary" id="openFormButton" style="flex:1; margin-bottom:0; display:none; color: #fff;     background: linear-gradient(135deg, #00f5ff 0%, #0080ff 100%);
-">
+                <button class="btn-primary" id="openFormButton" style="flex:1; margin-bottom:0; display:none;">
                     Nouvelle Séance</button>
             </div>
 
             <div class="section-title" id="recapSectionTitle"
                 style="display:none; margin-bottom:15px; margin-top:35px;">
-                Récapitulatif (<span id="recapDateDisplay" style="color:#fff;"></span>)
+                Récapitulatif (<span id="recapDateDisplay" style="color:var(--text-primary);"></span>)
             </div>
             <div id="sessionRecap" class="session-recap-container"></div>
         </div>
 
-        <div id="nutrition" class="page">
-            <div style="text-align:center; padding:60px 20px; color:#666;">
-                <div style="font-size:40px; margin-bottom:10px;">🍎</div>Module Nutrition à venir
+
+        <div id="settings" class="page">
+            <div class="section-title">Personnalisation</div>
+            <div class="card">
+                <div class="card-label" style="margin-bottom: 10px;">Thème de l'application</div>
+                <div class="theme-selector">
+                    <div class="theme-option active-theme" data-theme="light" onclick="setTheme('light', this)">
+                        <div class="theme-preview preview-light">
+                            <div class="dot"></div>
+                        </div>
+                        <label>Mode Clair</label>
+                    </div>
+                    <div class="theme-option" data-theme="dark" onclick="setTheme('dark', this)">
+                        <div class="theme-preview preview-dark">
+                            <div class="dot"></div>
+                        </div>
+                        <label>Mode Foncé</label>
+                    </div>
+                </div>
+
             </div>
         </div>
-
-        <div id="settings class=" page">
-
-        </div>
-
         <div class="modal-overlay hidden" id="addSessionModal">
             <div class="modal-content">
                 <div class="modal-header-row">
@@ -170,12 +175,12 @@
                 </div>
                 <div class="form-group"><label>Âge (ans)</label><input type="number" id="inputAge" placeholder="Ex:25">
                 </div>
-                <div class="card" style="margin: 20px 0; text-align:center; border:1px solid #333; background:#0a0a0a;">
+                <div class="card" style="margin: 20px 0; text-align:center; border:1px solid var(--border-color); background:var(--bg-tertiary);">
                     <div
-                        style="font-size:12px; color:#666; text-transform:uppercase; letter-spacing:1px; margin-bottom:5px;">
+                        style="font-size:12px; color:var(--text-secondary); text-transform:uppercase; letter-spacing:1px; margin-bottom:5px;">
                         IMC Estimé</div>
-                    <div id="bmiResult" style="font-size:40px; font-weight:900; color:#00BFFF; line-height:1;">--</div>
-                    <div id="bmiText" style="font-size:14px; font-weight:600; color:#fff; margin-top:5px;">--</div>
+                    <div id="bmiResult" style="font-size:40px; font-weight:900; color:var(--accent-gym); line-height:1;">--</div>
+                    <div id="bmiText" style="font-size:14px; font-weight:600; color:var(--text-primary); margin-top:5px;">--</div>
                 </div>
                 <div class="modal-actions"><button class="btn-primary full"
                         onclick="saveWeightData()">Sauvegarder</button></div>
@@ -194,17 +199,36 @@
                     <div class="input-group"><label>Répétitions</label><input type="number" id="rmReps" placeholder="8">
                     </div>
                 </div>
-                <div class="card" style="margin: 20px 0; text-align:center; border:1px solid #333; background:#0a0a0a;">
-                    <div style="font-size:12px; color:#666; text-transform:uppercase; letter-spacing:1px;">Max Théorique
+                <div class="card" style="margin: 20px 0; text-align:center; border:1px solid var(--border-color); background:var(--bg-tertiary);">
+                    <div style="font-size:12px; color:var(--text-secondary); text-transform:uppercase; letter-spacing:1px;">Max Théorique
                         sur une rep
                     </div>
-                    <div id="rmResult" style="font-size:40px; font-weight:900; color:#00BFFF;">--</div>
-                    <div style="font-size:12px; color:#666;">kg</div>
+                    <div id="rmResult" style="font-size:40px; font-weight:900; color:var(--accent-gym);">--</div>
+                    <div style="font-size:12px; color:var(--text-secondary);">kg</div>
                 </div>
                 <button class="btn-primary full" onclick="calculateRM()">Calculer</button>
             </div>
         </div>
 
+        <div class="modal-overlay hidden" id="percentageModal">
+            <div class="modal-content">
+                <div class="modal-header-row">
+                    <h2>Zones de travail (%)</h2>
+                    <button class="btn-close-text"
+                        onclick="document.getElementById('percentageModal').classList.add('hidden'); document.body.classList.remove('modal-open');">Fermer</button>
+                </div>
+                <div class="form-group">
+                    <label>Ton 1RM (Poids Max sur 1 Rép. en kg)</label>
+                    <input type="number" id="percMaxWeight" placeholder="Ex: 100" oninput="calculatePercentages()">
+                </div>
+
+                <div id="percentageResults" style="margin-top: 20px; display:flex; flex-direction:column; gap:8px;">
+                    <div style="text-align:center; color:var(--text-secondary); padding: 20px;">
+                        Entre ton 1RM pour calculer les poids.
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="modal-overlay hidden" id="templateModal">
             <div class="modal-content">
                 <div class="modal-header-row">
@@ -217,9 +241,9 @@
 
         <div id="smartTimer" class="timer-float hidden">
             <div style="display:flex; flex-direction:column;">
-                <span style="font-size:10px; color:#888; font-weight:700;">REPOS</span>
+                <span style="font-size:10px; color:var(--text-secondary); font-weight:700;">REPOS</span>
                 <span id="timerDisplay"
-                    style="font-size:20px; font-weight:700; color:#fff; font-family:monospace;">01:30</span>
+                    style="font-size:20px; font-weight:700; color:var(--text-primary); font-family:monospace;">01:30</span>
             </div>
             <div style="display:flex; gap:8px;">
                 <button class="timer-btn" onclick="adjustTimer(-10)">-10</button>
@@ -238,19 +262,50 @@
                 <div class="nav-icon"><img src="haltere.png"></div>
                 <div class="nav-label">Sport</div>
             </button>
-            <button class="nav-item" onclick="switchPage('nutrition')">
-                <div class="nav-icon"><img src="nourriture.png"></div>
-                <div class="nav-label">Nutrition</div>
-            </button>
         </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // =================================================================
+            // LOGIQUE DE GESTION DU THÈME
+            // =================================================================
+            const body = document.body;
+            const themeOptions = document.querySelectorAll('.theme-option');
+
+            window.setTheme = (theme, element) => {
+                if (theme === 'dark') {
+                    body.classList.add('dark-mode');
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    body.classList.remove('dark-mode');
+                    localStorage.setItem('theme', 'light');
+                }
+
+                // Met à jour l'état actif des boutons dans la page de réglages
+                if (themeOptions.length > 0) {
+                    themeOptions.forEach(opt => opt.classList.remove('active-theme'));
+                    const target = document.querySelector(`.theme-option[data-theme="${theme}"]`);
+                    if (target) target.classList.add('active-theme');
+                }
+            };
+
+            // Chargement du thème au démarrage
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            setTheme(savedTheme);
+            // =================================================================
+            // FIN LOGIQUE DE GESTION DU THÈME
+            // =================================================================
+
+
             window.switchPage = (pageName) => {
                 document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
                 document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-                event.target.closest('.nav-item')?.classList.add('active');
+                
+                // Correction: on utilise l'attribut data-page pour trouver le bouton de navigation
+                const targetNav = document.querySelector(`.bottom-nav .nav-item[onclick*="'${pageName}'"]`);
+                if(targetNav) targetNav.classList.add('active');
+                
                 document.getElementById(pageName).classList.add('active');
                 if (pageName === 'workout') setupWorkoutPage();
                 else if (typeof closeAddSessionModal === 'function') closeAddSessionModal();
@@ -260,17 +315,9 @@
             const date = new Date();
             let dateString = date.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
             dateElement.textContent = dateString.charAt(0).toUpperCase() + dateString.slice(1);
+            
+            // Les variables et fonctions d'hydratation ont été retirées ici
 
-            const TARGET_WATER = 3.2;
-            const STORAGE_KEY = 'dailyWaterAmount';
-            let currentWater = parseFloat(localStorage.getItem(STORAGE_KEY)) || 1.6;
-            window.updateHydrationUI = () => {
-                document.getElementById('currentWater').textContent = currentWater.toFixed(1);
-                document.getElementById('hydrationProgress').style.width = Math.min(100, (currentWater / TARGET_WATER) * 100) + '%';
-                localStorage.setItem(STORAGE_KEY, currentWater.toFixed(1));
-            }
-            window.adjustWater = (amount) => { currentWater = Math.max(0, parseFloat((currentWater + amount).toFixed(1))); updateHydrationUI(); }
-            updateHydrationUI();
 
             const SESSION_STORAGE_KEY = 'workoutSessions';
             let currentDate = new Date();
@@ -498,11 +545,62 @@
                 if (last && last.height) { document.getElementById('displayWeight').innerText = last.weight; const bmi = (last.weight / ((last.height / 100) ** 2)).toFixed(1); document.getElementById('displayBMI').innerText = bmi; }
                 const ctx = document.getElementById('weightChart').getContext('2d'); if (chartInstance) chartInstance.destroy();
                 const labels = weightHistory.map(entry => new Date(entry.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })); const data = weightHistory.map(entry => entry.weight);
-                chartInstance = new Chart(ctx, { type: 'line', data: { labels: labels, datasets: [{ label: 'Poids', data: data, borderColor: '#00BFFF', backgroundColor: 'rgba(0, 245, 255, 0.1)', borderWidth: 2, tension: 0.4, pointRadius: 3, fill: true }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { grid: { color: '#222' }, ticks: { color: '#666' } } } } });
+                chartInstance = new Chart(ctx, { type: 'line', data: { labels: labels, datasets: [{ label: 'Poids', data: data, borderColor: 'var(--accent-gym)', backgroundColor: 'rgba(0, 191, 255, 0.1)', borderWidth: 2, tension: 0.4, pointRadius: 3, fill: true }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { grid: { color: 'var(--border-color)' }, ticks: { color: 'var(--text-secondary)' } } } } });
             }
 
             window.openRmModal = () => { document.getElementById('rmModal').classList.remove('hidden'); }
             window.calculateRM = () => { const w = parseFloat(document.getElementById('rmWeight').value); const r = parseFloat(document.getElementById('rmReps').value); if (w && r) document.getElementById('rmResult').innerText = Math.round(w * (1 + r / 30)); }
+            
+            // NOUVELLES FONCTIONS DE CALCUL DE POURCENTAGES
+            window.openPercentageModal = () => {
+                document.getElementById('percentageModal').classList.remove('hidden');
+                document.body.classList.add('modal-open');
+                // Pré-remplir avec le dernier 1RM calculé si disponible
+                const lastRm = document.getElementById('rmResult').innerText;
+                if (lastRm && lastRm !== '--') {
+                    document.getElementById('percMaxWeight').value = parseFloat(lastRm);
+                }
+                calculatePercentages();
+            };
+
+            window.calculatePercentages = () => {
+                const maxWeight = parseFloat(document.getElementById('percMaxWeight').value);
+                const resultsContainer = document.getElementById('percentageResults');
+                resultsContainer.innerHTML = '';
+                
+                if (isNaN(maxWeight) || maxWeight <= 0) {
+                    resultsContainer.innerHTML = `<div style="text-align:center; color:var(--text-secondary); padding: 20px;">
+                        Entre ton 1RM pour calculer les poids.
+                    </div>`;
+                    return;
+                }
+
+                // Pourcentages courants pour les zones de travail, de 100% à 40% par pas de 5
+                const percentages = [100, 95, 90, 85, 80, 75, 70, 65, 60, 55, 50, 45, 40];
+
+                percentages.forEach(percent => {
+                    // Calcul et arrondi au 0.5kg le plus proche (pour simplifier le chargement des plaques)
+                    const rawWeight = maxWeight * (percent / 100);
+                    const calculatedWeight = Math.round(rawWeight * 2) / 2;
+                    
+                    const resultItem = document.createElement('div');
+                    resultItem.className = 'stat-line background-stat'; 
+                    resultItem.style.padding = '12px'; // Réutilise le style d'affichage existant
+                    
+                    const isMax = percent >= 90; // Met en évidence les poids > 90% pour la force max
+                    
+                    resultItem.innerHTML = `
+                        <div class="stat-label" style="font-size: 14px;">${percent}% de 1RM</div>
+                        <div style="font-size: 18px; font-weight: 700; color: ${isMax ? 'var(--accent-gym)' : 'var(--text-primary)'};">
+                            ${calculatedWeight.toFixed(1)} <span style="font-size: 12px; font-weight: 500; color: var(--text-secondary);">kg</span>
+                        </div>
+                    `;
+                    
+                    resultsContainer.appendChild(resultItem);
+                });
+            };
+            // FIN NOUVELLES FONCTIONS
+            
 
             const templates = { "Full Body": [{ name: "Squat", s: 3, r: 10 }, { name: "Développé Couché", s: 3, r: 10 }, { name: "Tractions", s: 3, r: 10 }], "Push": [{ name: "Pompes", s: 4, r: 12 }, { name: "Développé Militaire", s: 3, r: 10 }], "Pull": [{ name: "Tractions", s: 4, r: 8 }, { name: "Rowing", s: 3, r: 10 }] };
             window.openTemplateModal = () => {
@@ -510,7 +608,7 @@
                 const list = document.getElementById('templateList'); list.innerHTML = '';
                 Object.keys(templates).forEach(key => {
                     const btn = document.createElement('button'); btn.className = 'btn-secondary'; btn.style.width = '100%'; btn.style.marginBottom = '10px'; btn.style.textAlign = 'left';
-                    btn.innerHTML = `<b>${key}</b> <span style="float:right; color:#666">${templates[key].length} exos</span>`;
+                    btn.innerHTML = `<b>${key}</b> <span style="float:right; color:var(--text-secondary)">${templates[key].length} exos</span>`;
                     btn.onclick = () => loadTemplate(key); list.appendChild(btn);
                 });
                 document.getElementById('templateModal').classList.remove('hidden');
