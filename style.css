@@ -849,6 +849,11 @@ textarea {
     transition: background-color 0.3s, border-color 0.3s;
 }
 
+
+.timer-float.hidden {
+    display: none;
+}
+
 .dark-mode .timer-float {
     box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5);
 }

@@ -59,7 +59,7 @@
                     </div>
                     <div style="text-align:right;">
                         <div class="card-label">IMC</div>
-                        <div style="font-size: 28px; font-weight: 900; color: var(--accent-gym);" id="displayBMI">--</div>
+                        <div style="font-size: 28px; font-weight: 900; color: var(--text-primary);" id="displayBMI">--</div>
                     </div>
                 </div>
                 <div style="height: 150px; width: 100%;"><canvas id="weightChart"></canvas></div>
@@ -179,7 +179,7 @@
                     <div
                         style="font-size:12px; color:var(--text-secondary); text-transform:uppercase; letter-spacing:1px; margin-bottom:5px;">
                         IMC Estimé</div>
-                    <div id="bmiResult" style="font-size:40px; font-weight:900; color:var(--accent-gym); line-height:1;">--</div>
+                    <div id="bmiResult" style="font-size:40px; font-weight:900; color:var(--text-primary); line-height:1;">--</div>
                     <div id="bmiText" style="font-size:14px; font-weight:600; color:var(--text-primary); margin-top:5px;">--</div>
                 </div>
                 <div class="modal-actions"><button class="btn-primary full"
@@ -203,7 +203,7 @@
                     <div style="font-size:12px; color:var(--text-secondary); text-transform:uppercase; letter-spacing:1px;">Max Théorique
                         sur une rep
                     </div>
-                    <div id="rmResult" style="font-size:40px; font-weight:900; color:var(--accent-gym);">--</div>
+                    <div id="rmResult" style="font-size:40px; font-weight:900; color:var(--text-primary);">--</div>
                     <div style="font-size:12px; color:var(--text-secondary);">kg</div>
                 </div>
                 <button class="btn-primary full" onclick="calculateRM()">Calculer</button>
@@ -238,7 +238,7 @@
                 <div id="templateList" style="display:flex; flex-direction:column; gap:10px;"></div>
             </div>
         </div>
-
+        
         <div id="smartTimer" class="timer-float hidden">
             <div style="display:flex; flex-direction:column;">
                 <span style="font-size:10px; color:var(--text-secondary); font-weight:700;">REPOS</span>
@@ -252,7 +252,6 @@
             </div>
             <div class="timer-bar" id="timerBar"></div>
         </div>
-
         <div class="bottom-nav">
             <button class="nav-item active" onclick="switchPage('home')">
                 <div class="nav-icon"><img src="home.png"></div>
@@ -288,21 +287,98 @@
                     const target = document.querySelector(`.theme-option[data-theme="${theme}"]`);
                     if (target) target.classList.add('active-theme');
                 }
+                
+                // CRUCIAL : Relance l'UI du poids pour mettre à jour les couleurs du graphique
+                if (document.getElementById('weightChart')) {
+                    updateWeightUI();
+                }
             };
 
-            // Chargement du thème au démarrage
-            const savedTheme = localStorage.getItem('theme') || 'light';
-            setTheme(savedTheme);
             // =================================================================
-            // FIN LOGIQUE DE GESTION DU THÈME
+            // DÉFINITION DES FONCTIONS ET VARIABLES
             // =================================================================
+            
+            let chartInstance = null;
+            let weightHistory = JSON.parse(localStorage.getItem('weightHistory')) || [];
 
+            // FONCTION CORRIGÉE : Inclus l'affichage explicite de la ligne de l'axe Y pour le mode sombre
+            function updateWeightUI() {
+                const last = weightHistory[weightHistory.length - 1];
+                if (last && last.height) { 
+                    document.getElementById('displayWeight').innerText = last.weight; 
+                    const bmi = (last.weight / ((last.height / 100) ** 2)).toFixed(1); 
+                    document.getElementById('displayBMI').innerText = bmi; 
+                }
+                
+                // LECTURE DYNAMIQUE DES COULEURS À PARTIR DU BODY
+                const style = getComputedStyle(document.body);
+                const textColor = style.getPropertyValue('--text-primary').trim() || '#2C3E50';
+                // secondaryTextColor est la couleur claire utilisée en mode sombre pour les axes
+                const secondaryTextColor = style.getPropertyValue('--text-secondary').trim() || '#7F8C9A';
+                
+                // DÉFINITION RADICALE : Assure que tous les textes par défaut sont clairs
+                Chart.defaults.color = secondaryTextColor; 
+                
+                // Couleur de fond de la zone sous la courbe
+                const areaFillColor = document.body.classList.contains('dark-mode') 
+                    ? 'rgba(242, 242, 247, 0.1)' 
+                    : 'rgba(44, 62, 80, 0.05)';
+                
+                const ctx = document.getElementById('weightChart').getContext('2d'); 
+                if (chartInstance) chartInstance.destroy();
+
+                const labels = weightHistory.map(entry => new Date(entry.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })); 
+                const data = weightHistory.map(entry => entry.weight);
+                
+                chartInstance = new Chart(ctx, { 
+                    type: 'line', 
+                    data: { 
+                        labels: labels, 
+                        datasets: [{ 
+                            label: 'Poids', 
+                            data: data, 
+                            borderColor: textColor, 
+                            backgroundColor: areaFillColor, 
+                            borderWidth: 2, tension: 0.4, pointRadius: 3, fill: true 
+                        }] 
+                    }, 
+                    options: { 
+                        responsive: true, 
+                        maintainAspectRatio: false, 
+                        plugins: { legend: { display: false } }, 
+                        scales: { 
+                            x: { 
+                                display: true, 
+                                drawBorder: true,
+                                borderColor: secondaryTextColor, // <--- Axe X LIGNE : Couleur claire
+                                grid: {
+                                    display: false 
+                                },
+                                ticks: { 
+                                    color: secondaryTextColor, // <--- Axe X LABELS : Couleur claire
+                                    font: {
+                                        size: 10 
+                                    }
+                                }
+                            }, 
+                            y: { 
+                                drawBorder: true, 
+                                borderColor: secondaryTextColor, // <--- AXE Y LIGNE : Couleur claire
+                                grid: { 
+                                    color: secondaryTextColor, // <--- AXE Y GRILLE : Couleur claire
+                                    lineWidth: 0.5 
+                                }, 
+                                ticks: { color: secondaryTextColor } // AXE Y LABELS : Couleur claire
+                            } 
+                        } 
+                    } 
+                });
+            }
 
             window.switchPage = (pageName) => {
                 document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
                 document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
                 
-                // Correction: on utilise l'attribut data-page pour trouver le bouton de navigation
                 const targetNav = document.querySelector(`.bottom-nav .nav-item[onclick*="'${pageName}'"]`);
                 if(targetNav) targetNav.classList.add('active');
                 
@@ -316,9 +392,6 @@
             let dateString = date.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
             dateElement.textContent = dateString.charAt(0).toUpperCase() + dateString.slice(1);
             
-            // Les variables et fonctions d'hydratation ont été retirées ici
-
-
             const SESSION_STORAGE_KEY = 'workoutSessions';
             let currentDate = new Date();
             let currentSelectedDate = new Date();
@@ -333,7 +406,6 @@
             function formatDateKey(d) { return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; }
             function formatDateDisplay(d) { return d.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' }); }
 
-            // FONCTION CRUCIALE : Vérifie si la date est STRICTEMENT passée (hier ou avant)
             function isPastDate(d) {
                 const today = new Date(); today.setHours(0, 0, 0, 0);
                 const check = new Date(d); check.setHours(0, 0, 0, 0);
@@ -365,7 +437,7 @@
                 let selectedDayFound = false;
 
                 const today = new Date();
-                today.setHours(0, 0, 0, 0); // Jour actuel sans l'heure
+                today.setHours(0, 0, 0, 0); 
 
                 for (let i = 0; i < 7; i++) {
                     const dayDate = new Date(startOfWeek); dayDate.setDate(startOfWeek.getDate() + i);
@@ -374,16 +446,13 @@
                     const el = document.createElement('div');
                     el.classList.add('slider-day');
 
-                    // MARQUEUR DE SÉANCE (le point)
                     if (allSessions[key] && allSessions[key].exercises.length > 0) el.classList.add(allSessions[key].type);
 
-                    // MISE EN ÉVIDENCE DU JOUR ACTUEL
                     const checkDate = new Date(dayDate); checkDate.setHours(0, 0, 0, 0);
                     if (checkDate.getTime() === today.getTime()) {
                         el.classList.add('today');
                     }
 
-                    // SÉLECTION ACTUELLE
                     if (formatDateKey(dayDate) === formatDateKey(currentSelectedDate)) {
                         el.classList.add('selected');
                         selectedDayFound = true;
@@ -410,14 +479,13 @@
                 });
                 displaySessionRecap(currentSelectedDate, true);
 
-                // LOGIQUE DE VERROUILLAGE DES JOURS PASSÉS
                 const allSessions = getSessions();
                 const btnAdd = document.getElementById('openFormButton');
                 const actionContainer = document.getElementById('actionButtonsContainer');
                 const isPast = isPastDate(currentSelectedDate);
 
                 if (isPast) {
-                    actionContainer.style.display = 'none'; // Cache les boutons si date passée
+                    actionContainer.style.display = 'none'; 
                 } else {
                     actionContainer.style.display = 'flex';
                     btnAdd.style.display = 'flex';
@@ -429,7 +497,7 @@
             document.getElementById('nextWeek').addEventListener('click', () => { currentWeekStart.setDate(currentWeekStart.getDate() + 7); currentSelectedDate.setDate(currentSelectedDate.getDate() + 7); renderDaySlider(currentWeekStart); });
 
             function openAddExerciseModal() {
-                if (isPastDate(currentSelectedDate)) return; // Sécurité supplémentaire
+                if (isPastDate(currentSelectedDate)) return; 
                 document.getElementById('exerciseName').value = ''; document.getElementById('sets').value = '3'; document.getElementById('reps').value = '10'; document.getElementById('notes').value = '';
                 const key = formatDateKey(currentSelectedDate); const all = getSessions();
                 if (all[key] && all[key].exercises.length > 0) {
@@ -478,14 +546,13 @@
                     ex.series.forEach((ser, sIdx) => {
                         const btnClass = ser.isDone ? 'done' : '';
                         const check = ser.isDone ? '✓' : '';
-                        // MODIFICATION ICI : Affichage clair en LISTE avec distinction "Série" / "Reps"
                         seriesHtml += `
                     <li class="series-item ${btnClass}">
                         <div class="series-info-row">
                             <span class="series-num">Série ${sIdx + 1}</span>
                             <span class="series-val">${ser.reps} Reps</span>
                         </div>
-                        <button class="series-toggle-btn ${isPast ? 'disabled' : ''}" onclick="toggleSeries(${idx}, ${sIdx})">${check}</button>
+                        <button class="series-toggle-btn ${btnClass}" onclick="toggleSeries(${idx}, ${sIdx})">${check}</button>
                     </li>`;
                     });
                     seriesHtml += '</ul>';
@@ -494,12 +561,17 @@
                 });
             }
 
+            // FONCTION CORRIGÉE : Le contrôle de date passée est ici
             window.toggleSeries = (exIdx, sIdx) => {
-                if (isPastDate(currentSelectedDate)) return; // Sécurité
+                // Si la date est passée, on bloque la modification et le timer
+                if (isPastDate(currentSelectedDate)) return; 
+                
                 const key = formatDateKey(currentSelectedDate); const all = getSessions();
                 const val = !all[key].exercises[exIdx].series[sIdx].isDone;
                 all[key].exercises[exIdx].series[sIdx].isDone = val;
                 saveSessions(all); selectDay(currentSelectedDate);
+                
+                // DÉCLENCHE LE TIMER UNIQUEMENT SI ON COCHE (val === true)
                 if (val === true) startTimer(90);
             }
 
@@ -511,14 +583,13 @@
                 document.getElementById('addSessionModal').classList.remove('hidden');
             }
             window.delEx = (idx) => {
-                if (confirm('Supprimer ?')) {
+                if (confirm('Etes-vous sur de bien vouloir supprimer cet exercice ?')) {
                     const all = getSessions(); const dateKey = formatDateKey(currentSelectedDate);
                     all[dateKey].exercises.splice(idx, 1); if (all[dateKey].exercises.length === 0) delete all[dateKey];
                     saveSessions(all); selectDay(currentSelectedDate); updateDashboardSessions(); renderDaySlider(currentWeekStart);
                 }
             }
 
-            let weightHistory = JSON.parse(localStorage.getItem('weightHistory')) || [];
             function calcInstantBMI() {
                 const w = parseFloat(document.getElementById('inputWeight').value); const h = parseFloat(document.getElementById('inputHeight').value);
                 if (w > 0 && h > 0) { const bmi = (w / ((h / 100) * (h / 100))).toFixed(1); document.getElementById('bmiResult').innerText = bmi; document.getElementById('bmiText').innerText = (bmi < 18.5 ? "Maigreur" : (bmi < 25 ? "Normal" : "Surpoids")); }
@@ -539,23 +610,12 @@
                 }
             }
 
-            let chartInstance = null;
-            function updateWeightUI() {
-                const last = weightHistory[weightHistory.length - 1];
-                if (last && last.height) { document.getElementById('displayWeight').innerText = last.weight; const bmi = (last.weight / ((last.height / 100) ** 2)).toFixed(1); document.getElementById('displayBMI').innerText = bmi; }
-                const ctx = document.getElementById('weightChart').getContext('2d'); if (chartInstance) chartInstance.destroy();
-                const labels = weightHistory.map(entry => new Date(entry.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })); const data = weightHistory.map(entry => entry.weight);
-                chartInstance = new Chart(ctx, { type: 'line', data: { labels: labels, datasets: [{ label: 'Poids', data: data, borderColor: 'var(--accent-gym)', backgroundColor: 'rgba(0, 191, 255, 0.1)', borderWidth: 2, tension: 0.4, pointRadius: 3, fill: true }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { grid: { color: 'var(--border-color)' }, ticks: { color: 'var(--text-secondary)' } } } } });
-            }
-
             window.openRmModal = () => { document.getElementById('rmModal').classList.remove('hidden'); }
             window.calculateRM = () => { const w = parseFloat(document.getElementById('rmWeight').value); const r = parseFloat(document.getElementById('rmReps').value); if (w && r) document.getElementById('rmResult').innerText = Math.round(w * (1 + r / 30)); }
             
-            // NOUVELLES FONCTIONS DE CALCUL DE POURCENTAGES
             window.openPercentageModal = () => {
                 document.getElementById('percentageModal').classList.remove('hidden');
                 document.body.classList.add('modal-open');
-                // Pré-remplir avec le dernier 1RM calculé si disponible
                 const lastRm = document.getElementById('rmResult').innerText;
                 if (lastRm && lastRm !== '--') {
                     document.getElementById('percMaxWeight').value = parseFloat(lastRm);
@@ -575,23 +635,19 @@
                     return;
                 }
 
-                // Pourcentages courants pour les zones de travail, de 100% à 40% par pas de 5
                 const percentages = [100, 95, 90, 85, 80, 75, 70, 65, 60, 55, 50, 45, 40];
 
                 percentages.forEach(percent => {
-                    // Calcul et arrondi au 0.5kg le plus proche (pour simplifier le chargement des plaques)
                     const rawWeight = maxWeight * (percent / 100);
                     const calculatedWeight = Math.round(rawWeight * 2) / 2;
                     
                     const resultItem = document.createElement('div');
                     resultItem.className = 'stat-line background-stat'; 
-                    resultItem.style.padding = '12px'; // Réutilise le style d'affichage existant
-                    
-                    const isMax = percent >= 90; // Met en évidence les poids > 90% pour la force max
+                    resultItem.style.padding = '12px';
                     
                     resultItem.innerHTML = `
                         <div class="stat-label" style="font-size: 14px;">${percent}% de 1RM</div>
-                        <div style="font-size: 18px; font-weight: 700; color: ${isMax ? 'var(--accent-gym)' : 'var(--text-primary)'};">
+                        <div style="font-size: 18px; font-weight: 700; color: var(--text-primary);">
                             ${calculatedWeight.toFixed(1)} <span style="font-size: 12px; font-weight: 500; color: var(--text-secondary);">kg</span>
                         </div>
                     `;
@@ -599,12 +655,11 @@
                     resultsContainer.appendChild(resultItem);
                 });
             };
-            // FIN NOUVELLES FONCTIONS
             
 
             const templates = { "Full Body": [{ name: "Squat", s: 3, r: 10 }, { name: "Développé Couché", s: 3, r: 10 }, { name: "Tractions", s: 3, r: 10 }], "Push": [{ name: "Pompes", s: 4, r: 12 }, { name: "Développé Militaire", s: 3, r: 10 }], "Pull": [{ name: "Tractions", s: 4, r: 8 }, { name: "Rowing", s: 3, r: 10 }] };
             window.openTemplateModal = () => {
-                if (isPastDate(currentSelectedDate)) return; // Sécurité
+                if (isPastDate(currentSelectedDate)) return; 
                 const list = document.getElementById('templateList'); list.innerHTML = '';
                 Object.keys(templates).forEach(key => {
                     const btn = document.createElement('button'); btn.className = 'btn-secondary'; btn.style.width = '100%'; btn.style.marginBottom = '10px'; btn.style.textAlign = 'left';
@@ -620,20 +675,51 @@
                 saveSessions(all); document.getElementById('templateModal').classList.add('hidden'); selectDay(currentSelectedDate); updateDashboardSessions();
             }
 
+            // =================================================================
+            // LOGIQUE DU TIMER
+            // =================================================================
             let timerInterval = null; let timerTime = 0; let timerTotal = 0;
-            window.startTimer = (sec) => { timerTime = sec; timerTotal = sec; document.getElementById('smartTimer').classList.remove('hidden'); clearInterval(timerInterval); updateTimerUI(); timerInterval = setInterval(() => { timerTime--; updateTimerUI(); if (timerTime <= 0) stopTimer(); }, 1000); }
-            window.stopTimer = () => { clearInterval(timerInterval); document.getElementById('smartTimer').classList.add('hidden'); }
-            window.adjustTimer = (val) => { timerTime += val; if (timerTime < 0) timerTime = 0; updateTimerUI(); }
+            window.startTimer = (sec) => { 
+                timerTime = sec; 
+                timerTotal = sec; 
+                document.getElementById('smartTimer').classList.remove('hidden'); 
+                clearInterval(timerInterval); 
+                updateTimerUI(); 
+                timerInterval = setInterval(() => { 
+                    timerTime--; 
+                    updateTimerUI(); 
+                    if (timerTime <= 0) stopTimer(); 
+                }, 1000); 
+            }
+            window.stopTimer = () => { 
+                clearInterval(timerInterval); 
+                document.getElementById('smartTimer').classList.add('hidden'); 
+            }
+            window.adjustTimer = (val) => { 
+                timerTime += val; 
+                if (timerTime < 0) timerTime = 0; 
+                updateTimerUI(); 
+            }
             function updateTimerUI() {
-                const m = Math.floor(timerTime / 60).toString().padStart(2, '0'); const s = (timerTime % 60).toString().padStart(2, '0');
+                const m = Math.floor(timerTime / 60).toString().padStart(2, '0'); 
+                const s = (timerTime % 60).toString().padStart(2, '0');
                 document.getElementById('timerDisplay').innerText = `${m}:${s}`;
                 document.getElementById('timerBar').style.width = (timerTime / timerTotal) * 100 + "%";
             }
 
+            // =================================================================
+            // INITIALISATION FINALE
+            // =================================================================
             document.getElementById('openFormButton').addEventListener('click', openAddExerciseModal);
             const workoutPage = document.getElementById('workout');
             const setupWorkoutPage = () => { currentWeekStart = getWeekStart(new Date()); renderDaySlider(currentWeekStart); selectDay(new Date()); };
-            setupWorkoutPage(); updateDashboardSessions(); updateWeightUI();
+            
+            // Chargement du thème au démarrage
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            setTheme(savedTheme); // Met à jour le thème et appelle updateWeightUI()
+
+            setupWorkoutPage(); 
+            updateDashboardSessions(); 
         });
     </script>
 </body>
