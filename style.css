@@ -560,9 +560,24 @@ body {
     color: var(--text-secondary);
 }
 
-/* Since the toggle button is removed from planning, these styles are mostly unused here but kept for context if needed */
 .series-toggle-btn {
-    display: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    border: 2px solid #444;
+    background: none;
+    color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.series-item.done .series-toggle-btn {
+    background: var(--bg-primary);
+    border-color: var(--bg-primary);
+    font-weight: bold;
 }
 
 
