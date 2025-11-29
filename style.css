@@ -13,12 +13,17 @@
     --accent-gym: #00BFFF;
     --accent-home: #FF00C8;
     --text-inactive: #95A5A6;
-    --icon-filter: invert(20%) sepia(50%) saturate(100%) hue-rotate(180deg); /* Légèrement bleuté pour le clair */
-    --header-bg-rgb: 255, 255, 255; /* Blanc pour le header transparent */
+    --header-bg-rgb: 255, 255, 255;
     --gradient-text-start: #2F3438;
     --gradient-text-end: #C4C6CA;
-    --input-bg: #E5E7EB;
+    --input-bg: #F3F4F6;
     --input-text: #2F3438;
+    --btn-primary-start: #F3F4F6;
+    --btn-primary-end: #CFD2D9;
+    /* OMBRE DE CARTE LÉGÈREMENT PLUS PRONONCÉE */
+    --card-shadow-light: 0 10px 30px rgba(0, 0, 0, 0.12); 
+    /* OMBRE DE MODALE PLUS FORTE EN CLAIR POUR EFFET DE PROFONDEUR */
+    --modal-shadow-light: 0 15px 50px rgba(0, 0, 0, 0.18);
 }
 
 /* ================================================= */
@@ -26,7 +31,6 @@
 /* ================================================= */
 
 .dark-mode {
-    /* Couleurs du Pro/Dark (Sombre) */
     --bg-primary: #1C1C1E;
     --bg-secondary: #2C2C2E;
     --bg-tertiary: #3A3A3C;
@@ -36,12 +40,15 @@
     --accent-gym: #00BFFF;
     --accent-home: #FF00C8;
     --text-inactive: #6D6D75;
-    --icon-filter: invert(100%); /* Inverse les couleurs des icônes pour le mode sombre */
-    --header-bg-rgb: 44, 44, 46; /* Gris foncé pour le header transparent */
-    --gradient-text-start: #00f5ff;
-    --gradient-text-end: #0080ff;
+    --header-bg-rgb: 44, 44, 46;
+    --gradient-text-start: #F2F2F7;
+    --gradient-text-end: #A8A8B4;
     --input-bg: #3A3A3C;
     --input-text: #F2F2F7;
+    --btn-primary-start: #3A3A3C;
+    --btn-primary-end: #48484A;
+    --card-shadow-light: 0 6px 18px rgba(0, 0, 0, 0.3);
+    --modal-shadow-light: 0 20px 50px rgba(0, 0, 0, 0.5);
 }
 
 
@@ -106,7 +113,7 @@ body {
     font-weight: 800;
     letter-spacing: -1px;
     margin: 0;
-    /* Utilisation des variables pour le dégradé de texte */
+    /* Utilise maintenant les variables (fonctionne pour clair et sombre) */
     background: linear-gradient(135deg, var(--gradient-text-start) 0%, var(--gradient-text-end) 100%);
     -webkit-background-clip: text;
     background-clip: text;
@@ -123,7 +130,8 @@ body {
 .settings img {
     height: 24px;
     width: 24px;
-    filter: var(--icon-filter); /* Application du filtre d'icône */
+    filter: var(--icon-filter);
+    /* Application du filtre d'icône */
 }
 
 .settings img:hover {
@@ -166,6 +174,7 @@ body {
     filter: var(--icon-filter);
     opacity: 0.6;
 }
+
 .nav-item.active .nav-icon img {
     opacity: 1;
 }
@@ -228,12 +237,14 @@ body {
     color: var(--text-primary);
     border-radius: 14px;
     padding: 20px;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
-    transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
+    /* UTILISATION DE L'OMBRE PLUS PRONONCÉE EN MODE CLAIR */
+    box-shadow: var(--card-shadow-light); 
+    transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s, transform 0.1s;
 }
 
 .dark-mode .card {
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3); /* Ombre plus marquée en dark mode */
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+    /* Ombre style sombre (inchangée) */
 }
 
 .card.gradient-border {
@@ -241,7 +252,17 @@ body {
     border: 1px solid var(--border-color);
 }
 
+/* EFFET DE RIPPLE (CLIC) PLUS MARQUÉ EN MODE CLAIR (INSET SHADOW) */
 .card.ripple:active {
+    transform: scale(0.99); 
+    background: var(--bg-tertiary);
+    /* Effet de pression */
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.dark-mode .card.ripple:active {
+    /* Garde le style simple du dark mode pour le clic */
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
     transform: scale(0.98);
     background: var(--bg-tertiary);
 }
@@ -309,85 +330,6 @@ body {
     border: 1px solid var(--border-color);
 }
 
-/* Hydratation */
-.hydration-card {
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-color);
-    color: var(--text-secondary);
-    border-radius: 14px;
-    padding: 20px;
-    margin-bottom: 15px;
-    position: relative;
-    transition: transform 0.1s;
-}
-
-.hydration-header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 15px;
-}
-
-.hydration-count {
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--text-primary);
-}
-
-.hydration-bar {
-    height: 8px;
-    background: var(--bg-tertiary);
-    border-radius: 4px;
-    overflow: hidden;
-    margin-bottom: 15px;
-}
-
-.hydration-progress {
-    height: 100%;
-    background: var(--accent-gym);
-    width: 50%;
-    transition: width 0.5s ease;
-}
-
-.hydration-controls {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    align-items: center;
-}
-
-.hydration-amount {
-    font-size: 14px;
-    color: var(--text-primary);
-    font-weight: 600;
-}
-
-.hydration-btn {
-    width: 40px;
-    height: 40px;
-    color: var(--text-primary);
-    background: var(--bg-tertiary);
-    border: 2px solid var(--border-color);
-    border-radius: 14px;
-    font-size: 20px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: 0.1s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.indication-hydration {
-    font-size: 11px;
-    color: var(--text-secondary);
-    font-weight: 400;
-    margin-top: 15px;
-    text-align: left;
-}
-
-.hydration-btn:active {
-    transform: scale(0.9);
-}
 
 /* ================================================= */
 /* PAGE SPORT - SLIDER */
@@ -497,8 +439,10 @@ body {
 
 /* Active Session Interface Styles */
 .active-session-interface {
-    display: none; /* Controlled by JS/class .hidden */
+    display: none;
+    /* Controlled by JS/class .hidden */
 }
+
 .active-session-interface.hidden {
     display: none;
 }
@@ -521,7 +465,8 @@ body {
 .current-exercise-card {
     padding: 25px;
     text-align: center;
-    border: 2px solid var(--accent-gym); /* Highlight the main card */
+    border: 2px solid var(--accent-gym);
+    /* Highlight the main card */
 }
 
 .session-recap-container {
@@ -588,7 +533,8 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 8px 0; /* Adjusted padding */
+    padding: 8px 0;
+    /* Adjusted padding */
     border-bottom: 1px solid var(--border-color);
 }
 
@@ -616,7 +562,7 @@ body {
 
 /* Since the toggle button is removed from planning, these styles are mostly unused here but kept for context if needed */
 .series-toggle-btn {
-    display: none; 
+    display: none;
 }
 
 
@@ -689,12 +635,15 @@ body {
     border-radius: 16px;
     padding: 25px;
     border: 1px solid var(--border-color);
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    /* Utilisation de l'ombre améliorée pour le mode clair */
+    box-shadow: var(--modal-shadow-light); 
     max-height: 90vh;
     overflow-y: auto;
     transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
 }
+
 .dark-mode .modal-content {
+    /* Maintien de l'ombre plus forte et sombre pour le mode dark */
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
 }
 
@@ -707,8 +656,9 @@ body {
     padding-bottom: 10px;
 }
 
+/* Le titre H2 des modales utilise les variables de dégradé (sobre dans les deux modes) */
 .modal-header-row h2 {
-    background: linear-gradient(135deg, var(--accent-gym) 0%, #0080ff 100%);
+    background: linear-gradient(135deg, var(--gradient-text-start) 0%, var(--gradient-text-end) 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -795,10 +745,13 @@ textarea {
     transition: 0.2s;
 }
 
+/* Bouton GYM actif en mode CLAIR (Gris foncé sobre) */
 .toggle-switch button[data-type="gym"].active {
-    background: var(--accent-gym);
+    background: var(--text-primary);
+    /* Gris foncé */
     color: var(--bg-secondary);
-    box-shadow: 0 2px 5px rgba(0, 191, 255, 0.3);
+    /* Blanc */
+    box-shadow: 0 2px 5px rgba(44, 62, 80, 0.25);
 }
 
 .toggle-switch button[data-type="home"].active {
@@ -808,12 +761,19 @@ textarea {
 
 }
 
+/* Bouton GYM actif en mode SOMBRE (Gris sombre) */
+.dark-mode .toggle-switch button[data-type="gym"].active {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
 
 
 /* Boutons Principaux */
 .btn-primary {
     width: 100%;
-    background: linear-gradient(135deg, var(--accent-gym) 0%, #0080ff 100%);
+    /* Utilise les variables sobres dans les deux modes */
+    background: linear-gradient(135deg, var(--btn-primary-start) 0%, var(--btn-primary-end) 100%);
     color: var(--bg-secondary);
     border: none;
     padding: 16px;
@@ -821,15 +781,23 @@ textarea {
     font-weight: 700;
     font-size: 15px;
     cursor: pointer;
-    box-shadow: 0 4px 20px rgba(0, 150, 255, 0.35);
-    transition: transform 0.1s;
+    /* Ombre unifiée pour un effet 3D dans les deux modes */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
+    transition: transform 0.1s, box-shadow 0.1s;
 }
+
+/* L'ombre est gérée par défaut, mais on peut la rendre plus subtile en dark mode */
 .dark-mode .btn-primary {
-    color: #1a1a1a;
+    color: var(--text-primary);
+    /* Le texte passe en clair en mode sombre */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    /* Ombre un peu plus marquée en mode sombre */
 }
+
 
 .btn-primary:active {
     transform: scale(0.98);
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2); /* Ombre réduite à l'état actif (enfoncé) */
 }
 
 .btn-secondary {
@@ -841,7 +809,20 @@ textarea {
     border-radius: 12px;
     font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
+    transition: background-color 0.3s, color 0.3s, transform 0.1s, box-shadow 0.1s;
+}
+
+/* EFFET D'ENFONCEMENT (INSET) POUR LE BOUTON SECONDAIRE EN MODE CLAIR */
+.btn-secondary:active:not(.dark-mode *) {
+    transform: scale(0.99);
+    background: var(--border-color);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15); /* Effet de pression */
+}
+
+.dark-mode .btn-secondary:active {
+    transform: scale(0.99);
+    background: var(--border-color);
+    box-shadow: none; /* Reste plat en dark mode */
 }
 
 /* Timer Flottant */
@@ -867,6 +848,7 @@ textarea {
     z-index: 1500;
     transition: background-color 0.3s, border-color 0.3s;
 }
+
 .dark-mode .timer-float {
     box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5);
 }
@@ -874,6 +856,7 @@ textarea {
 .timer-float.hidden {
     display: none;
 }
+
 .timer-float span {
     color: var(--text-primary);
 }
@@ -933,9 +916,10 @@ textarea {
     opacity: 0.9;
 }
 
+/* Bordure et ombre sobre pour le mode CLAIR */
 .theme-option.active-theme {
-    border-color: var(--accent-gym);
-    box-shadow: 0 0 0 3px rgba(0, 191, 255, 0.2);
+    border-color: var(--text-primary);
+    box-shadow: 0 0 0 3px rgba(44, 62, 80, 0.15);
 }
 
 .theme-preview {
@@ -954,6 +938,7 @@ textarea {
 .preview-light {
     background: #E5E7EB;
 }
+
 .preview-light .dot {
     background: #2C3E50;
 }
@@ -961,6 +946,7 @@ textarea {
 .preview-dark {
     background: #1C1C1E;
 }
+
 .preview-dark .dot {
     background: #F2F2F7;
 }
