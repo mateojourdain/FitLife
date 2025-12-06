@@ -763,32 +763,19 @@ textarea {
     cursor: pointer;
 }
 
-.toggle-switch button[data-type="gym"].active {
-    background: var(--bg-tertiary);
+/* --- CORRECTION CSS : STYLE GÉNÉRIQUE POUR TOUS LES BOUTONS ACTIFS (GYM, HOME, HOMME, FEMME) --- */
+.toggle-switch button.active {
+    background: var(--bg-secondary); /* Fond blanc/carte pour bien ressortir */
     color: var(--text-primary);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.toggle-switch button[data-type="home"].active {
-    background: var(--bg-tertiary);
-    color: var(--text-primary);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-
-}
-
-/* Bouton GYM actif en mode SOMBRE (Gris sombre) */
-.dark-mode .toggle-switch button[data-type="gym"].active {
+/* En mode sombre, on garde le style discret d'origine */
+.dark-mode .toggle-switch button.active {
     background: var(--bg-tertiary);
     color: var(--text-primary);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
-
-.dark-mode .toggle-switch button[data-type="home"].active {
-    background: var(--bg-tertiary);
-    color: var(--text-primary);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-}
-
 
 /* Boutons Principaux */
 .btn-primary {

@@ -18,9 +18,7 @@
                 <h1>FitLife</h1>
                 <div class="date" id="currentDate"></div>
             </div>
-            <div class="settings">
-                <div class="settings" onclick="switchPage('settings')"><img src="reglage.png"></div>
-            </div>
+            <div class="settings" onclick="switchPage('settings')"><img src="reglage.png"></div>
         </header>
 
         <div id="home" class="page active">
@@ -35,11 +33,13 @@
                         <div class="background-stat">
                             <div class="stat-line" style="margin-bottom: 8px;">
                                 <div class="stat-label">En salle de sport</div>
-                                <div style="font-size: 20px; font-weight: 700; color: var(--accent-gym);" id="gymSessions">0</div>
+                                <div style="font-size: 20px; font-weight: 700; color: var(--accent-gym);"
+                                    id="gymSessions">0</div>
                             </div>
                             <div class="stat-line">
                                 <div class="stat-label">A la maison</div>
-                                <div style="font-size: 20px; font-weight: 700; color: var(--accent-home);" id="homeSessions">0
+                                <div style="font-size: 20px; font-weight: 700; color: var(--accent-home);"
+                                    id="homeSessions">0
                                 </div>
                             </div>
                         </div>
@@ -59,7 +59,8 @@
                     </div>
                     <div style="text-align:right;">
                         <div class="card-label">IMC</div>
-                        <div style="font-size: 28px; font-weight: 900; color: var(--text-primary);" id="displayBMI">--</div>
+                        <div style="font-size: 28px; font-weight: 900; color: var(--text-primary);" id="displayBMI">--
+                        </div>
                     </div>
                 </div>
                 <div style="height: 150px; width: 100%;"><canvas id="weightChart"></canvas></div>
@@ -69,13 +70,15 @@
             </div>
 
             <div class="section-title">Outils</div>
+
             <div class="card ripple" onclick="openRmModal()"
                 style="display:flex; justify-content:space-between; align-items:center; padding:20px; margin-bottom: 15px;">
                 <div style="display:flex; align-items:center; gap:15px;">
                     <div class="icon-box">⚡</div>
                     <div>
                         <div style="font-weight:700; color:var(--text-primary); font-size:16px;">Calculateur 1RM</div>
-                        <div style="font-size:12px; color:var(--text-secondary);">Estime ta force max sur une seul rep</div>
+                        <div style="font-size:12px; color:var(--text-secondary);">Estime ta force max sur une seul rep
+                        </div>
                     </div>
                 </div>
                 <div style="color:var(--accent-gym); font-size:20px; cursor: pointer;">›</div>
@@ -87,12 +90,26 @@
                     <div class="icon-box">📊</div>
                     <div>
                         <div style="font-weight:700; color:var(--text-primary); font-size:16px;">Zones de travail</div>
-                        <div style="font-size:12px; color:var(--text-secondary);">Calcule ton poids par exercice en %</div>
+                        <div style="font-size:12px; color:var(--text-secondary);">Calcule ton poids par exercice en %
+                        </div>
                     </div>
                 </div>
                 <div style="color:var(--accent-gym); font-size:20px; cursor: pointer;">›</div>
             </div>
+
+            <div class="card ripple" onclick="openCaloriesModal()"
+                style="display:flex; justify-content:space-between; align-items:center; padding:20px; margin-top: 15px;">
+                <div style="display:flex; align-items:center; gap:15px;">
+                    <div class="icon-box">🔥</div>
+                    <div>
+                        <div style="font-weight:700; color:var(--text-primary); font-size:16px;">Besoins Caloriques</div>
+                        <div style="font-size:12px; color:var(--text-secondary);">Calcule tes calories de maintien</div>
+                    </div>
+                </div>
+                <div style="color:var(--accent-gym); font-size:20px; cursor: pointer;">›</div>
             </div>
+
+        </div>
 
         <div id="workout" class="page">
             <div class="day-slider-container">
@@ -139,7 +156,8 @@
             <div class="card" style="margin-top: 15px;">
                 <div class="card-label" style="margin-bottom: 10px;">Objectif hebdomadaire du nombre de séance</div>
                 <div class="form-group">
-                    <input type="number" id="weeklyGoalInput" min="1" max="14" placeholder="Ex:5" style="margin-top: 7px;">
+                    <input type="number" id="weeklyGoalInput" min="1" max="14" placeholder="Ex:5"
+                        style="margin-top: 7px;">
                 </div>
                 <button class="btn-primary" onclick="saveWeeklyGoal()" style="margin-top: 10px;">Enregistrer</button>
             </div>
@@ -182,12 +200,15 @@
                 </div>
                 <div class="form-group"><label>Âge (ans)</label><input type="number" id="inputAge" placeholder="Ex:25">
                 </div>
-                <div class="card" style="margin: 20px 0; text-align:center; border:1px solid var(--border-color); background:var(--bg-tertiary);">
+                <div class="card"
+                    style="margin: 20px 0; text-align:center; border:1px solid var(--border-color); background:var(--bg-tertiary);">
                     <div
                         style="font-size:12px; color:var(--text-secondary); text-transform:uppercase; letter-spacing:1px; margin-bottom:5px;">
                         IMC Estimé</div>
-                    <div id="bmiResult" style="font-size:40px; font-weight:900; color:var(--text-primary); line-height:1;">--</div>
-                    <div id="bmiText" style="font-size:14px; font-weight:600; color:var(--text-primary); margin-top:5px;">--</div>
+                    <div id="bmiResult"
+                        style="font-size:40px; font-weight:900; color:var(--text-primary); line-height:1;">--</div>
+                    <div id="bmiText"
+                        style="font-size:14px; font-weight:600; color:var(--text-primary); margin-top:5px;">--</div>
                 </div>
                 <div class="modal-actions"><button class="btn-primary full"
                         onclick="saveWeightData()">Sauvegarder</button></div>
@@ -198,7 +219,7 @@
             <div class="modal-content">
                 <div class="modal-header-row">
                     <h2>Calculateur 1RM</h2><button class="btn-close-text"
-                        onclick="document.getElementById('rmModal').classList.add('hidden')">Fermer</button>
+                        onclick="closeRmModal()">Fermer</button>
                 </div>
                 <div class="form-group row-group">
                     <div class="input-group"><label>Poids (kg)</label><input type="number" id="rmWeight"
@@ -206,8 +227,11 @@
                     <div class="input-group"><label>Répétitions</label><input type="number" id="rmReps" placeholder="8">
                     </div>
                 </div>
-                <div class="card" style="margin: 20px 0; text-align:center; border:1px solid var(--border-color); background:var(--bg-tertiary);">
-                    <div style="font-size:12px; color:var(--text-secondary); text-transform:uppercase; letter-spacing:1px;">Max Théorique
+                <div class="card"
+                    style="margin: 20px 0; text-align:center; border:1px solid var(--border-color); background:var(--bg-tertiary);">
+                    <div
+                        style="font-size:12px; color:var(--text-secondary); text-transform:uppercase; letter-spacing:1px;">
+                        Max Théorique
                         sur une rep
                     </div>
                     <div id="rmResult" style="font-size:40px; font-weight:900; color:var(--text-primary);">--</div>
@@ -222,7 +246,7 @@
                 <div class="modal-header-row">
                     <h2>Zones de travail (%)</h2>
                     <button class="btn-close-text"
-                        onclick="document.getElementById('percentageModal').classList.add('hidden'); document.body.classList.remove('modal-open');">Fermer</button>
+                        onclick="closePercentageModal()">Fermer</button>
                 </div>
                 <div class="form-group">
                     <label>Ton 1RM (Poids Max sur 1 Rép. en kg)</label>
@@ -245,7 +269,62 @@
                 <div id="templateList" style="display:flex; flex-direction:column; gap:10px;"></div>
             </div>
         </div>
-        
+
+        <div class="modal-overlay hidden" id="caloriesModal">
+            <div class="modal-content">
+                <div class="modal-header-row">
+                    <h2>Calories</h2>
+                    <button class="btn-close-text" onclick="closeCaloriesModal()">Fermer</button>
+                </div>
+
+                <div class="form-group">
+                    <label>Sexe</label>
+                    <div class="toggle-switch" id="genderToggle">
+                        <button data-sex="male" class="active" onclick="setCalorieGender('male', this)">Homme</button>
+                        <button data-sex="female" onclick="setCalorieGender('female', this)">Femme</button>
+                    </div>
+                </div>
+
+                <div class="form-group row-group">
+                    <div class="input-group"><label>Poids (kg)</label><input type="number" id="calWeight"
+                            placeholder="Ex: 75"></div>
+                    <div class="input-group"><label>Taille (cm)</label><input type="number" id="calHeight"
+                            placeholder="Ex: 180"></div>
+                </div>
+
+                <div class="form-group row-group">
+                    <div class="input-group"><label>Âge (ans)</label><input type="number" id="calAge"
+                            placeholder="Ex: 25"></div>
+                </div>
+
+                <div class="form-group">
+                    <label>Niveau d'activité</label>
+                    <select id="calActivity"
+                        style="width: 100%; background: var(--input-bg); border: 1px solid var(--border-color); color: var(--input-text); padding: 12px; border-radius: 10px; font-size: 16px; outline: none; appearance: none;">
+                        <option value="1.2">Sédentaire (Peu ou pas de sport)</option>
+                        <option value="1.375">Léger (Sport 1-3 fois/semaine)</option>
+                        <option value="1.55">Modéré (Sport 3-5 fois/semaine)</option>
+                        <option value="1.725">Actif (Sport 6-7 fois/semaine)</option>
+                        <option value="1.9">Très actif (Job physique + sport)</option>
+                    </select>
+                </div>
+
+                <div class="card"
+                    style="margin: 20px 0; text-align:center; border:1px solid var(--border-color); background:var(--bg-tertiary);">
+                    <div
+                        style="font-size:12px; color:var(--text-secondary); text-transform:uppercase; letter-spacing:1px; margin-bottom:5px;">
+                        Maintien Quotidien
+                    </div>
+                    <div id="calResult"
+                        style="font-size:40px; font-weight:900; color:var(--text-primary); line-height:1;">--</div>
+                    <div style="font-size:14px; font-weight:600; color:var(--accent-gym); margin-top:5px;">Kcal / jour
+                    </div>
+                </div>
+
+                <button class="btn-primary full" onclick="calculateCalories()">Calculer</button>
+            </div>
+        </div>
+
         <div id="smartTimer" class="timer-float hidden">
             <div style="display:flex; flex-direction:column;">
                 <span style="font-size:10px; color:var(--text-secondary); font-weight:700;">REPOS</span>
@@ -294,7 +373,7 @@
                     const target = document.querySelector(`.theme-option[data-theme="${theme}"]`);
                     if (target) target.classList.add('active-theme');
                 }
-                
+
                 // CRUCIAL : Relance l'UI du poids pour mettre à jour les couleurs du graphique
                 if (document.getElementById('weightChart')) {
                     updateWeightUI();
@@ -304,91 +383,101 @@
             // =================================================================
             // DÉFINITION DES FONCTIONS ET VARIABLES
             // =================================================================
-            
+
             let chartInstance = null;
             let weightHistory = JSON.parse(localStorage.getItem('weightHistory')) || [];
 
             // FONCTION CORRIGÉE : Inclus l'affichage explicite de la ligne de l'axe Y pour le mode sombre
             function updateWeightUI() {
                 const last = weightHistory[weightHistory.length - 1];
-                if (last && last.height) { 
-                    document.getElementById('displayWeight').innerText = last.weight; 
-                    const bmi = (last.weight / ((last.height / 100) ** 2)).toFixed(1); 
-                    document.getElementById('displayBMI').innerText = bmi; 
+                if (last && last.height) {
+                    document.getElementById('displayWeight').innerText = last.weight;
+                    const bmi = (last.weight / ((last.height / 100) ** 2)).toFixed(1);
+                    document.getElementById('displayBMI').innerText = bmi;
                 }
-                
+
                 // LECTURE DYNAMIQUE DES COULEURS À PARTIR DU BODY
                 const style = getComputedStyle(document.body);
                 const textColor = style.getPropertyValue('--text-primary').trim() || '#2C3E50';
                 // secondaryTextColor est la couleur claire utilisée en mode sombre pour les axes
                 const secondaryTextColor = style.getPropertyValue('--text-secondary').trim() || '#7F8C9A';
-                
+
                 // DÉFINITION RADICALE : Assure que tous les textes par défaut sont clairs
-                Chart.defaults.color = secondaryTextColor; 
-                
+                Chart.defaults.color = secondaryTextColor;
+
                 // Couleur de fond de la zone sous la courbe
-                const areaFillColor = document.body.classList.contains('dark-mode') 
-                    ? 'rgba(242, 242, 247, 0.1)' 
+                const areaFillColor = document.body.classList.contains('dark-mode')
+                    ? 'rgba(242, 242, 247, 0.1)'
                     : 'rgba(44, 62, 80, 0.05)';
-                
-                const ctx = document.getElementById('weightChart').getContext('2d'); 
+
+                const ctx = document.getElementById('weightChart').getContext('2d');
                 if (chartInstance) chartInstance.destroy();
 
-                const labels = weightHistory.map(entry => new Date(entry.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })); 
+                const labels = weightHistory.map(entry => new Date(entry.date).toLocaleDateString('fr-FR', {
+                    day: 'numeric',
+                    month: 'short'
+                }));
                 const data = weightHistory.map(entry => entry.weight);
-                
-                chartInstance = new Chart(ctx, { 
-                    type: 'line', 
-                    data: { 
-                        labels: labels, 
-                        datasets: [{ 
-                            label: 'Poids', 
-                            data: data, 
-                            borderColor: textColor, 
-                            backgroundColor: areaFillColor, 
-                            borderWidth: 2, tension: 0.4, pointRadius: 3, fill: true 
-                        }] 
-                    }, 
-                    options: { 
-                        responsive: true, 
-                        maintainAspectRatio: false, 
-                        plugins: { legend: { display: false } }, 
-                        scales: { 
-                            x: { 
-                                display: true, 
+
+                chartInstance = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Poids',
+                            data: data,
+                            borderColor: textColor,
+                            backgroundColor: areaFillColor,
+                            borderWidth: 2,
+                            tension: 0.4,
+                            pointRadius: 3,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            x: {
+                                display: true,
                                 drawBorder: true,
                                 borderColor: secondaryTextColor, // <--- Axe X LIGNE : Couleur claire
                                 grid: {
-                                    display: false 
+                                    display: false
                                 },
-                                ticks: { 
+                                ticks: {
                                     color: secondaryTextColor, // <--- Axe X LABELS : Couleur claire
                                     font: {
-                                        size: 10 
+                                        size: 10
                                     }
                                 }
-                            }, 
-                            y: { 
-                                drawBorder: true, 
+                            },
+                            y: {
+                                drawBorder: true,
                                 borderColor: secondaryTextColor, // <--- AXE Y LIGNE : Couleur claire
-                                grid: { 
+                                grid: {
                                     color: secondaryTextColor, // <--- AXE Y GRILLE : Couleur claire
-                                    lineWidth: 0.5 
-                                }, 
-                                ticks: { color: secondaryTextColor } // AXE Y LABELS : Couleur claire
-                            } 
-                        } 
-                    } 
+                                    lineWidth: 0.5
+                                },
+                                ticks: {
+                                    color: secondaryTextColor
+                                } // AXE Y LABELS : Couleur claire
+                            }
+                        }
+                    }
                 });
             }
 
             window.switchPage = (pageName) => {
                 document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
                 document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-                
                 const targetNav = document.querySelector(`.bottom-nav .nav-item[onclick*="'${pageName}'"]`);
-                if(targetNav) targetNav.classList.add('active');
-                
+                if (targetNav) targetNav.classList.add('active');
                 document.getElementById(pageName).classList.add('active');
                 if (pageName === 'workout') setupWorkoutPage();
                 else if (typeof closeAddSessionModal === 'function') closeAddSessionModal();
@@ -396,26 +485,55 @@
 
             const dateElement = document.getElementById('currentDate');
             const date = new Date();
-            let dateString = date.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
+            let dateString = date.toLocaleDateString('fr-FR', {
+                weekday: 'long',
+                day: 'numeric',
+                month: 'long'
+            });
             dateElement.textContent = dateString.charAt(0).toUpperCase() + dateString.slice(1);
-            
+
             const SESSION_STORAGE_KEY = 'workoutSessions';
             let currentDate = new Date();
             let currentSelectedDate = new Date();
             let selectedDayElement = null;
             let sessionType = 'gym';
             let editingExerciseIndex = null;
-            function getWeekStart(date) { const d = new Date(date); let day = d.getDay() || 7; d.setDate(d.getDate() - (day - 1)); d.setHours(0, 0, 0, 0); return d; }
+
+            function getWeekStart(date) {
+                const d = new Date(date);
+                let day = d.getDay() || 7;
+                d.setDate(d.getDate() - (day - 1));
+                d.setHours(0, 0, 0, 0);
+                return d;
+            }
+
             let currentWeekStart = getWeekStart(currentDate);
 
-            function getSessions() { return JSON.parse(localStorage.getItem(SESSION_STORAGE_KEY)) || {}; }
-            function saveSessions(sessions) { localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(sessions)); }
-            function formatDateKey(d) { return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; }
-            function formatDateDisplay(d) { return d.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' }); }
+            function getSessions() {
+                return JSON.parse(localStorage.getItem(SESSION_STORAGE_KEY)) || {};
+            }
+
+            function saveSessions(sessions) {
+                localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(sessions));
+            }
+
+            function formatDateKey(d) {
+                return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+            }
+
+            function formatDateDisplay(d) {
+                return d.toLocaleDateString('fr-FR', {
+                    weekday: 'long',
+                    day: 'numeric',
+                    month: 'long'
+                });
+            }
 
             function isPastDate(d) {
-                const today = new Date(); today.setHours(0, 0, 0, 0);
-                const check = new Date(d); check.setHours(0, 0, 0, 0);
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const check = new Date(d);
+                check.setHours(0, 0, 0, 0);
                 return check.getTime() < today.getTime();
             }
 
@@ -429,29 +547,10 @@
                 document.getElementById('weeklyGoal').textContent = goal;
             }
 
-            function updateDashboardSessions() {
-                const allSessions = getSessions();
-                let totalSessions = 0, gymSessions = 0, homeSessions = 0;
-                const today = new Date(); today.setHours(0, 0, 0, 0);
-                let startOfWeekDay = today.getDay() || 7;
-                const startOfWeek = new Date(today); startOfWeek.setDate(today.getDate() - (startOfWeekDay - 1));
-                for (let i = 0; i < 7; i++) {
-                    const dayDate = new Date(startOfWeek); dayDate.setDate(startOfWeek.getDate() + i);
-                    const session = allSessions[formatDateKey(dayDate)];
-                    if (session && session.exercises.length > 0) {
-                        totalSessions++;
-                        if (session.type === 'gym') gymSessions++; else homeSessions++;
-                    }
-                }
-                document.getElementById('totalSessions').textContent = totalSessions;
-                document.getElementById('gymSessions').textContent = gymSessions;
-                document.getElementById('homeSessions').textContent = homeSessions;
-                updateWeeklyGoalDisplay();
-            }
-
             window.saveWeeklyGoal = () => {
-                const goal = parseInt(document.getElementById('weeklyGoalInput').value);
-                if (goal && goal >= 1 && goal <= 14) {
+                const input = document.getElementById('weeklyGoalInput');
+                const goal = parseInt(input.value);
+                if (goal >= 1 && goal <= 14) {
                     localStorage.setItem('weeklyGoal', goal.toString());
                     updateWeeklyGoalDisplay();
                     alert('Nouvel objectif hebdomadaire modifié !');
@@ -461,23 +560,27 @@
             }
 
             function renderDaySlider(startOfWeek) {
-                const slider = document.getElementById('daySlider'); slider.innerHTML = '';
+                const slider = document.getElementById('daySlider');
+                slider.innerHTML = '';
                 const allSessions = getSessions();
                 let selectedDayFound = false;
-
                 const today = new Date();
-                today.setHours(0, 0, 0, 0); 
+                today.setHours(0, 0, 0, 0);
 
                 for (let i = 0; i < 7; i++) {
-                    const dayDate = new Date(startOfWeek); dayDate.setDate(startOfWeek.getDate() + i);
+                    const dayDate = new Date(startOfWeek);
+                    dayDate.setDate(startOfWeek.getDate() + i);
                     const key = formatDateKey(dayDate);
-                    const dayName = dayDate.toLocaleDateString('fr-FR', { weekday: 'short' }).substring(0, 3).toUpperCase();
+                    const dayName = dayDate.toLocaleDateString('fr-FR', {
+                        weekday: 'short'
+                    }).substring(0, 3).toUpperCase();
+
                     const el = document.createElement('div');
                     el.classList.add('slider-day');
-
                     if (allSessions[key] && allSessions[key].exercises.length > 0) el.classList.add(allSessions[key].type);
 
-                    const checkDate = new Date(dayDate); checkDate.setHours(0, 0, 0, 0);
+                    const checkDate = new Date(dayDate);
+                    checkDate.setHours(0, 0, 0, 0);
                     if (checkDate.getTime() === today.getTime()) {
                         el.classList.add('today');
                     }
@@ -492,20 +595,45 @@
                     el.onclick = () => selectDay(dayDate);
                     slider.appendChild(el);
                 }
+
                 if (!selectedDayFound) selectDay(startOfWeek);
-                setTimeout(() => { if (document.querySelector('.slider-day.selected')) document.querySelector('.slider-day.selected').scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' }); }, 0);
+
+                setTimeout(() => {
+                    if (document.querySelector('.slider-day.selected')) document.querySelector('.slider-day.selected').scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'nearest',
+                        inline: 'center'
+                    });
+                }, 0);
             }
+
+            document.getElementById('prevWeek').addEventListener('click', () => {
+                currentWeekStart.setDate(currentWeekStart.getDate() - 7);
+                renderDaySlider(currentWeekStart);
+            });
+
+            document.getElementById('nextWeek').addEventListener('click', () => {
+                currentWeekStart.setDate(currentWeekStart.getDate() + 7);
+                renderDaySlider(currentWeekStart);
+            });
 
             function selectDay(date) {
                 currentSelectedDate = new Date(date);
                 const dateKey = formatDateKey(currentSelectedDate);
                 document.getElementById('recapDateDisplay').textContent = formatDateDisplay(currentSelectedDate);
+
                 if (selectedDayElement) selectedDayElement.classList.remove('selected');
                 document.querySelectorAll('.slider-day').forEach(el => {
                     const dayDate = new Date(currentWeekStart);
                     dayDate.setDate(currentWeekStart.getDate() + Array.from(el.parentNode.children).indexOf(el));
-                    if (formatDateKey(dayDate) === formatDateKey(currentSelectedDate)) { selectedDayElement = el; el.classList.add('selected'); } else { el.classList.remove('selected'); }
+                    if (formatDateKey(dayDate) === formatDateKey(currentSelectedDate)) {
+                        selectedDayElement = el;
+                        el.classList.add('selected');
+                    } else {
+                        el.classList.remove('selected');
+                    }
                 });
+
                 displaySessionRecap(currentSelectedDate, true);
 
                 const allSessions = getSessions();
@@ -514,236 +642,629 @@
                 const isPast = isPastDate(currentSelectedDate);
 
                 if (isPast) {
-                    actionContainer.style.display = 'none'; 
+                    actionContainer.style.display = 'none';
                 } else {
                     actionContainer.style.display = 'flex';
-                    btnAdd.style.display = 'flex';
-                    btnAdd.textContent = (allSessions[dateKey] && allSessions[dateKey].exercises.length > 0) ? ' Ajouter un exercice' : ' Ajouté une séance';
+                }
+
+                // Initialise le type de session si la session existe déjà pour l'UI
+                if (allSessions[dateKey]) {
+                    sessionType = allSessions[dateKey].type;
+                } else {
+                    // Sinon, réinitialise au défaut ou garde le dernier sélectionné
+                    sessionType = 'gym';
+                }
+
+                // Met à jour l'état visuel du toggle pour correspondre au jour
+                document.querySelectorAll('#sessionTypeToggle button').forEach(b => {
+                    b.classList.remove('active');
+                    if (b.dataset.type === sessionType) {
+                        b.classList.add('active');
+                    }
+                });
+
+                // Si la session existe, cacher le sélecteur de type d'entrainement
+                const sessionLocationGroup = document.getElementById('sessionLocationGroup');
+                if (allSessions[dateKey] && allSessions[dateKey].exercises.length > 0) {
+                    sessionLocationGroup.style.display = 'none';
+                } else {
+                    sessionLocationGroup.style.display = 'flex';
                 }
             }
 
-            document.getElementById('prevWeek').addEventListener('click', () => { currentWeekStart.setDate(currentWeekStart.getDate() - 7); currentSelectedDate.setDate(currentSelectedDate.getDate() - 7); renderDaySlider(currentWeekStart); });
-            document.getElementById('nextWeek').addEventListener('click', () => { currentWeekStart.setDate(currentWeekStart.getDate() + 7); currentSelectedDate.setDate(currentSelectedDate.getDate() + 7); renderDaySlider(currentWeekStart); });
+            function updateDashboardSessions() {
+                const allSessions = getSessions();
+                let total = 0;
+                let gym = 0;
+                let home = 0;
+                const weekStart = getWeekStart(currentDate);
 
-            function openAddExerciseModal() {
-                if (isPastDate(currentSelectedDate)) return; 
-                document.getElementById('exerciseName').value = ''; document.getElementById('sets').value = '3'; document.getElementById('reps').value = '10'; document.getElementById('notes').value = '';
-                const key = formatDateKey(currentSelectedDate); const all = getSessions();
-                if (all[key] && all[key].exercises.length > 0) {
-                    document.getElementById('modalTitle').textContent = 'Ajouter un Exercice';
-                    document.getElementById('sessionLocationGroup').style.display = 'none';
-                    sessionType = all[key].type;
-                } else {
-                    document.getElementById('modalTitle').textContent = 'Nouvelle Séance';
-                    document.getElementById('sessionLocationGroup').style.display = 'block';
-                    sessionType = 'gym';
-                    document.querySelector('[data-type="gym"]').classList.add('active'); document.querySelector('[data-type="home"]').classList.remove('active');
+                for (let i = 0; i < 7; i++) {
+                    const d = new Date(weekStart);
+                    d.setDate(weekStart.getDate() + i);
+                    const key = formatDateKey(d);
+
+                    if (allSessions[key] && allSessions[key].exercises.length > 0) {
+                        total++;
+                        if (allSessions[key].type === 'gym') {
+                            gym++;
+                        } else {
+                            home++;
+                        }
+                    }
                 }
+
+                document.getElementById('totalSessions').textContent = total;
+                document.getElementById('gymSessions').textContent = gym;
+                document.getElementById('homeSessions').textContent = home;
+            }
+
+            function openAddExerciseModal(exercise = null, index = null) {
+                if (isPastDate(currentSelectedDate)) return;
+
+                document.getElementById('modalTitle').textContent = index !== null ? 'Modifier Exercice' : 'Nouvelle Séance';
+
+                const sessionLocationGroup = document.getElementById('sessionLocationGroup');
+                const allSessions = getSessions();
+                const dateKey = formatDateKey(currentSelectedDate);
+
+                // Si la session existe et on ajoute un nouvel exercice (index == null), on cache le toggle
+                if (allSessions[dateKey] && index === null) {
+                    sessionLocationGroup.style.display = 'none';
+                } else {
+                    sessionLocationGroup.style.display = 'flex';
+                }
+
+                if (exercise) {
+                    document.getElementById('exerciseName').value = exercise.name;
+                    document.getElementById('sets').value = exercise.sets;
+                    document.getElementById('reps').value = exercise.reps;
+                    document.getElementById('notes').value = exercise.notes;
+                    editingExerciseIndex = index;
+                    // Met à jour le type de session si on édite (important pour le toggle)
+                    sessionType = allSessions[dateKey].type;
+                } else {
+                    document.getElementById('exerciseName').value = '';
+                    document.getElementById('sets').value = 3;
+                    document.getElementById('reps').value = 10;
+                    document.getElementById('notes').value = '';
+                    editingExerciseIndex = null;
+                }
+
+                // Met à jour l'état visuel du toggle pour correspondre au type de session
+                document.querySelectorAll('#sessionTypeToggle button').forEach(b => {
+                    b.classList.remove('active');
+                    if (b.dataset.type === sessionType) {
+                        b.classList.add('active');
+                    }
+                });
+
                 document.getElementById('addSessionModal').classList.remove('hidden');
                 document.body.classList.add('modal-open');
             }
-            window.closeAddSessionModal = () => { document.getElementById('addSessionModal').classList.add('hidden'); document.body.classList.remove('modal-open'); editingExerciseIndex = null; if (currentSelectedDate) selectDay(currentSelectedDate); renderDaySlider(currentWeekStart); }
 
-            document.getElementById('sessionTypeToggle').addEventListener('click', (e) => {
-                const btn = e.target.closest('button');
-                if (btn) { sessionType = btn.dataset.type; document.querySelectorAll('.toggle-switch button').forEach(b => b.classList.remove('active')); btn.classList.add('active'); }
+            window.closeAddSessionModal = () => {
+                document.getElementById('addSessionModal').classList.add('hidden');
+                document.body.classList.remove('modal-open');
+                editingExerciseIndex = null; // Réinitialise l'index d'édition
+            }
+
+            window.editExercise = (dateKey, index) => {
+                const all = getSessions();
+                const session = all[dateKey];
+                if (session && session.exercises[index]) {
+                    openAddExerciseModal(session.exercises[index], index);
+                }
+            }
+
+            window.deleteExercise = (idx) => {
+                if (confirm('Êtes-vous sûr de vouloir supprimer cet exercice ?')) {
+                    const all = getSessions();
+                    const dateKey = formatDateKey(currentSelectedDate);
+                    all[dateKey].exercises.splice(idx, 1);
+
+                    if (all[dateKey].exercises.length === 0) delete all[dateKey];
+
+                    saveSessions(all);
+                    selectDay(currentSelectedDate);
+                    updateDashboardSessions();
+                    renderDaySlider(currentWeekStart);
+                }
+            }
+
+            window.toggleSeries = (exIndex, seriesIndex) => {
+                const key = formatDateKey(currentSelectedDate);
+                const all = getSessions();
+
+                // Vérifie si la session n'est pas une date passée avant de toggler
+                if (isPastDate(currentSelectedDate)) {
+                    alert('Impossible de modifier des séries pour une date passée.');
+                    return;
+                }
+
+                if (all[key] && all[key].exercises[exIndex] && all[key].exercises[exIndex].series[seriesIndex]) {
+                    all[key].exercises[exIndex].series[seriesIndex].isDone = !all[key].exercises[exIndex].series[seriesIndex].isDone;
+                    saveSessions(all);
+                    displaySessionRecap(currentSelectedDate); // Rafraîchit sans changer le titre/date
+                }
+            }
+
+
+            document.querySelectorAll('.toggle-switch button[data-type]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    sessionType = btn.dataset.type;
+                    document.querySelectorAll('.toggle-switch button[data-type]').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                });
             });
+
             document.getElementById('saveSessionButton').addEventListener('click', () => {
                 const name = document.getElementById('exerciseName').value;
                 const sets = parseInt(document.getElementById('sets').value);
                 const reps = parseInt(document.getElementById('reps').value);
+
                 if (!name) return alert('Nom manquant');
-                const key = formatDateKey(currentSelectedDate); const all = getSessions();
-                if (!all[key]) all[key] = { type: sessionType, exercises: [] };
-                const newEx = { name, sets, reps, notes: document.getElementById('notes').value, series: [] };
-                for (let i = 0; i < sets; i++) newEx.series.push({ reps, isDone: false });
+
+                const key = formatDateKey(currentSelectedDate);
+                const all = getSessions();
+
+                // Si la session n'existe pas encore, on la crée avec le type actuel
+                if (!all[key]) all[key] = {
+                    type: sessionType,
+                    exercises: []
+                };
+
+                const newEx = {
+                    name,
+                    sets,
+                    reps,
+                    notes: document.getElementById('notes').value,
+                    series: []
+                };
+
+                // Initialise les séries
+                for (let i = 0; i < sets; i++) newEx.series.push({
+                    reps,
+                    isDone: false
+                });
+
                 if (editingExerciseIndex !== null) all[key].exercises[editingExerciseIndex] = newEx;
-                else { all[key].exercises.push(newEx); if (document.getElementById('sessionLocationGroup').style.display !== 'none') all[key].type = sessionType; }
-                saveSessions(all); closeAddSessionModal(); selectDay(currentSelectedDate); updateDashboardSessions();
+                else {
+                    all[key].exercises.push(newEx);
+                    // Ligne redondante supprimée: if (document.getElementById('sessionLocationGroup').style.display !== 'none') all[key].type = sessionType; 
+                }
+
+                saveSessions(all);
+                closeAddSessionModal();
+                selectDay(currentSelectedDate);
+                updateDashboardSessions();
+                renderDaySlider(currentWeekStart); // Pour afficher le point sur le jour
             });
 
             function displaySessionRecap(date, showTitle = false) {
-                const container = document.getElementById('sessionRecap'); container.innerHTML = '';
-                const key = formatDateKey(date); const all = getSessions(); const s = all[key];
+                const container = document.getElementById('sessionRecap');
+                container.innerHTML = '';
+                const key = formatDateKey(date);
+                const all = getSessions();
+                const s = all[key];
                 const recapTitle = document.getElementById('recapSectionTitle');
-                if (!s || s.exercises.length === 0) { container.innerHTML = '<div class="no-session-msg">Aucune séance.</div>'; recapTitle.style.display = showTitle ? 'block' : 'none'; return; }
+
+                if (!s || s.exercises.length === 0) {
+                    container.innerHTML = '<div class="no-session-msg">Aucune séance.</div>';
+                    recapTitle.style.display = showTitle ? 'block' : 'none';
+                    return;
+                }
+
                 recapTitle.style.display = 'block';
                 const isPast = isPastDate(date);
+
                 container.innerHTML = `<div class="session-type-header ${s.type}"><span class="type-label">${s.type === 'gym' ? 'Salle de Sport' : 'Maison'}</span></div>`;
+
                 s.exercises.forEach((ex, idx) => {
                     let seriesHtml = '<ul class="series-list">';
                     ex.series.forEach((ser, sIdx) => {
                         const btnClass = ser.isDone ? 'done' : '';
                         const check = ser.isDone ? '✓' : '';
-                        
+                        const isDisabled = isPast ? 'disabled' : '';
+
                         seriesHtml += `
-                    <li class="series-item ${btnClass}">
-                        <div class="series-info-row">
-                            <span class="series-num">Série ${sIdx + 1}</span>
-                            <span class="series-val">${ser.reps} Reps</span>
-                        </div>
-                        <button class="series-toggle-btn ${btnClass}" onclick="toggleSeries(${idx}, ${sIdx})">${check}</button>
-                    </li>`;
+                            <li class="series-item ${btnClass}">
+                                <div class="series-info-row">
+                                    <span class="series-num">Série ${sIdx + 1}</span>
+                                    <span class="series-val">${ser.reps} Reps</span>
+                                </div>
+                                <button class="series-toggle-btn ${btnClass}" onclick="toggleSeries(${idx}, ${sIdx})" ${isDisabled}>${check}</button>
+                            </li>
+                        `;
                     });
                     seriesHtml += '</ul>';
-                    const actions = isPast ? '' : `<div class="card-actions"><button class="btn-edit" onclick="editEx(${idx})">Modifier</button><button class="btn-delete" onclick="delEx(${idx})">Supprimer</button></div>`;
-                    container.innerHTML += `<div class="session-card ${s.type}"><div class="ex-header-row"><h4>${ex.name}</h4></div>${seriesHtml}${actions}</div>`;
+
+                    const notesHtml = ex.notes ? `<div class="exercise-notes">${ex.notes}</div>` : '';
+
+                    container.innerHTML += `
+                        <div class="card session-card">
+                            <div class="exercise-name">${ex.name}</div>
+                            <div style="font-size:14px; color:var(--text-secondary); margin-bottom:10px;">${ex.sets} Séries de ${ex.reps} Répétitions</div>
+                            ${seriesHtml}
+                            ${notesHtml}
+                            ${!isPast ? `
+                                <div class="card-actions">
+                                    <button class="btn-edit" onclick="editExercise('${key}', ${idx})">Modifier</button>
+                                    <button class="btn-delete" onclick="deleteExercise(${idx})">Supprimer</button>
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
                 });
             }
 
-            // FONCTION CORRIGÉE : Le contrôle de date passée est ici
-            window.toggleSeries = (exIdx, sIdx) => {
-                // Si la date est passée, on bloque la modification et le timer
-                if (isPastDate(currentSelectedDate)) return; 
-                
-                const key = formatDateKey(currentSelectedDate); const all = getSessions();
-                const val = !all[key].exercises[exIdx].series[sIdx].isDone;
-                all[key].exercises[exIdx].series[sIdx].isDone = val;
-                saveSessions(all); selectDay(currentSelectedDate);
-                
-                // DÉCLENCHE LE TIMER UNIQUEMENT SI ON COCHE (val === true)
-                if (val === true) startTimer(90);
-            }
 
-            window.editEx = (idx) => {
-                const all = getSessions(); const dateKey = formatDateKey(currentSelectedDate); const ex = all[dateKey].exercises[idx];
-                document.getElementById('exerciseName').value = ex.name; document.getElementById('sets').value = ex.sets;
-                document.getElementById('reps').value = ex.reps; document.getElementById('notes').value = ex.notes;
-                editingExerciseIndex = idx; document.getElementById('modalTitle').textContent = 'Modifier';
-                document.getElementById('addSessionModal').classList.remove('hidden');
-            }
-            window.delEx = (idx) => {
-                if (confirm('Etes-vous sur de bien vouloir supprimer cet exercice ?')) {
-                    const all = getSessions(); const dateKey = formatDateKey(currentSelectedDate);
-                    all[dateKey].exercises.splice(idx, 1); if (all[dateKey].exercises.length === 0) delete all[dateKey];
-                    saveSessions(all); selectDay(currentSelectedDate); updateDashboardSessions(); renderDaySlider(currentWeekStart);
+            // Poids & IMC Logique
+            function calcInstantBMI() {
+                const w = parseFloat(document.getElementById('inputWeight').value);
+                const h = parseFloat(document.getElementById('inputHeight').value);
+
+                if (w > 0 && h > 0) {
+                    const bmi = (w / ((h / 100) * (h / 100))).toFixed(1);
+                    document.getElementById('bmiResult').innerText = bmi;
+                    document.getElementById('bmiText').innerText = (bmi < 18.5 ? "Maigreur" : (bmi < 25 ? "Normal" : "Surpoids"));
+                } else {
+                    document.getElementById('bmiResult').innerText = "--";
+                    document.getElementById('bmiText').innerText = "--";
                 }
             }
 
-            function calcInstantBMI() {
-                const w = parseFloat(document.getElementById('inputWeight').value); const h = parseFloat(document.getElementById('inputHeight').value);
-                if (w > 0 && h > 0) { const bmi = (w / ((h / 100) * (h / 100))).toFixed(1); document.getElementById('bmiResult').innerText = bmi; document.getElementById('bmiText').innerText = (bmi < 18.5 ? "Maigreur" : (bmi < 25 ? "Normal" : "Surpoids")); }
-                else { document.getElementById('bmiResult').innerText = "--"; document.getElementById('bmiText').innerText = "--"; }
-            }
             ['inputWeight', 'inputHeight', 'inputAge'].forEach(id => document.getElementById(id).addEventListener('input', calcInstantBMI));
 
-            window.openWeightModal = () => { document.getElementById('weightModal').classList.remove('hidden'); document.body.classList.add('modal-open'); const last = weightHistory[weightHistory.length - 1]; if (last) { document.getElementById('inputWeight').value = last.weight; document.getElementById('inputHeight').value = last.height || ''; document.getElementById('inputAge').value = last.age || ''; calcInstantBMI(); } }
-            window.closeWeightModal = () => { document.getElementById('weightModal').classList.add('hidden'); document.body.classList.remove('modal-open'); }
+            window.openWeightModal = () => {
+                document.getElementById('weightModal').classList.remove('hidden');
+                document.body.classList.add('modal-open');
+                const last = weightHistory[weightHistory.length - 1];
+                if (last) {
+                    document.getElementById('inputWeight').value = last.weight;
+                    document.getElementById('inputHeight').value = last.height || '';
+                    document.getElementById('inputAge').value = last.age || '';
+                    calcInstantBMI();
+                }
+            }
+
+            window.closeWeightModal = () => {
+                document.getElementById('weightModal').classList.add('hidden');
+                document.body.classList.remove('modal-open');
+            }
+
             window.saveWeightData = () => {
-                const w = parseFloat(document.getElementById('inputWeight').value); const h = parseFloat(document.getElementById('inputHeight').value); const a = parseFloat(document.getElementById('inputAge').value);
+                const w = parseFloat(document.getElementById('inputWeight').value);
+                const h = parseFloat(document.getElementById('inputHeight').value);
+                const a = parseFloat(document.getElementById('inputAge').value);
+
                 if (w && h) {
                     const todayKey = new Date().toISOString().substring(0, 10);
                     weightHistory = weightHistory.filter(e => new Date(e.date).toISOString().substring(0, 10) !== todayKey);
-                    weightHistory.push({ date: new Date().toISOString(), weight: w, height: h, age: a });
-                    weightHistory.sort((a, b) => new Date(a.date) - new Date(b.date)); localStorage.setItem('weightHistory', JSON.stringify(weightHistory));
-                    updateWeightUI(); closeWeightModal();
+
+                    weightHistory.push({
+                        date: new Date().toISOString(),
+                        weight: w,
+                        height: h,
+                        age: a
+                    });
+                    weightHistory.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+                    localStorage.setItem('weightHistory', JSON.stringify(weightHistory));
+
+                    updateWeightUI();
+                    closeWeightModal();
+                } else {
+                    alert('Veuillez entrer un poids et une taille valides.');
                 }
             }
 
-            window.openRmModal = () => { document.getElementById('rmModal').classList.remove('hidden'); }
-            window.calculateRM = () => { const w = parseFloat(document.getElementById('rmWeight').value); const r = parseFloat(document.getElementById('rmReps').value); if (w && r) document.getElementById('rmResult').innerText = Math.round(w * (1 + r / 30)); }
+
+            // =================================================================
+            // GESTION DES MODALES D'OUTILS - CORRIGÉES
+            // =================================================================
+
+            // RM Calculator Logique (Epley formula)
+            window.openRmModal = () => {
+                document.getElementById('rmModal').classList.remove('hidden');
+                document.body.classList.add('modal-open');
+            };
+            
+            window.closeRmModal = () => {
+                document.getElementById('rmModal').classList.add('hidden');
+                document.body.classList.remove('modal-open');
+            };
+
+            window.calculateRM = () => {
+                const w = parseFloat(document.getElementById('rmWeight').value);
+                const r = parseFloat(document.getElementById('rmReps').value);
+                const resultElement = document.getElementById('rmResult');
+
+                if (w > 0 && r > 0) {
+                    const rm = (w * (1 + (r / 30))).toFixed(1);
+                    resultElement.innerText = rm;
+                } else {
+                    resultElement.innerText = '--';
+                }
+            }
+
+            // Percentage Calculator Logique
+            const percentages = [100, 95, 90, 85, 80, 75, 70, 65, 60];
             
             window.openPercentageModal = () => {
                 document.getElementById('percentageModal').classList.remove('hidden');
                 document.body.classList.add('modal-open');
-                const lastRm = document.getElementById('rmResult').innerText;
-                if (lastRm && lastRm !== '--') {
-                    document.getElementById('percMaxWeight').value = parseFloat(lastRm);
-                }
-                calculatePercentages();
             };
+            
+            window.closePercentageModal = () => {
+                document.getElementById('percentageModal').classList.add('hidden');
+                document.body.classList.remove('modal-open');
+            };
+
 
             window.calculatePercentages = () => {
                 const maxWeight = parseFloat(document.getElementById('percMaxWeight').value);
                 const resultsContainer = document.getElementById('percentageResults');
                 resultsContainer.innerHTML = '';
-                
+
                 if (isNaN(maxWeight) || maxWeight <= 0) {
-                    resultsContainer.innerHTML = `<div style="text-align:center; color:var(--text-secondary); padding: 20px;">
-                        Entre ton 1RM pour calculer les poids.
-                    </div>`;
+                    resultsContainer.innerHTML = `
+                        <div style="text-align:center; color:var(--text-secondary); padding: 20px;">
+                            Entre ton 1RM pour calculer les poids.
+                        </div>
+                    `;
                     return;
                 }
 
-                const percentages = [100, 95, 90, 85, 80, 75, 70, 65, 60, 55, 50, 45, 40];
-
-                percentages.forEach(percent => {
-                    const rawWeight = maxWeight * (percent / 100);
-                    const calculatedWeight = Math.round(rawWeight * 2) / 2;
-                    
+                percentages.forEach(perc => {
+                    const weight = (maxWeight * (perc / 100)).toFixed(1);
                     const resultItem = document.createElement('div');
-                    resultItem.className = 'stat-line background-stat'; 
-                    resultItem.style.padding = '12px';
-                    
+                    resultItem.style.display = 'flex';
+                    resultItem.style.justifyContent = 'space-between';
+                    resultItem.style.padding = '8px 0';
+                    resultItem.style.borderBottom = '1px solid var(--border-color)';
+
                     resultItem.innerHTML = `
-                        <div class="stat-label" style="font-size: 14px;">${percent}% de 1RM</div>
-                        <div style="font-size: 18px; font-weight: 700; color: var(--text-primary);">
-                            ${calculatedWeight.toFixed(1)} <span style="font-size: 12px; font-weight: 500; color: var(--text-secondary);">kg</span>
-                        </div>
+                        <div style="font-size:16px; font-weight:600;">${perc}% de 1RM</div>
+                        <div style="font-size:18px; font-weight:700; color:var(--accent-gym);">${weight} <span style="font-size:12px; font-weight:500; color: var(--text-secondary);">kg</span> </div>
                     `;
-                    
                     resultsContainer.appendChild(resultItem);
                 });
             };
-            
 
-            const templates = { "Full Body": [{ name: "Squat", s: 3, r: 10 }, { name: "Développé Couché", s: 3, r: 10 }, { name: "Tractions", s: 3, r: 10 }], "Push": [{ name: "Pompes", s: 4, r: 12 }, { name: "Développé Militaire", s: 3, r: 10 }], "Pull": [{ name: "Tractions", s: 4, r: 8 }, { name: "Rowing", s: 3, r: 10 }] };
-            window.openTemplateModal = () => {
-                if (isPastDate(currentSelectedDate)) return; 
-                const list = document.getElementById('templateList'); list.innerHTML = '';
-                Object.keys(templates).forEach(key => {
-                    const btn = document.createElement('button'); btn.className = 'btn-secondary'; btn.style.width = '100%'; btn.style.marginBottom = '10px'; btn.style.textAlign = 'left';
-                    btn.innerHTML = `<b>${key}</b> <span style="float:right; color:var(--text-secondary)">${templates[key].length} exos</span>`;
-                    btn.onclick = () => loadTemplate(key); list.appendChild(btn);
-                });
-                document.getElementById('templateModal').classList.remove('hidden');
+            // =================================================================
+            // CALCULATEUR DE CALORIES (MAINTIEN)
+            // =================================================================
+
+            let calorieGender = 'male'; // Par défaut
+
+            window.openCaloriesModal = () => {
+                // Pré-remplir avec les dernières données connues si disponibles
+                const last = weightHistory[weightHistory.length - 1];
+                if (last) {
+                    document.getElementById('calWeight').value = last.weight;
+                    if (last.height) document.getElementById('calHeight').value = last.height;
+                    if (last.age) document.getElementById('calAge').value = last.age;
+                }
+
+                document.getElementById('caloriesModal').classList.remove('hidden');
+                document.body.classList.add('modal-open');
             }
-            function loadTemplate(key) {
-                const tpl = templates[key]; const dateKey = formatDateKey(currentSelectedDate); const all = getSessions();
-                if (!all[dateKey]) all[dateKey] = { type: 'gym', exercises: [] };
-                tpl.forEach(item => { const newEx = { name: item.name, sets: item.s, reps: item.r, notes: "Importé", series: [] }; for (let i = 0; i < item.s; i++) newEx.series.push({ reps: item.r, isDone: false }); all[dateKey].exercises.push(newEx); });
-                saveSessions(all); document.getElementById('templateModal').classList.add('hidden'); selectDay(currentSelectedDate); updateDashboardSessions();
+
+            window.closeCaloriesModal = () => {
+                document.getElementById('caloriesModal').classList.add('hidden');
+                document.body.classList.remove('modal-open');
+            }
+
+            window.setCalorieGender = (sex, btn) => {
+                calorieGender = sex;
+                // Gestion visuelle du toggle (réutilise ton style css)
+                const container = document.getElementById('genderToggle');
+                Array.from(container.children).forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            }
+
+            window.calculateCalories = () => {
+                const w = parseFloat(document.getElementById('calWeight').value);
+                const h = parseFloat(document.getElementById('calHeight').value);
+                const a = parseFloat(document.getElementById('calAge').value);
+                const activity = parseFloat(document.getElementById('calActivity').value);
+
+                if (w && h && a && activity) {
+                    // Formule de Mifflin-St Jeor
+                    let bmr = (10 * w) + (6.25 * h) - (5 * a);
+
+                    if (calorieGender === 'male') {
+                        bmr += 5;
+                    } else {
+                        bmr -= 161;
+                    }
+
+                    // Calcul TDEE (Total Daily Energy Expenditure)
+                    const tdee = Math.round(bmr * activity);
+
+                    // Animation simple du résultat
+                    document.getElementById('calResult').innerText = tdee;
+                } else {
+                    alert("Merci de remplir toutes les informations (Poids, Taille, Age).");
+                }
+            }
+
+            const templates = {
+                "Full Body": [{
+                    name: "Squat",
+                    s: 3,
+                    r: 10
+                }, {
+                    name: "Développé Couché",
+                    s: 3,
+                    r: 10
+                }, {
+                    name: "Tractions",
+                    s: 3,
+                    r: 10
+                }],
+                "Push": [{
+                    name: "Pompes",
+                    s: 4,
+                    r: 12
+                }, {
+                    name: "Développé Militaire",
+                    s: 3,
+                    r: 10
+                }],
+                "Pull": [{
+                    name: "Tractions",
+                    s: 4,
+                    r: 8
+                }, {
+                    name: "Rowing",
+                    s: 3,
+                    r: 10
+                }]
+            };
+
+            window.applyTemplate = (templateKey) => {
+                const exercises = templates[templateKey];
+                const key = formatDateKey(currentSelectedDate);
+                const all = getSessions();
+
+                // Si la session n'existe pas, on la crée avec le type par défaut 'gym'
+                if (!all[key]) all[key] = {
+                    type: 'gym',
+                    exercises: []
+                };
+
+                exercises.forEach(ex => {
+                    const newEx = {
+                        name: ex.name,
+                        sets: ex.s,
+                        reps: ex.r,
+                        notes: '',
+                        series: []
+                    };
+                    for (let i = 0; i < ex.s; i++) newEx.series.push({
+                        reps: ex.r,
+                        isDone: false
+                    });
+                    all[key].exercises.push(newEx);
+                });
+
+                saveSessions(all);
+                document.getElementById('templateModal').classList.add('hidden');
+                selectDay(currentSelectedDate);
+                updateDashboardSessions();
+                renderDaySlider(currentWeekStart);
+            }
+
+            window.openTemplateModal = () => {
+                if (isPastDate(currentSelectedDate)) return;
+
+                const list = document.getElementById('templateList');
+                list.innerHTML = '';
+
+                Object.keys(templates).forEach(key => {
+                    const btn = document.createElement('button');
+                    btn.className = 'btn-secondary';
+                    btn.style.width = '100%';
+                    btn.style.marginBottom = '10px';
+                    btn.style.marginTop = '0';
+                    btn.textContent = key;
+                    btn.onclick = () => applyTemplate(key);
+                    list.appendChild(btn);
+                });
+
+                document.getElementById('templateModal').classList.remove('hidden');
             }
 
             // =================================================================
             // LOGIQUE DU TIMER
             // =================================================================
-            let timerInterval = null; let timerTime = 0; let timerTotal = 0;
-            window.startTimer = (sec) => { 
-                timerTime = sec; 
-                timerTotal = sec; 
-                document.getElementById('smartTimer').classList.remove('hidden'); 
-                clearInterval(timerInterval); 
-                updateTimerUI(); 
-                timerInterval = setInterval(() => { 
-                    timerTime--; 
-                    updateTimerUI(); 
-                    if (timerTime <= 0) stopTimer(); 
-                }, 1000); 
-            }
-            window.stopTimer = () => { 
-                clearInterval(timerInterval); 
-                document.getElementById('smartTimer').classList.add('hidden'); 
-            }
-            window.adjustTimer = (val) => { 
-                timerTime += val; 
-                if (timerTime < 0) timerTime = 0; 
-                updateTimerUI(); 
-            }
+
+            let timerInterval;
+            let timerTime = 90; // Default 1:30
+            let timerTotal = 90;
+
             function updateTimerUI() {
-                const m = Math.floor(timerTime / 60).toString().padStart(2, '0'); 
+                const m = Math.floor(timerTime / 60).toString().padStart(2, '0');
                 const s = (timerTime % 60).toString().padStart(2, '0');
                 document.getElementById('timerDisplay').innerText = `${m}:${s}`;
                 document.getElementById('timerBar').style.width = (timerTime / timerTotal) * 100 + "%";
             }
 
+            function startTimer(initialTime = 90) {
+                if (timerInterval) clearInterval(timerInterval);
+                timerTotal = initialTime;
+                timerTime = initialTime;
+                updateTimerUI();
+                document.getElementById('smartTimer').classList.remove('hidden');
+
+                timerInterval = setInterval(() => {
+                    timerTime--;
+                    if (timerTime < 0) {
+                        stopTimer(true);
+                        // Vous pouvez ajouter une alerte ou vibration ici
+                        new Audio('alert.mp3').play();
+                    } else {
+                        updateTimerUI();
+                    }
+                }, 1000);
+            }
+
+            window.stopTimer = (finished = false) => {
+                clearInterval(timerInterval);
+                document.getElementById('smartTimer').classList.add('hidden');
+                if (finished) {
+                    alert('Temps de repos terminé !');
+                }
+            }
+
+            window.adjustTimer = (seconds) => {
+                const newTime = timerTime + seconds;
+                if (newTime > 0) {
+                    timerTime = newTime;
+                    timerTotal = Math.max(timerTotal, timerTime); // Assure que la barre de progression ne dépasse pas 100%
+                    updateTimerUI();
+                }
+            }
+
+            // Global access for series toggle to start timer
+            const originalToggleSeries = window.toggleSeries;
+            window.toggleSeries = (exIndex, seriesIndex) => {
+                // Exécute la logique originale
+                originalToggleSeries(exIndex, seriesIndex);
+
+                const key = formatDateKey(currentSelectedDate);
+                const all = getSessions();
+
+                // Après avoir togglé, vérifie si c'est la fin d'une série.
+                if (all[key].exercises[exIndex].series[seriesIndex].isDone) {
+                    // Vérifie si la série suivante existe
+                    if (seriesIndex < all[key].exercises[exIndex].series.length - 1) {
+                        // Démarre le timer de 90 secondes (1:30)
+                        startTimer(90);
+                    } else {
+                        // Si c'est la dernière série de l'exercice, arrête le timer au cas où il était déjà actif
+                        stopTimer();
+                    }
+                } else {
+                    // Si on décoche une série, cela annule le début du repos.
+                    stopTimer();
+                }
+            }
+
+
             // =================================================================
             // INITIALISATION FINALE
             // =================================================================
-            document.getElementById('openFormButton').addEventListener('click', openAddExerciseModal);
+            document.getElementById('openFormButton').addEventListener('click', () => openAddExerciseModal(null, null));
             const workoutPage = document.getElementById('workout');
-            const setupWorkoutPage = () => { currentWeekStart = getWeekStart(new Date()); renderDaySlider(currentWeekStart); selectDay(new Date()); };
-            
+            const setupWorkoutPage = () => {
+                currentWeekStart = getWeekStart(new Date());
+                renderDaySlider(currentWeekStart);
+                selectDay(new Date());
+            };
+
             // Chargement du thème au démarrage
             const savedTheme = localStorage.getItem('theme') || 'light';
             setTheme(savedTheme); // Met à jour le thème et appelle updateWeightUI()
@@ -751,9 +1272,9 @@
             // Charger l'objectif hebdomadaire dans le champ des réglages
             const savedGoal = getWeeklyGoal();
             document.getElementById('weeklyGoalInput').value = savedGoal;
-            
-            setupWorkoutPage(); 
-            updateDashboardSessions(); 
+
+            setupWorkoutPage();
+            updateDashboardSessions();
         });
     </script>
 </body>
