@@ -765,7 +765,8 @@ textarea {
 
 /* --- CORRECTION CSS : STYLE GÉNÉRIQUE POUR TOUS LES BOUTONS ACTIFS (GYM, HOME, HOMME, FEMME) --- */
 .toggle-switch button.active {
-    background: var(--bg-secondary); /* Fond blanc/carte pour bien ressortir */
+    background: var(--bg-secondary);
+    /* Fond blanc/carte pour bien ressortir */
     color: var(--text-primary);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }

@@ -106,7 +106,7 @@
                         <div style="font-size:12px; color:var(--text-secondary);">Calcule tes calories de maintien</div>
                     </div>
                 </div>
-                <div style="color:var(--accent-gym); font-size:20px; cursor: pointer;">›</div>
+                <div style="color:red; font-size:20px; cursor: pointer;">›</div>
             </div>
 
         </div>
@@ -253,7 +253,7 @@
                     <input type="number" id="percMaxWeight" placeholder="Ex: 100" oninput="calculatePercentages()">
                 </div>
 
-                <div id="percentageResults" style="margin-top: 20px; display:flex; flex-direction:column; gap:8px;">
+                <div id="percentageResults" style="margin-top: 20px; display:flex; flex-direction:column; gap:8px; color:var(--text-primary)">
                     <div style="text-align:center; color:var(--text-secondary); padding: 20px;">
                         Entre ton 1RM pour calculer les poids.
                     </div>
@@ -317,7 +317,7 @@
                     </div>
                     <div id="calResult"
                         style="font-size:40px; font-weight:900; color:var(--text-primary); line-height:1;">--</div>
-                    <div style="font-size:14px; font-weight:600; color:var(--accent-gym); margin-top:5px;">Kcal / jour
+                    <div style="font-size:12px; color:var(--text-secondary); margin-top:5px;">Kcal / jour
                     </div>
                 </div>
 
@@ -1026,7 +1026,7 @@
 
                     resultItem.innerHTML = `
                         <div style="font-size:16px; font-weight:600;">${perc}% de 1RM</div>
-                        <div style="font-size:18px; font-weight:700; color:var(--accent-gym);">${weight} <span style="font-size:12px; font-weight:500; color: var(--text-secondary);">kg</span> </div>
+                        <div style="font-size:18px; font-weight:700; color:var(--text-primary);">${weight} <span style="font-size:12px; font-weight:500; color: var(--text-secondary);">kg</span> </div>
                     `;
                     resultsContainer.appendChild(resultItem);
                 });
