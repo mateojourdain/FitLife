@@ -102,7 +102,8 @@
                 <div style="display:flex; align-items:center; gap:15px;">
                     <div class="icon-box">🔥</div>
                     <div>
-                        <div style="font-weight:700; color:var(--text-primary); font-size:16px;">Besoins Caloriques</div>
+                        <div style="font-weight:700; color:var(--text-primary); font-size:16px;">Besoins Caloriques
+                        </div>
                         <div style="font-size:12px; color:var(--text-secondary);">Calcule tes calories de maintien</div>
                     </div>
                 </div>
@@ -203,7 +204,7 @@
                 <div class="card"
                     style="margin: 20px 0; text-align:center; border:1px solid var(--border-color); background:var(--bg-tertiary);">
                     <div
-                        style="font-size:12px; color:var(--text-secondary); text-transform:uppercase; letter-spacing:1px; margin-bottom:5px;">
+                        style="font-size:12px; color:var(--text-secondary); text-transform:uppercase; letter-spacing:1px;">
                         IMC Estimé</div>
                     <div id="bmiResult"
                         style="font-size:40px; font-weight:900; color:var(--text-primary); line-height:1;">--</div>
@@ -218,8 +219,7 @@
         <div class="modal-overlay hidden" id="rmModal">
             <div class="modal-content">
                 <div class="modal-header-row">
-                    <h2>Calculateur 1RM</h2><button class="btn-close-text"
-                        onclick="closeRmModal()">Fermer</button>
+                    <h2>Calculateur 1RM</h2><button class="btn-close-text" onclick="closeRmModal()">Fermer</button>
                 </div>
                 <div class="form-group row-group">
                     <div class="input-group"><label>Poids (kg)</label><input type="number" id="rmWeight"
@@ -245,15 +245,15 @@
             <div class="modal-content">
                 <div class="modal-header-row">
                     <h2>Zones de travail (%)</h2>
-                    <button class="btn-close-text"
-                        onclick="closePercentageModal()">Fermer</button>
+                    <button class="btn-close-text" onclick="closePercentageModal()">Fermer</button>
                 </div>
                 <div class="form-group">
                     <label>Ton 1RM (Poids Max sur 1 Rép. en kg)</label>
                     <input type="number" id="percMaxWeight" placeholder="Ex: 100" oninput="calculatePercentages()">
                 </div>
 
-                <div id="percentageResults" style="margin-top: 20px; display:flex; flex-direction:column; gap:8px; color:var(--text-primary)">
+                <div id="percentageResults"
+                    style="margin-top: 20px; display:flex; flex-direction:column; gap:8px; color:var(--text-primary)">
                     <div style="text-align:center; color:var(--text-secondary); padding: 20px;">
                         Entre ton 1RM pour calculer les poids.
                     </div>
@@ -325,6 +325,23 @@
             </div>
         </div>
 
+        <div class="modal-overlay hidden full-screen" id="activeSessionModal">
+            <div class="active-session-content">
+                <div class="active-session-header">
+                    <h2 id="activeSessionTitle">Séance en cours</h2>
+                    <button class="btn-close-text" onclick="closeActiveSessionModal()">Terminer & Fermer</button>
+                </div>
+
+                <div id="activeWorkoutDetails">
+                </div>
+
+                <div class="main-action-btn">
+                    <button class="btn-primary full" id="finishSeriesButton" onclick="finishSeries()">
+                        SÉRIE TERMINÉE (Prochaine: 90s)
+                    </button>
+                </div>
+            </div>
+        </div>
         <div id="smartTimer" class="timer-float hidden">
             <div style="display:flex; flex-direction:column;">
                 <span style="font-size:10px; color:var(--text-secondary); font-weight:700;">REPOS</span>
@@ -357,6 +374,7 @@
             // =================================================================
             const body = document.body;
             const themeOptions = document.querySelectorAll('.theme-option');
+            let chartInstance = null; // Pour stocker l'instance du graphique de poids
 
             window.setTheme = (theme, element) => {
                 if (theme === 'dark') {
@@ -381,136 +399,38 @@
             };
 
             // =================================================================
-            // DÉFINITION DES FONCTIONS ET VARIABLES
+            // LOGIQUE DE NAVIGATION
             // =================================================================
-
-            let chartInstance = null;
-            let weightHistory = JSON.parse(localStorage.getItem('weightHistory')) || [];
-
-            // FONCTION CORRIGÉE : Inclus l'affichage explicite de la ligne de l'axe Y pour le mode sombre
-            function updateWeightUI() {
-                const last = weightHistory[weightHistory.length - 1];
-                if (last && last.height) {
-                    document.getElementById('displayWeight').innerText = last.weight;
-                    const bmi = (last.weight / ((last.height / 100) ** 2)).toFixed(1);
-                    document.getElementById('displayBMI').innerText = bmi;
-                }
-
-                // LECTURE DYNAMIQUE DES COULEURS À PARTIR DU BODY
-                const style = getComputedStyle(document.body);
-                const textColor = style.getPropertyValue('--text-primary').trim() || '#2C3E50';
-                // secondaryTextColor est la couleur claire utilisée en mode sombre pour les axes
-                const secondaryTextColor = style.getPropertyValue('--text-secondary').trim() || '#7F8C9A';
-
-                // DÉFINITION RADICALE : Assure que tous les textes par défaut sont clairs
-                Chart.defaults.color = secondaryTextColor;
-
-                // Couleur de fond de la zone sous la courbe
-                const areaFillColor = document.body.classList.contains('dark-mode')
-                    ? 'rgba(242, 242, 247, 0.1)'
-                    : 'rgba(44, 62, 80, 0.05)';
-
-                const ctx = document.getElementById('weightChart').getContext('2d');
-                if (chartInstance) chartInstance.destroy();
-
-                const labels = weightHistory.map(entry => new Date(entry.date).toLocaleDateString('fr-FR', {
-                    day: 'numeric',
-                    month: 'short'
-                }));
-                const data = weightHistory.map(entry => entry.weight);
-
-                chartInstance = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: 'Poids',
-                            data: data,
-                            borderColor: textColor,
-                            backgroundColor: areaFillColor,
-                            borderWidth: 2,
-                            tension: 0.4,
-                            pointRadius: 3,
-                            fill: true
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                display: false
-                            }
-                        },
-                        scales: {
-                            x: {
-                                display: true,
-                                drawBorder: true,
-                                borderColor: secondaryTextColor, // <--- Axe X LIGNE : Couleur claire
-                                grid: {
-                                    display: false
-                                },
-                                ticks: {
-                                    color: secondaryTextColor, // <--- Axe X LABELS : Couleur claire
-                                    font: {
-                                        size: 10
-                                    }
-                                }
-                            },
-                            y: {
-                                drawBorder: true,
-                                borderColor: secondaryTextColor, // <--- AXE Y LIGNE : Couleur claire
-                                grid: {
-                                    color: secondaryTextColor, // <--- AXE Y GRILLE : Couleur claire
-                                    lineWidth: 0.5
-                                },
-                                ticks: {
-                                    color: secondaryTextColor
-                                } // AXE Y LABELS : Couleur claire
-                            }
-                        }
-                    }
+            window.switchPage = (pageId) => {
+                document.querySelectorAll('.page').forEach(page => {
+                    page.classList.remove('active');
                 });
-            }
+                document.getElementById(pageId).classList.add('active');
 
-            window.switchPage = (pageName) => {
-                document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-                const targetNav = document.querySelector(`.bottom-nav .nav-item[onclick*="'${pageName}'"]`);
-                if (targetNav) targetNav.classList.add('active');
-                document.getElementById(pageName).classList.add('active');
-                if (pageName === 'workout') setupWorkoutPage();
-                else if (typeof closeAddSessionModal === 'function') closeAddSessionModal();
-            }
+                document.querySelectorAll('.nav-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                document.querySelector(`.nav-item[onclick="switchPage('${pageId}')"]`).classList.add('active');
+                // Si on va sur la page workout, on met à jour la sélection
+                if (pageId === 'workout') {
+                    selectDay(currentSelectedDate);
+                }
+            };
 
-            const dateElement = document.getElementById('currentDate');
-            const date = new Date();
-            let dateString = date.toLocaleDateString('fr-FR', {
-                weekday: 'long',
-                day: 'numeric',
-                month: 'long'
-            });
-            dateElement.textContent = dateString.charAt(0).toUpperCase() + dateString.slice(1);
 
+            // =================================================================
+            // GESTION DU STOCKAGE ET DES DATES
+            // =================================================================
+            const WEIGHT_STORAGE_KEY = 'weightHistory';
             const SESSION_STORAGE_KEY = 'workoutSessions';
-            let currentDate = new Date();
+
+            let weightHistory = JSON.parse(localStorage.getItem(WEIGHT_STORAGE_KEY) || '[]');
             let currentSelectedDate = new Date();
-            let selectedDayElement = null;
-            let sessionType = 'gym';
-            let editingExerciseIndex = null;
-
-            function getWeekStart(date) {
-                const d = new Date(date);
-                let day = d.getDay() || 7;
-                d.setDate(d.getDate() - (day - 1));
-                d.setHours(0, 0, 0, 0);
-                return d;
-            }
-
-            let currentWeekStart = getWeekStart(currentDate);
+            let currentWeekStart;
+            let sessionType = 'gym'; // Type de séance par défaut pour le formulaire
 
             function getSessions() {
-                return JSON.parse(localStorage.getItem(SESSION_STORAGE_KEY)) || {};
+                return JSON.parse(localStorage.getItem(SESSION_STORAGE_KEY) || '{}');
             }
 
             function saveSessions(sessions) {
@@ -559,6 +479,15 @@
                 }
             }
 
+            function getWeekStart(date) {
+                const d = new Date(date);
+                const day = d.getDay(); // 0 = Dimanche, 1 = Lundi, ..., 6 = Samedi
+                const diff = d.getDate() - day + (day === 0 ? -6 : 1); // Ajuste au Lundi
+                const weekStart = new Date(d.setDate(diff));
+                weekStart.setHours(0, 0, 0, 0);
+                return weekStart;
+            }
+
             function renderDaySlider(startOfWeek) {
                 const slider = document.getElementById('daySlider');
                 slider.innerHTML = '';
@@ -577,18 +506,23 @@
 
                     const el = document.createElement('div');
                     el.classList.add('slider-day');
-                    if (allSessions[key] && allSessions[key].exercises.length > 0) el.classList.add(allSessions[key].type);
 
-                    const checkDate = new Date(dayDate);
-                    checkDate.setHours(0, 0, 0, 0);
-                    if (checkDate.getTime() === today.getTime()) {
+                    if (allSessions[key] && allSessions[key].exercises.length > 0) {
+                        el.classList.add('has-session');
+                        el.classList.add(allSessions[key].type);
+                    }
+
+                    if (dayDate.toDateString() === today.toDateString()) {
                         el.classList.add('today');
                     }
 
-                    if (formatDateKey(dayDate) === formatDateKey(currentSelectedDate)) {
+                    if (isPastDate(dayDate)) {
+                        el.classList.add('past');
+                    }
+
+                    if (dayDate.toDateString() === currentSelectedDate.toDateString()) {
                         el.classList.add('selected');
                         selectedDayFound = true;
-                        selectedDayElement = el;
                     }
 
                     el.innerHTML = `<div class="day-name">${dayName}</div><div class="day-num">${dayDate.getDate()}</div>`;
@@ -596,58 +530,200 @@
                     slider.appendChild(el);
                 }
 
-                if (!selectedDayFound) selectDay(startOfWeek);
-
-                setTimeout(() => {
-                    if (document.querySelector('.slider-day.selected')) document.querySelector('.slider-day.selected').scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'nearest',
-                        inline: 'center'
-                    });
-                }, 0);
+                // S'assurer que le jour sélectionné est visible
+if (selectedDayFound) {
+                    const selectedEl = slider.querySelector('.slider-day.selected');
+                    if (selectedEl) {
+                        selectedEl.scrollIntoView({
+                            behavior: 'instant', // <-- Changé à 'instant' pour ne pas interférer avec le swipe
+                            inline: 'center',
+                            block: 'nearest'
+                        });
+                    }
+                }
             }
 
-            document.getElementById('prevWeek').addEventListener('click', () => {
+            window.prevWeek = () => {
                 currentWeekStart.setDate(currentWeekStart.getDate() - 7);
                 renderDaySlider(currentWeekStart);
-            });
+            };
 
-            document.getElementById('nextWeek').addEventListener('click', () => {
+            window.nextWeek = () => {
                 currentWeekStart.setDate(currentWeekStart.getDate() + 7);
                 renderDaySlider(currentWeekStart);
-            });
+            };
 
-            function selectDay(date) {
-                currentSelectedDate = new Date(date);
-                const dateKey = formatDateKey(currentSelectedDate);
-                document.getElementById('recapDateDisplay').textContent = formatDateDisplay(currentSelectedDate);
-
-                if (selectedDayElement) selectedDayElement.classList.remove('selected');
+            window.selectDay = (date) => {
+                currentSelectedDate = date;
+                // Met à jour la sélection visuelle
                 document.querySelectorAll('.slider-day').forEach(el => {
-                    const dayDate = new Date(currentWeekStart);
-                    dayDate.setDate(currentWeekStart.getDate() + Array.from(el.parentNode.children).indexOf(el));
-                    if (formatDateKey(dayDate) === formatDateKey(currentSelectedDate)) {
-                        selectedDayElement = el;
+                    el.classList.remove('selected');
+                    const key = formatDateKey(date);
+                    const dateFromElement = new Date(currentWeekStart);
+                    dateFromElement.setDate(currentWeekStart.getDate() + Array.from(document.getElementById('daySlider').children).indexOf(el));
+                    if (dateFromElement.toDateString() === date.toDateString()) {
                         el.classList.add('selected');
-                    } else {
-                        el.classList.remove('selected');
                     }
                 });
 
-                displaySessionRecap(currentSelectedDate, true);
+                displaySessionRecap(date);
+            }
 
-                const allSessions = getSessions();
-                const btnAdd = document.getElementById('openFormButton');
-                const actionContainer = document.getElementById('actionButtonsContainer');
-                const isPast = isPastDate(currentSelectedDate);
+            function displaySessionRecap(date) {
+                const container = document.getElementById('sessionRecap');
+                container.innerHTML = '';
+                const key = formatDateKey(date);
+                const sessionData = getSessions()[key];
+                const dateDisplay = formatDateDisplay(date);
+                const isPast = isPastDate(date);
 
-                if (isPast) {
-                    actionContainer.style.display = 'none';
-                } else {
-                    actionContainer.style.display = 'flex';
+                document.getElementById('recapDateDisplay').textContent = dateDisplay;
+                document.getElementById('recapSectionTitle').style.display = 'none';
+
+                if (!sessionData || sessionData.exercises.length === 0) {
+                    container.innerHTML = isPast ?
+                        `<div style="text-align:center; padding: 20px; color:var(--text-secondary);">Aucune séance enregistrée pour cette date.</div>` :
+                        `<div style="text-align:center; padding: 20px; color:var(--text-secondary);">Programme ta séance pour le ${dateDisplay}.</div>`;
+                    return;
                 }
 
-                // Initialise le type de session si la session existe déjà pour l'UI
+                if (sessionData && sessionData.exercises.length > 0) {
+                    document.getElementById('recapSectionTitle').style.display = 'block';
+
+                    // NOUVEAU: Bouton Démarrer la Séance si ce n'est pas une date passée
+                    if (!isPast) {
+                        const startBtnContainer = document.createElement('div');
+                        startBtnContainer.style.marginBottom = '25px';
+                        startBtnContainer.innerHTML = `<button class="btn-primary full" style="margin-top:0; margin-bottom:0;" onclick="startWorkout('${key}')">DÉMARRER LA SÉANCE</button>`;
+                        container.appendChild(startBtnContainer);
+                    }
+
+                    sessionData.exercises.forEach((exercise, index) => {
+                        const exElement = document.createElement('div');
+                        exElement.className = 'exercise-card';
+                        exElement.innerHTML = `
+                            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                                <div>
+                                    <h3>${exercise.name}</h3>
+                                    <div class="exercise-meta">${exercise.sets} séries de ${exercise.reps} reps</div>
+                                </div>
+                                <div class="action-icons">
+                                    <span class="icon-edit" onclick="openAddExerciseModal(${index}, getSessions()['${key}'].exercises[${index}])">✎</span>
+                                    <span class="icon-delete" onclick="deleteExercise(${index})">✕</span>
+                                </div>
+                            </div>
+                            ${exercise.notes ? `<p class="exercise-notes">${exercise.notes}</p>` : ''}
+                        `;
+                        container.appendChild(exElement);
+                    });
+                }
+            }
+            
+            // CORRECTION: Utilisation de JSON.stringify pour passer l'objet exercise correctement
+            // et éviter les erreurs de syntaxe dans l'appel `onclick` dans le HTML généré.
+            function createEditHtml(index, exercise) {
+                const exString = JSON.stringify(exercise).replace(/"/g, '&quot;');
+                return `<span class="icon-edit" onclick="openAddExerciseModal(${index}, ${exString})">✎</span>`;
+            }
+
+            // MODIFICATION APPORTÉE ICI
+            function displaySessionRecap(date) {
+                const container = document.getElementById('sessionRecap');
+                container.innerHTML = '';
+                const key = formatDateKey(date);
+                const sessionData = getSessions()[key];
+                const dateDisplay = formatDateDisplay(date);
+                const isPast = isPastDate(date);
+
+                document.getElementById('recapDateDisplay').textContent = dateDisplay;
+                document.getElementById('recapSectionTitle').style.display = 'none';
+
+                if (!sessionData || sessionData.exercises.length === 0) {
+                    container.innerHTML = isPast ?
+                        `<div style="text-align:center; padding: 20px; color:var(--text-secondary);">Aucune séance enregistrée pour cette date.</div>` :
+                        `<div style="text-align:center; padding: 20px; color:var(--text-secondary);">Programme ta séance pour le ${dateDisplay}.</div>`;
+                    return;
+                }
+
+                if (sessionData && sessionData.exercises.length > 0) {
+                    document.getElementById('recapSectionTitle').style.display = 'block';
+
+                    if (!isPast) {
+                        const startBtnContainer = document.createElement('div');
+                        startBtnContainer.style.marginBottom = '25px';
+                        startBtnContainer.innerHTML = `<button class="btn-primary full" style="margin-top:0; margin-bottom:0;" onclick="startWorkout('${key}')">DÉMARRER LA SÉANCE</button>`;
+                        container.appendChild(startBtnContainer);
+                    }
+
+                    sessionData.exercises.forEach((exercise, index) => {
+                        const exElement = document.createElement('div');
+                        exElement.className = 'exercise-card';
+                        
+                        // CORRECTION APPORTÉE DANS CETTE LIGNE
+                        const editIconHtml = `<span class="icon-edit" onclick="openAddExerciseModal(${index}, ${JSON.stringify(exercise).replace(/"/g, '&quot;')})">✎</span>`;
+
+                        exElement.innerHTML = `
+                            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                                <div>
+                                    <h3>${exercise.name}</h3>
+                                    <div class="exercise-meta">${exercise.sets} séries de ${exercise.reps} reps</div>
+                                </div>
+                                <div class="action-icons">
+                                    ${editIconHtml} 
+                                    <span class="icon-delete" onclick="deleteExercise(${index})">✕</span>
+                                </div>
+                            </div>
+                            ${exercise.notes ? `<p class="exercise-notes">${exercise.notes}</p>` : ''}
+                        `;
+                        container.appendChild(exElement);
+                    });
+                }
+            }
+
+
+            window.openAddExerciseModal = (index, exercise) => {
+                // S'assure que exercise est un objet s'il est passé en tant que string par le HTML
+                if (typeof exercise === 'string') {
+                    try {
+                        exercise = JSON.parse(exercise);
+                    } catch (e) {
+                        console.error("Erreur lors du parsing de l'exercice:", e);
+                        exercise = null;
+                    }
+                }
+                
+                if (isPastDate(currentSelectedDate) && index === null) return alert('Impossible d\'ajouter un exercice pour une date passée.');
+                
+                const allSessions = getSessions();
+                const dateKey = formatDateKey(currentSelectedDate);
+                const sessionLocationGroup = document.getElementById('sessionLocationGroup');
+                const modalTitle = document.getElementById('modalTitle');
+
+                modalTitle.textContent = index !== null ? 'Modifier l\'exercice' : 'Nouvel exercice';
+
+                if (allSessions[dateKey] && allSessions[dateKey].exercises.length > 0) {
+                    // Si la session existe déjà, on cache le toggle car le type est défini
+                    sessionLocationGroup.style.display = 'none';
+                } else {
+                    // Sinon, c'est un ajout et la première fois qu'on crée une nouvelle session, on affiche le toggle
+                    sessionLocationGroup.style.display = 'flex';
+                }
+
+                if (exercise) {
+                    document.getElementById('exerciseName').value = exercise.name || '';
+                    document.getElementById('sets').value = exercise.sets || 3;
+                    document.getElementById('reps').value = exercise.reps || 10;
+                    document.getElementById('notes').value = exercise.notes || '';
+                    document.getElementById('saveSessionButton').dataset.editIndex = index;
+                } else {
+                    document.getElementById('exerciseName').value = '';
+                    document.getElementById('sets').value = 3;
+                    document.getElementById('reps').value = 10;
+                    document.getElementById('notes').value = '';
+                    document.getElementById('saveSessionButton').dataset.editIndex = null;
+                }
+
+                // Récupère le type de session actuel pour l'initialisation du toggle
                 if (allSessions[dateKey]) {
                     sessionType = allSessions[dateKey].type;
                 } else {
@@ -663,82 +739,6 @@
                     }
                 });
 
-                // Si la session existe, cacher le sélecteur de type d'entrainement
-                const sessionLocationGroup = document.getElementById('sessionLocationGroup');
-                if (allSessions[dateKey] && allSessions[dateKey].exercises.length > 0) {
-                    sessionLocationGroup.style.display = 'none';
-                } else {
-                    sessionLocationGroup.style.display = 'flex';
-                }
-            }
-
-            function updateDashboardSessions() {
-                const allSessions = getSessions();
-                let total = 0;
-                let gym = 0;
-                let home = 0;
-                const weekStart = getWeekStart(currentDate);
-
-                for (let i = 0; i < 7; i++) {
-                    const d = new Date(weekStart);
-                    d.setDate(weekStart.getDate() + i);
-                    const key = formatDateKey(d);
-
-                    if (allSessions[key] && allSessions[key].exercises.length > 0) {
-                        total++;
-                        if (allSessions[key].type === 'gym') {
-                            gym++;
-                        } else {
-                            home++;
-                        }
-                    }
-                }
-
-                document.getElementById('totalSessions').textContent = total;
-                document.getElementById('gymSessions').textContent = gym;
-                document.getElementById('homeSessions').textContent = home;
-            }
-
-            function openAddExerciseModal(exercise = null, index = null) {
-                if (isPastDate(currentSelectedDate)) return;
-
-                document.getElementById('modalTitle').textContent = index !== null ? 'Modifier Exercice' : 'Nouvelle Séance';
-
-                const sessionLocationGroup = document.getElementById('sessionLocationGroup');
-                const allSessions = getSessions();
-                const dateKey = formatDateKey(currentSelectedDate);
-
-                // Si la session existe et on ajoute un nouvel exercice (index == null), on cache le toggle
-                if (allSessions[dateKey] && index === null) {
-                    sessionLocationGroup.style.display = 'none';
-                } else {
-                    sessionLocationGroup.style.display = 'flex';
-                }
-
-                if (exercise) {
-                    document.getElementById('exerciseName').value = exercise.name;
-                    document.getElementById('sets').value = exercise.sets;
-                    document.getElementById('reps').value = exercise.reps;
-                    document.getElementById('notes').value = exercise.notes;
-                    editingExerciseIndex = index;
-                    // Met à jour le type de session si on édite (important pour le toggle)
-                    sessionType = allSessions[dateKey].type;
-                } else {
-                    document.getElementById('exerciseName').value = '';
-                    document.getElementById('sets').value = 3;
-                    document.getElementById('reps').value = 10;
-                    document.getElementById('notes').value = '';
-                    editingExerciseIndex = null;
-                }
-
-                // Met à jour l'état visuel du toggle pour correspondre au type de session
-                document.querySelectorAll('#sessionTypeToggle button').forEach(b => {
-                    b.classList.remove('active');
-                    if (b.dataset.type === sessionType) {
-                        b.classList.add('active');
-                    }
-                });
-
                 document.getElementById('addSessionModal').classList.remove('hidden');
                 document.body.classList.add('modal-open');
             }
@@ -746,50 +746,22 @@
             window.closeAddSessionModal = () => {
                 document.getElementById('addSessionModal').classList.add('hidden');
                 document.body.classList.remove('modal-open');
-                editingExerciseIndex = null; // Réinitialise l'index d'édition
-            }
-
-            window.editExercise = (dateKey, index) => {
-                const all = getSessions();
-                const session = all[dateKey];
-                if (session && session.exercises[index]) {
-                    openAddExerciseModal(session.exercises[index], index);
-                }
             }
 
             window.deleteExercise = (idx) => {
+                if (isPastDate(currentSelectedDate)) return alert('Impossible de supprimer des exercices pour une date passée.');
                 if (confirm('Êtes-vous sûr de vouloir supprimer cet exercice ?')) {
                     const all = getSessions();
                     const dateKey = formatDateKey(currentSelectedDate);
                     all[dateKey].exercises.splice(idx, 1);
-
                     if (all[dateKey].exercises.length === 0) delete all[dateKey];
-
                     saveSessions(all);
                     selectDay(currentSelectedDate);
                     updateDashboardSessions();
                     renderDaySlider(currentWeekStart);
                 }
             }
-
-            window.toggleSeries = (exIndex, seriesIndex) => {
-                const key = formatDateKey(currentSelectedDate);
-                const all = getSessions();
-
-                // Vérifie si la session n'est pas une date passée avant de toggler
-                if (isPastDate(currentSelectedDate)) {
-                    alert('Impossible de modifier des séries pour une date passée.');
-                    return;
-                }
-
-                if (all[key] && all[key].exercises[exIndex] && all[key].exercises[exIndex].series[seriesIndex]) {
-                    all[key].exercises[exIndex].series[seriesIndex].isDone = !all[key].exercises[exIndex].series[seriesIndex].isDone;
-                    saveSessions(all);
-                    displaySessionRecap(currentSelectedDate); // Rafraîchit sans changer le titre/date
-                }
-            }
-
-
+            
             document.querySelectorAll('.toggle-switch button[data-type]').forEach(btn => {
                 btn.addEventListener('click', () => {
                     sessionType = btn.dataset.type;
@@ -798,11 +770,13 @@
                 });
             });
 
+            // =================================================================
+            // LOGIQUE DE SAUVEGARDE (CORRIGÉE)
+            // =================================================================
             document.getElementById('saveSessionButton').addEventListener('click', () => {
                 const name = document.getElementById('exerciseName').value;
                 const sets = parseInt(document.getElementById('sets').value);
                 const reps = parseInt(document.getElementById('reps').value);
-
                 if (!name) return alert('Nom manquant');
 
                 const key = formatDateKey(currentSelectedDate);
@@ -828,78 +802,443 @@
                     isDone: false
                 });
 
-                if (editingExerciseIndex !== null) all[key].exercises[editingExerciseIndex] = newEx;
-                else {
-                    all[key].exercises.push(newEx);
-                    // Ligne redondante supprimée: if (document.getElementById('sessionLocationGroup').style.display !== 'none') all[key].type = sessionType; 
+                const indexToEdit = document.getElementById('saveSessionButton').dataset.editIndex;
+                if (indexToEdit !== undefined && indexToEdit !== null && indexToEdit !== 'null') {
+                    // C'est une modification
+                    all[key].exercises[parseInt(indexToEdit)] = newEx; 
+                } else {
+                    // C'est un ajout
+                    all[key].exercises.push(newEx); 
                 }
 
+                // 1. Sauvegarder les données
                 saveSessions(all);
+                
+                // 2. Fermer la modale
                 closeAddSessionModal();
-                selectDay(currentSelectedDate);
+                
+                // 3. Basculer sur la page Sport (ASSURE L'AFFICHAGE DU RÉCAPITULATIF)
+                window.switchPage('workout'); 
+
+                // 4. Mettre à jour la vue du jour sélectionné
+                selectDay(currentSelectedDate); 
+                
+                // 5. Mettre à jour les statistiques du tableau de bord
                 updateDashboardSessions();
-                renderDaySlider(currentWeekStart); // Pour afficher le point sur le jour
+                
+                // 6. Mettre à jour le slider des jours
+                renderDaySlider(currentWeekStart); 
             });
 
-            function displaySessionRecap(date, showTitle = false) {
-                const container = document.getElementById('sessionRecap');
-                container.innerHTML = '';
-                const key = formatDateKey(date);
-                const all = getSessions();
-                const s = all[key];
-                const recapTitle = document.getElementById('recapSectionTitle');
 
-                if (!s || s.exercises.length === 0) {
-                    container.innerHTML = '<div class="no-session-msg">Aucune séance.</div>';
-                    recapTitle.style.display = showTitle ? 'block' : 'none';
-                    return;
+            // =================================================================
+            // GESTION DES PROGRAMMES (TEMPLATES)
+            // =================================================================
+
+            function applyTemplate(templateKey) {
+                if (isPastDate(currentSelectedDate)) return alert('Impossible d\'appliquer un programme pour une date passée.');
+
+                const dateKey = formatDateKey(currentSelectedDate);
+                const all = getSessions();
+
+                let exercises = [];
+                let type = 'gym';
+
+                switch (templateKey) {
+                    case 'haut-du-corps':
+                        exercises = [
+                            { name: 'Développé Couché', s: 4, r: 8 },
+                            { name: 'Tirage Vertical (Poulie Haute)', s: 4, r: 10 },
+                            { name: 'Développé Militaire (Haltères)', s: 3, r: 10 },
+                            { name: 'Rowing Haltère', s: 3, r: 10 },
+                            { name: 'Extension Triceps', s: 3, r: 12 },
+                            { name: 'Curl Biceps', s: 3, r: 12 }
+                        ];
+                        type = 'gym';
+                        break;
+                    case 'bas-du-corps':
+                        exercises = [
+                            { name: 'Squat Barre', s: 5, r: 5 },
+                            { name: 'Soulevé de Terre Roumain', s: 3, r: 10 },
+                            { name: 'Presse à Cuisses', s: 3, r: 12 },
+                            { name: 'Leg Extension', s: 3, r: 15 },
+                            { name: 'Mollets Debout', s: 4, r: 15 }
+                        ];
+                        type = 'gym';
+                        break;
+                    case 'full-body':
+                        exercises = [
+                            { name: 'Pompes', s: 3, r: 15 },
+                            { name: 'Fentes Marchées', s: 3, r: 12 },
+                            { name: 'Tirage Inversé (Sous une table)', s: 3, r: 10 },
+                            { name: 'Squat au poids du corps', s: 3, r: 20 },
+                            { name: 'Planche', s: 3, r: 60 }
+                        ];
+                        type = 'home';
+                        break;
+                    default:
+                        return;
                 }
 
-                recapTitle.style.display = 'block';
-                const isPast = isPastDate(date);
+                // Initialiser la session pour le jour
+                all[dateKey] = {
+                    type: type,
+                    exercises: []
+                };
 
-                container.innerHTML = `<div class="session-type-header ${s.type}"><span class="type-label">${s.type === 'gym' ? 'Salle de Sport' : 'Maison'}</span></div>`;
-
-                s.exercises.forEach((ex, idx) => {
-                    let seriesHtml = '<ul class="series-list">';
-                    ex.series.forEach((ser, sIdx) => {
-                        const btnClass = ser.isDone ? 'done' : '';
-                        const check = ser.isDone ? '✓' : '';
-                        const isDisabled = isPast ? 'disabled' : '';
-
-                        seriesHtml += `
-                            <li class="series-item ${btnClass}">
-                                <div class="series-info-row">
-                                    <span class="series-num">Série ${sIdx + 1}</span>
-                                    <span class="series-val">${ser.reps} Reps</span>
-                                </div>
-                                <button class="series-toggle-btn ${btnClass}" onclick="toggleSeries(${idx}, ${sIdx})" ${isDisabled}>${check}</button>
-                            </li>
-                        `;
+                exercises.forEach(ex => {
+                    const newEx = {
+                        name: ex.name,
+                        sets: ex.s,
+                        reps: ex.r,
+                        notes: '',
+                        series: []
+                    };
+                    for (let i = 0; i < ex.s; i++) newEx.series.push({
+                        reps: ex.r,
+                        isDone: false
                     });
-                    seriesHtml += '</ul>';
+                    all[dateKey].exercises.push(newEx);
+                });
 
-                    const notesHtml = ex.notes ? `<div class="exercise-notes">${ex.notes}</div>` : '';
+                saveSessions(all);
+                document.getElementById('templateModal').classList.add('hidden');
+                selectDay(currentSelectedDate);
+                updateDashboardSessions();
+                renderDaySlider(currentWeekStart);
+            }
 
-                    container.innerHTML += `
-                        <div class="card session-card">
-                            <div class="exercise-name">${ex.name}</div>
-                            <div style="font-size:14px; color:var(--text-secondary); margin-bottom:10px;">${ex.sets} Séries de ${ex.reps} Répétitions</div>
-                            ${seriesHtml}
-                            ${notesHtml}
-                            ${!isPast ? `
-                                <div class="card-actions">
-                                    <button class="btn-edit" onclick="editExercise('${key}', ${idx})">Modifier</button>
-                                    <button class="btn-delete" onclick="deleteExercise(${idx})">Supprimer</button>
-                                </div>
-                            ` : ''}
-                        </div>
-                    `;
+            window.openTemplateModal = () => {
+                if (isPastDate(currentSelectedDate)) return;
+                const list = document.getElementById('templateList');
+                list.innerHTML = '';
+                const templates = {
+                    'haut-du-corps': 'Haut du Corps (Push/Pull)',
+                    'bas-du-corps': 'Bas du Corps (Jambes)',
+                    'full-body': 'Full Body (Maison)'
+                };
+
+                Object.keys(templates).forEach(key => {
+                    const btn = document.createElement('button');
+                    btn.className = 'btn-secondary';
+                    btn.style.width = '100%';
+                    btn.style.marginBottom = '10px';
+                    btn.style.marginTop = '0';
+                    btn.textContent = templates[key];
+                    btn.onclick = () => applyTemplate(key);
+                    list.appendChild(btn);
+                });
+
+                // Option pour commencer à zéro
+                const clearBtn = document.createElement('button');
+                clearBtn.className = 'btn-secondary';
+                clearBtn.style.width = '100%';
+                clearBtn.style.marginTop = '10px';
+                clearBtn.style.backgroundColor = 'var(--bg-primary)';
+                clearBtn.textContent = 'Effacer les exercices existants et commencer un programme';
+                clearBtn.onclick = () => {
+                    if (confirm("Êtes-vous sûr de vouloir effacer le programme existant pour cette date?")) {
+                        const dateKey = formatDateKey(currentSelectedDate);
+                        const all = getSessions();
+                        if (all[dateKey]) {
+                            all[dateKey].exercises = [];
+                            saveSessions(all);
+                            selectDay(currentSelectedDate);
+                        }
+                        // Ouvre à nouveau la modale pour choisir le template
+                        // (On la referme si l'utilisateur annule, mais là on veut qu'il choisisse)
+                    }
+                };
+                list.appendChild(clearBtn);
+
+                document.getElementById('templateModal').classList.remove('hidden');
+            }
+
+
+            function updateDashboardSessions() {
+                const allSessions = getSessions();
+                let total = 0;
+                let gym = 0;
+                let home = 0;
+                const now = new Date();
+                const startOfWeek = getWeekStart(now);
+
+                for (let i = 0; i < 7; i++) {
+                    const dayDate = new Date(startOfWeek);
+                    dayDate.setDate(startOfWeek.getDate() + i);
+                    const key = formatDateKey(dayDate);
+
+                    if (allSessions[key] && allSessions[key].exercises.length > 0) {
+                        // On compte uniquement les séances passées
+                        if (isPastDate(dayDate) || dayDate.toDateString() === now.toDateString()) {
+                            total++;
+                            if (allSessions[key].type === 'gym') {
+                                gym++;
+                            } else {
+                                home++;
+                            }
+                        }
+                    }
+                }
+
+                document.getElementById('totalSessions').textContent = total;
+                document.getElementById('gymSessions').textContent = gym;
+                document.getElementById('homeSessions').textContent = home;
+
+                // Met à jour la date actuelle dans le header
+                document.getElementById('currentDate').textContent = now.toLocaleDateString('fr-FR', {
+                    day: 'numeric',
+                    month: 'short'
                 });
             }
 
 
-            // Poids & IMC Logique
+            // =================================================================
+            // LOGIQUE PENDANT LA SÉANCE ACTIVE (NOUVEAU)
+            // =================================================================
+            let activeSessionDateKey = null;
+            let activeExerciseIndex = 0;
+            let activeSeriesIndex = 0;
+
+            window.startWorkout = (dateKey) => {
+                activeSessionDateKey = dateKey;
+                activeExerciseIndex = 0;
+                activeSeriesIndex = 0;
+                stopTimer(); // S'assurer que le timer est éteint au début
+
+                const allSessions = getSessions();
+                if (!allSessions[dateKey] || allSessions[dateKey].exercises.length === 0) {
+                    return alert("Aucun exercice programmé pour cette journée.");
+                }
+
+                // Parcourt les exercices pour trouver où reprendre
+                let resumed = false;
+                for (let i = 0; i < allSessions[dateKey].exercises.length; i++) {
+                    const ex = allSessions[dateKey].exercises[i];
+                    for (let j = 0; j < ex.series.length; j++) {
+                        if (!ex.series[j].isDone) {
+                            activeExerciseIndex = i;
+                            activeSeriesIndex = j;
+                            resumed = true;
+                            break;
+                        }
+                    }
+                    if (resumed) break;
+                }
+
+                // Si tout est fini, on recommence au début (ou on alerte)
+                if (!resumed) {
+                    if (confirm("Tous les exercices sont marqués comme terminés. Voulez-vous recommencer la séance ?")) {
+                        // Réinitialiser toutes les séries à isDone: false
+                        allSessions[dateKey].exercises.forEach(ex => {
+                            ex.series.forEach(s => s.isDone = false);
+                        });
+                        saveSessions(allSessions);
+                        activeExerciseIndex = 0;
+                        activeSeriesIndex = 0;
+                    } else {
+                        return; // L'utilisateur annule le redémarrage
+                    }
+                }
+
+                updateActiveWorkoutUI();
+                document.getElementById('activeSessionModal').classList.remove('hidden');
+                document.body.classList.add('modal-open');
+            };
+
+            window.closeActiveSessionModal = () => {
+                stopTimer();
+                document.getElementById('activeSessionModal').classList.add('hidden');
+                document.body.classList.remove('modal-open');
+                // Rafraîchir le récapitulatif après la fermeture
+                selectDay(currentSelectedDate);
+                updateDashboardSessions();
+            };
+
+            window.finishSeries = () => {
+                const allSessions = getSessions();
+                const session = allSessions[activeSessionDateKey];
+                if (!session) return;
+
+                const currentEx = session.exercises[activeExerciseIndex];
+                if (!currentEx) return;
+
+
+                // 1. Marquer la série actuelle comme terminée
+                if (currentEx.series[activeSeriesIndex]) {
+                    currentEx.series[activeSeriesIndex].isDone = true;
+                    saveSessions(allSessions); // Sauvegarder immédiatement
+                }
+
+                // 2. Passer à la série suivante
+                activeSeriesIndex++;
+
+                // 3. Vérifier si on passe à l'exercice suivant ou si la séance est finie
+                let isSessionFinished = false;
+                if (activeSeriesIndex >= currentEx.sets) {
+                    // Toutes les séries de l'exercice actuel sont terminées
+                    activeExerciseIndex++;
+                    activeSeriesIndex = 0;
+                    if (activeExerciseIndex >= session.exercises.length) {
+                        // Séance terminée!
+                        isSessionFinished = true;
+                    }
+                }
+
+                if (isSessionFinished) {
+                    // Pas de repos si c'est la toute fin de séance
+                    stopTimer();
+                    alert("Félicitations, la séance est terminée ! Vous pouvez maintenant fermer la fenêtre.");
+                } else {
+                    // 4. Déclencher le chronomètre de repos (90s par défaut)
+                    // On peut ajuster le temps de repos ici si on voulait une règle plus complexe
+                    startTimer(90);
+                }
+
+                // 5. Mettre à jour l'interface utilisateur
+                updateActiveWorkoutUI();
+            };
+
+            function updateActiveWorkoutUI() {
+                const allSessions = getSessions();
+                const session = allSessions[activeSessionDateKey];
+                const container = document.getElementById('activeWorkoutDetails');
+                container.innerHTML = '';
+                if (!session) return;
+
+                document.getElementById('activeSessionTitle').textContent = `Séance ${session.type === 'gym' ? 'Salle de sport' : 'Maison'}`;
+
+                let allFinished = true; // Pour vérifier si la séance est terminée
+
+                session.exercises.forEach((ex, exIdx) => {
+                    const isActiveEx = exIdx === activeExerciseIndex;
+                    let seriesHtml = '';
+                    ex.series.forEach((s, sIdx) => {
+                        let statusClass = s.isDone ? 'done-series' : '';
+                        let statusText = s.isDone ? 'FAIT' : 'À FAIRE';
+
+                        if (!s.isDone) {
+                            allFinished = false; // Il reste au moins une série à faire
+                        }
+
+                        if (isActiveEx && sIdx === activeSeriesIndex && !s.isDone) {
+                            statusClass = 'current-series';
+                            statusText = 'EN COURS';
+                        }
+
+                        seriesHtml += ` 
+                            <li class="active-series-item ${statusClass}"> 
+                                <div style="font-weight:600;">Série ${sIdx + 1}: ${s.reps} Rép.</div> 
+                                <div class="series-status">${statusText}</div> 
+                            </li> 
+                        `;
+                    });
+
+                    const exElement = document.createElement('div');
+                    exElement.className = `exercise-block ${isActiveEx ? 'active-exercise' : ''}`;
+                    exElement.innerHTML = `
+                        <h3>${ex.name}</h3>
+                        <div class="exercise-block-meta">${ex.sets} séries de ${ex.reps} reps</div>
+                        ${ex.notes ? `<p class="exercise-notes">${ex.notes}</p>` : ''}
+                        <ul class="active-series-list">${seriesHtml}</ul>
+                    `;
+                    container.appendChild(exElement);
+                });
+
+                // Mettre à jour le bouton principal
+                const finishBtn = document.getElementById('finishSeriesButton');
+                if (allFinished) {
+                    finishBtn.textContent = "SÉANCE TERMINÉE (Fermer)";
+                    finishBtn.onclick = closeActiveSessionModal;
+                } else {
+                    const nextRestTime = 90; // Temps de repos par défaut
+                    finishBtn.textContent = `SÉRIE TERMINÉE (Repos: ${nextRestTime}s)`;
+                    finishBtn.onclick = window.finishSeries;
+                }
+            }
+
+
+            // =================================================================
+            // LOGIQUE DU CHRONOMÈTRE DE REPOS FLOTTANT
+            // =================================================================
+            let timerInterval;
+            let timerStartTime;
+            let timerDuration;
+            let timerRunning = false;
+
+            window.startTimer = (durationInSeconds) => {
+                stopTimer(); // Arrête tout timer existant
+                timerDuration = durationInSeconds;
+                timerStartTime = Date.now();
+                timerRunning = true;
+                const timerFloat = document.getElementById('smartTimer');
+                timerFloat.classList.remove('hidden');
+
+                // Réinitialise la barre de progression
+                document.getElementById('timerBar').style.transition = 'none'; // Reset transition instantly
+                document.getElementById('timerBar').style.width = '100%';
+
+
+                const updateDisplay = () => {
+                    const elapsed = Math.floor((Date.now() - timerStartTime) / 1000);
+                    const remaining = timerDuration - elapsed;
+
+                    if (remaining <= 0) {
+                        stopTimer(true);
+                        document.getElementById('timerDisplay').textContent = "00:00";
+                        // Alerte sonore ou vibration ici
+                        if (navigator.vibrate) navigator.vibrate([200, 100, 200]); // Vibre 
+                        // Le timer reste visible mais à 00:00.
+                        return;
+                    }
+
+                    const minutes = Math.floor(remaining / 60);
+                    const seconds = remaining % 60;
+                    document.getElementById('timerDisplay').textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+                    // Met à jour la barre de progression avec une transition animée
+                    const percentage = (remaining / timerDuration) * 100;
+                    document.getElementById('timerBar').style.transition = 'width 1s linear';
+                    document.getElementById('timerBar').style.width = `${percentage}%`;
+                };
+
+                updateDisplay(); // Mise à jour immédiate
+                timerInterval = setInterval(updateDisplay, 1000);
+            };
+
+            window.stopTimer = (hide = true) => {
+                clearInterval(timerInterval);
+                timerRunning = false;
+                if (hide) {
+                    document.getElementById('smartTimer').classList.add('hidden');
+                }
+            };
+
+            window.adjustTimer = (change) => {
+                if (timerRunning) {
+                    const elapsed = Math.floor((Date.now() - timerStartTime) / 1000);
+                    let remaining = timerDuration - elapsed + change;
+
+                    if (remaining > 0) {
+                        // Recalcule le timerDuration pour le prochain cycle de l'intervalle
+                        timerDuration = remaining;
+                        timerStartTime = Date.now() - (timerDuration * 1000); // Fait en sorte que le prochain intervalle commence au nouveau "départ"
+                        
+                        // Redémarre l'intervalle pour un rafraîchissement immédiat et régulier
+                        stopTimer(false);
+                        startTimer(timerDuration);
+                    } else {
+                        // Si le temps est inférieur à zéro, on arrête
+                        stopTimer(true);
+                        document.getElementById('timerDisplay').textContent = "00:00";
+                    }
+                }
+            }
+
+
+            // =================================================================
+            // LOGIQUE DE GESTION DU POIDS (WEIGHT & IMC)
+            // =================================================================
             function calcInstantBMI() {
                 const w = parseFloat(document.getElementById('inputWeight').value);
                 const h = parseFloat(document.getElementById('inputHeight').value);
@@ -907,7 +1246,7 @@
                 if (w > 0 && h > 0) {
                     const bmi = (w / ((h / 100) * (h / 100))).toFixed(1);
                     document.getElementById('bmiResult').innerText = bmi;
-                    document.getElementById('bmiText').innerText = (bmi < 18.5 ? "Maigreur" : (bmi < 25 ? "Normal" : "Surpoids"));
+                    document.getElementById('bmiText').innerText = (bmi < 18.5 ? "Maigreur" : (bmi < 25 ? "Normal" : (bmi < 30 ? "Surpoids" : "Obésité")));
                 } else {
                     document.getElementById('bmiResult').innerText = "--";
                     document.getElementById('bmiText').innerText = "--";
@@ -924,7 +1263,7 @@
                     document.getElementById('inputWeight').value = last.weight;
                     document.getElementById('inputHeight').value = last.height || '';
                     document.getElementById('inputAge').value = last.age || '';
-                    calcInstantBMI();
+                    calcInstantBMI(); // Calcule l'IMC initial au chargement
                 }
             }
 
@@ -936,76 +1275,199 @@
             window.saveWeightData = () => {
                 const w = parseFloat(document.getElementById('inputWeight').value);
                 const h = parseFloat(document.getElementById('inputHeight').value);
-                const a = parseFloat(document.getElementById('inputAge').value);
+                const a = parseInt(document.getElementById('inputAge').value);
+                const date = new Date().toISOString().split('T')[0];
 
-                if (w && h) {
-                    const todayKey = new Date().toISOString().substring(0, 10);
-                    weightHistory = weightHistory.filter(e => new Date(e.date).toISOString().substring(0, 10) !== todayKey);
-
-                    weightHistory.push({
-                        date: new Date().toISOString(),
+                if (w > 0 && h > 0 && a > 0) {
+                    const newEntry = {
+                        date,
                         weight: w,
                         height: h,
                         age: a
-                    });
+                    };
+
+                    // Remplace l'entrée d'aujourd'hui si elle existe, sinon ajoute
+                    const existingIndex = weightHistory.findIndex(entry => entry.date === date);
+                    if (existingIndex > -1) {
+                        weightHistory[existingIndex] = newEntry;
+                    } else {
+                        weightHistory.push(newEntry);
+                    }
+
+                    // Trier par date pour l'affichage du graphique
                     weightHistory.sort((a, b) => new Date(a.date) - new Date(b.date));
 
-                    localStorage.setItem('weightHistory', JSON.stringify(weightHistory));
-
+                    localStorage.setItem(WEIGHT_STORAGE_KEY, JSON.stringify(weightHistory));
                     updateWeightUI();
                     closeWeightModal();
                 } else {
-                    alert('Veuillez entrer un poids et une taille valides.');
+                    alert("Veuillez remplir tous les champs (Poids, Taille, Âge) avec des valeurs valides.");
                 }
+            }
+
+            function updateWeightUI() {
+                if (weightHistory.length > 0) {
+                    const lastEntry = weightHistory[weightHistory.length - 1];
+                    document.getElementById('displayWeight').textContent = lastEntry.weight.toFixed(1);
+                    // Recalculer et afficher l'IMC du dernier enregistrement
+                    const bmi = (lastEntry.weight / ((lastEntry.height / 100) * (lastEntry.height / 100))).toFixed(1);
+                    document.getElementById('displayBMI').textContent = bmi;
+                } else {
+                    document.getElementById('displayWeight').textContent = '--';
+                    document.getElementById('displayBMI').textContent = '--';
+                }
+
+                renderWeightChart();
+            }
+
+            function renderWeightChart() {
+                const ctx = document.getElementById('weightChart').getContext('2d');
+
+                // Déterminer les couleurs en fonction du thème
+                const isDarkMode = document.body.classList.contains('dark-mode');
+                const textColor = isDarkMode ? '#ECF0F1' : '#2C3E50';
+                const secondaryTextColor = isDarkMode ? '#95A5A6' : '#7F8C9A';
+                const areaFillColor = isDarkMode ? 'rgba(0, 191, 255, 0.2)' : 'rgba(0, 191, 255, 0.4)';
+
+
+                if (chartInstance) {
+                    chartInstance.destroy();
+                }
+
+                if (weightHistory.length === 0) {
+                    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+                    return;
+                }
+
+                const labels = weightHistory.map(entry => new Date(entry.date).toLocaleDateString('fr-FR', {
+                    day: 'numeric',
+                    month: 'short'
+                }));
+                const data = weightHistory.map(entry => entry.weight);
+
+                chartInstance = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Poids',
+                            data: data,
+                            borderColor: textColor,
+                            backgroundColor: areaFillColor,
+                            borderWidth: 2,
+                            tension: 0.4,
+                            pointRadius: 3,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            x: {
+                                display: true,
+                                drawBorder: true,
+                                borderColor: secondaryTextColor, // <--- Axe X LIGNE
+                                grid: {
+                                    display: false
+                                },
+                                ticks: {
+                                    color: secondaryTextColor, // <--- Axe X LABELS
+                                    font: {
+                                        size: 10
+                                    }
+                                }
+                            },
+                            y: {
+                                drawBorder: true,
+                                borderColor: secondaryTextColor, // <--- AXE Y LIGNE
+                                grid: {
+                                    color: secondaryTextColor + '20', // Lignes de grille plus claires
+                                    borderDash: [5, 5]
+                                },
+                                ticks: {
+                                    color: secondaryTextColor, // <--- AXE Y LABELS
+                                    callback: function (value) {
+                                        return value + ' kg';
+                                    },
+                                    font: {
+                                        size: 10
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
             }
 
 
             // =================================================================
-            // GESTION DES MODALES D'OUTILS - CORRIGÉES
+            // CALCULATEUR 1RM
             // =================================================================
-
-            // RM Calculator Logique (Epley formula)
             window.openRmModal = () => {
                 document.getElementById('rmModal').classList.remove('hidden');
                 document.body.classList.add('modal-open');
-            };
-            
+                // Réinitialiser l'affichage
+                document.getElementById('rmResult').innerText = '--';
+            }
+
             window.closeRmModal = () => {
                 document.getElementById('rmModal').classList.add('hidden');
                 document.body.classList.remove('modal-open');
-            };
-
-            window.calculateRM = () => {
-                const w = parseFloat(document.getElementById('rmWeight').value);
-                const r = parseFloat(document.getElementById('rmReps').value);
-                const resultElement = document.getElementById('rmResult');
-
-                if (w > 0 && r > 0) {
-                    const rm = (w * (1 + (r / 30))).toFixed(1);
-                    resultElement.innerText = rm;
-                } else {
-                    resultElement.innerText = '--';
-                }
             }
 
-            // Percentage Calculator Logique
-            const percentages = [100, 95, 90, 85, 80, 75, 70, 65, 60];
-            
+            window.calculateRM = () => {
+                const weight = parseFloat(document.getElementById('rmWeight').value);
+                const reps = parseInt(document.getElementById('rmReps').value);
+
+                if (isNaN(weight) || isNaN(reps) || weight <= 0 || reps <= 0) {
+                    document.getElementById('rmResult').innerText = '--';
+                    return alert('Veuillez entrer des valeurs valides.');
+                }
+
+                let rm;
+
+                if (reps === 1) {
+                    rm = weight;
+                } else if (reps > 10) {
+                    // La formule est moins précise au-delà de 10-12 répétitions
+                    // Utilisation de Brzycki
+                    rm = weight * (36 / (37 - reps));
+                } else {
+                    // Utilisation de Brzycki pour 2-10 reps (la plus courante)
+                    rm = weight * (36 / (37 - reps));
+                }
+
+                document.getElementById('rmResult').innerText = rm.toFixed(1);
+            }
+
+            // =================================================================
+            // CALCULATEUR DE POURCENTAGES
+            // =================================================================
+            const percentages = [60, 65, 70, 75, 80, 85, 90, 95, 100];
+
             window.openPercentageModal = () => {
                 document.getElementById('percentageModal').classList.remove('hidden');
                 document.body.classList.add('modal-open');
-            };
-            
+                // Si l'utilisateur a enregistré son poids max 1RM, on le pré-remplit
+                // (Non implémenté, mais bonne pratique)
+                calculatePercentages();
+            }
+
             window.closePercentageModal = () => {
                 document.getElementById('percentageModal').classList.add('hidden');
                 document.body.classList.remove('modal-open');
-            };
-
+            }
 
             window.calculatePercentages = () => {
                 const maxWeight = parseFloat(document.getElementById('percMaxWeight').value);
                 const resultsContainer = document.getElementById('percentageResults');
-                resultsContainer.innerHTML = '';
+                resultsContainer.innerHTML = ''; // Nettoyer
 
                 if (isNaN(maxWeight) || maxWeight <= 0) {
                     resultsContainer.innerHTML = `
@@ -1023,7 +1485,6 @@
                     resultItem.style.justifyContent = 'space-between';
                     resultItem.style.padding = '8px 0';
                     resultItem.style.borderBottom = '1px solid var(--border-color)';
-
                     resultItem.innerHTML = `
                         <div style="font-size:16px; font-weight:600;">${perc}% de 1RM</div>
                         <div style="font-size:18px; font-weight:700; color:var(--text-primary);">${weight} <span style="font-size:12px; font-weight:500; color: var(--text-secondary);">kg</span> </div>
@@ -1032,10 +1493,10 @@
                 });
             };
 
+
             // =================================================================
             // CALCULATEUR DE CALORIES (MAINTIEN)
             // =================================================================
-
             let calorieGender = 'male'; // Par défaut
 
             window.openCaloriesModal = () => {
@@ -1046,7 +1507,6 @@
                     if (last.height) document.getElementById('calHeight').value = last.height;
                     if (last.age) document.getElementById('calAge').value = last.age;
                 }
-
                 document.getElementById('caloriesModal').classList.remove('hidden');
                 document.body.classList.add('modal-open');
             }
@@ -1056,201 +1516,37 @@
                 document.body.classList.remove('modal-open');
             }
 
-            window.setCalorieGender = (sex, btn) => {
+            window.setCalorieGender = (sex, button) => {
                 calorieGender = sex;
-                // Gestion visuelle du toggle (réutilise ton style css)
-                const container = document.getElementById('genderToggle');
-                Array.from(container.children).forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
+                document.querySelectorAll('#genderToggle button').forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
             }
 
             window.calculateCalories = () => {
                 const w = parseFloat(document.getElementById('calWeight').value);
                 const h = parseFloat(document.getElementById('calHeight').value);
-                const a = parseFloat(document.getElementById('calAge').value);
-                const activity = parseFloat(document.getElementById('calActivity').value);
+                const a = parseInt(document.getElementById('calAge').value);
+                const activityFactor = parseFloat(document.getElementById('calActivity').value);
 
-                if (w && h && a && activity) {
-                    // Formule de Mifflin-St Jeor
-                    let bmr = (10 * w) + (6.25 * h) - (5 * a);
+                if (isNaN(w) || isNaN(h) || isNaN(a) || w <= 0 || h <= 0 || a <= 0) {
+                    document.getElementById('calResult').innerText = '--';
+                    return alert('Veuillez entrer des valeurs valides pour le poids, la taille et l\'âge.');
+                }
 
-                    if (calorieGender === 'male') {
-                        bmr += 5;
-                    } else {
-                        bmr -= 161;
-                    }
+                let bmr; // Taux Métabolique de Base
 
-                    // Calcul TDEE (Total Daily Energy Expenditure)
-                    const tdee = Math.round(bmr * activity);
-
-                    // Animation simple du résultat
-                    document.getElementById('calResult').innerText = tdee;
+                if (calorieGender === 'male') {
+                    // Homme: 10 * poids + 6.25 * taille - 5 * âge + 5
+                    bmr = (10 * w) + (6.25 * h) - (5 * a) + 5;
                 } else {
-                    alert("Merci de remplir toutes les informations (Poids, Taille, Age).");
+                    // Femme: 10 * poids + 6.25 * taille - 5 * âge - 161
+                    bmr = (10 * w) + (6.25 * h) - (5 * a) - 161;
                 }
-            }
 
-            const templates = {
-                "Full Body": [{
-                    name: "Squat",
-                    s: 3,
-                    r: 10
-                }, {
-                    name: "Développé Couché",
-                    s: 3,
-                    r: 10
-                }, {
-                    name: "Tractions",
-                    s: 3,
-                    r: 10
-                }],
-                "Push": [{
-                    name: "Pompes",
-                    s: 4,
-                    r: 12
-                }, {
-                    name: "Développé Militaire",
-                    s: 3,
-                    r: 10
-                }],
-                "Pull": [{
-                    name: "Tractions",
-                    s: 4,
-                    r: 8
-                }, {
-                    name: "Rowing",
-                    s: 3,
-                    r: 10
-                }]
-            };
+                // Besoins cal. de maintien = BMR * Facteur d'activité
+                const tdee = bmr * activityFactor;
 
-            window.applyTemplate = (templateKey) => {
-                const exercises = templates[templateKey];
-                const key = formatDateKey(currentSelectedDate);
-                const all = getSessions();
-
-                // Si la session n'existe pas, on la crée avec le type par défaut 'gym'
-                if (!all[key]) all[key] = {
-                    type: 'gym',
-                    exercises: []
-                };
-
-                exercises.forEach(ex => {
-                    const newEx = {
-                        name: ex.name,
-                        sets: ex.s,
-                        reps: ex.r,
-                        notes: '',
-                        series: []
-                    };
-                    for (let i = 0; i < ex.s; i++) newEx.series.push({
-                        reps: ex.r,
-                        isDone: false
-                    });
-                    all[key].exercises.push(newEx);
-                });
-
-                saveSessions(all);
-                document.getElementById('templateModal').classList.add('hidden');
-                selectDay(currentSelectedDate);
-                updateDashboardSessions();
-                renderDaySlider(currentWeekStart);
-            }
-
-            window.openTemplateModal = () => {
-                if (isPastDate(currentSelectedDate)) return;
-
-                const list = document.getElementById('templateList');
-                list.innerHTML = '';
-
-                Object.keys(templates).forEach(key => {
-                    const btn = document.createElement('button');
-                    btn.className = 'btn-secondary';
-                    btn.style.width = '100%';
-                    btn.style.marginBottom = '10px';
-                    btn.style.marginTop = '0';
-                    btn.textContent = key;
-                    btn.onclick = () => applyTemplate(key);
-                    list.appendChild(btn);
-                });
-
-                document.getElementById('templateModal').classList.remove('hidden');
-            }
-
-            // =================================================================
-            // LOGIQUE DU TIMER
-            // =================================================================
-
-            let timerInterval;
-            let timerTime = 90; // Default 1:30
-            let timerTotal = 90;
-
-            function updateTimerUI() {
-                const m = Math.floor(timerTime / 60).toString().padStart(2, '0');
-                const s = (timerTime % 60).toString().padStart(2, '0');
-                document.getElementById('timerDisplay').innerText = `${m}:${s}`;
-                document.getElementById('timerBar').style.width = (timerTime / timerTotal) * 100 + "%";
-            }
-
-            function startTimer(initialTime = 90) {
-                if (timerInterval) clearInterval(timerInterval);
-                timerTotal = initialTime;
-                timerTime = initialTime;
-                updateTimerUI();
-                document.getElementById('smartTimer').classList.remove('hidden');
-
-                timerInterval = setInterval(() => {
-                    timerTime--;
-                    if (timerTime < 0) {
-                        stopTimer(true);
-                        // Vous pouvez ajouter une alerte ou vibration ici
-                        new Audio('alert.mp3').play();
-                    } else {
-                        updateTimerUI();
-                    }
-                }, 1000);
-            }
-
-            window.stopTimer = (finished = false) => {
-                clearInterval(timerInterval);
-                document.getElementById('smartTimer').classList.add('hidden');
-                if (finished) {
-                    alert('Temps de repos terminé !');
-                }
-            }
-
-            window.adjustTimer = (seconds) => {
-                const newTime = timerTime + seconds;
-                if (newTime > 0) {
-                    timerTime = newTime;
-                    timerTotal = Math.max(timerTotal, timerTime); // Assure que la barre de progression ne dépasse pas 100%
-                    updateTimerUI();
-                }
-            }
-
-            // Global access for series toggle to start timer
-            const originalToggleSeries = window.toggleSeries;
-            window.toggleSeries = (exIndex, seriesIndex) => {
-                // Exécute la logique originale
-                originalToggleSeries(exIndex, seriesIndex);
-
-                const key = formatDateKey(currentSelectedDate);
-                const all = getSessions();
-
-                // Après avoir togglé, vérifie si c'est la fin d'une série.
-                if (all[key].exercises[exIndex].series[seriesIndex].isDone) {
-                    // Vérifie si la série suivante existe
-                    if (seriesIndex < all[key].exercises[exIndex].series.length - 1) {
-                        // Démarre le timer de 90 secondes (1:30)
-                        startTimer(90);
-                    } else {
-                        // Si c'est la dernière série de l'exercice, arrête le timer au cas où il était déjà actif
-                        stopTimer();
-                    }
-                } else {
-                    // Si on décoche une série, cela annule le début du repos.
-                    stopTimer();
-                }
+                document.getElementById('calResult').innerText = Math.round(tdee);
             }
 
 
@@ -1258,21 +1554,26 @@
             // INITIALISATION FINALE
             // =================================================================
             document.getElementById('openFormButton').addEventListener('click', () => openAddExerciseModal(null, null));
-            const workoutPage = document.getElementById('workout');
+            
             const setupWorkoutPage = () => {
                 currentWeekStart = getWeekStart(new Date());
                 renderDaySlider(currentWeekStart);
                 selectDay(new Date());
             };
 
-            // Chargement du thème au démarrage
-            const savedTheme = localStorage.getItem('theme') || 'light';
-            setTheme(savedTheme); // Met à jour le thème et appelle updateWeightUI()
-
             // Charger l'objectif hebdomadaire dans le champ des réglages
             const savedGoal = getWeeklyGoal();
             document.getElementById('weeklyGoalInput').value = savedGoal;
 
+            // Corrige l'ordre d'initialisation :
+            // 1. Applique le thème (qui appelle updateWeightUI) une fois que tout est défini.
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            setTheme(savedTheme);
+
+            // 2.Pour recharge l'objectif sur la page d'accueil
+updateWeeklyGoalDisplay();
+
+            // 3. Initialise l'interface
             setupWorkoutPage();
             updateDashboardSessions();
         });
